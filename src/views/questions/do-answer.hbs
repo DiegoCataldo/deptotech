@@ -1,0 +1,12 @@
+  <!-- Si la respuestas estan habilitadas mostrar pagina con respuestas -->
+  {{#if question.best_answer_chosen}}
+
+  {{> do-answer-enabled}}
+
+  {{else}}
+
+  
+  {{> do-answer-disabled}}
+
+  {{/if}}
+  

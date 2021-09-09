@@ -1,0 +1,35 @@
+<div class="row card border-card">
+  <div class="banner-question u-section-2">
+    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">USER</h3>
+    <h2 class="u-heading-font u-text u-text-2">SIGN IN</h2>
+    <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+  </div>
+  {{> errors}}
+
+  <div class="row">
+    <div class="col-md-3 mx-auto ">
+      <div class="card mt-5 text-center ">
+        <img src="/img/logoprice.png" class="e mx-auto display-block m-4 login-logo" alt="">
+        <div class="card-body login-card card-body-signup">
+          <form action="/users/signin" method="POST">
+            <div class="mt-3">
+              <input type="email" class="form-control" name="email" placeholder="Email" autofocus>
+            </div>
+            <div class="mt-3">
+              <input type="password" class="form-control" name="password" placeholder="password" autofocus>
+            </div>
+            <div class="mt-3">
+              <button type="submit" class="btn btn-primary btn-block">SignIn </button>
+            </div>
+            <div class="footer-login mt-4">
+              <div class="register-text-login">
+                You do not have an account? <a href="/users/signup" class="link-primary">Sign Up</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

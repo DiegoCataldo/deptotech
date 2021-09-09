@@ -1,0 +1,78 @@
+<div class="row card border-card">
+  <div class="card card-question border-card">
+    <div class="banner-question u-section-2">
+      <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">PORTAFOLIO</h3>
+      <h2 class="u-heading-font u-text u-text-2">PROYECTOS RECIENTES</h2>
+      <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+    </div>
+    <br>
+      {{> errors}}
+
+    <div class="tm-main row justify-content-md-center margin-x-0">
+
+
+      <fieldset class="fieldset-question col-md-8">
+        <legend class="legend-question">Reservation Details</legend>
+        <div class="card-body">
+          <form action="/users/myprofile?_method=PUT" method="POST" enctype="multipart/form-data">
+            <div class="mt-3">
+              <label for="title">Name</label>
+              <input type="text" id="title" name="name" class="form-control" placeholder="Name" value="{{user.name}}"
+                autofocus>
+              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="mt-3">
+              <label for="title">Email</label>
+              <input type="text" id="email" name="email" class="form-control" placeholder="Title" value="{{user.email}}"
+                autofocus>
+              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="mt-3">
+              <label for="title">Country of birth</label>
+              <select type="text" id="country_birth" name="country_birth" class="form-control custom-select custom-select">
+                <option  value="{{user.country_birth}}" selected>{{user.country_birth}} </option>
+                {{#each countriesList}}
+                  <option value="{{this.name}}">{{this.name}}</option>
+                {{/each}}
+                </select>
+
+              <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+            <div class="mt-3">
+              <label for="title">Write a one-line description about yourself.</label>
+              <input type="text" id="short_describe" name="short_describe" class="form-control"
+                placeholder="example: math expert" value="{{user.short_describe}}" autofocus>
+              <small id="emailHelp" class="form-text text-muted">Write a one-line description about yourself.</small>
+            </div>
+            <div class="mt-3">
+              <label for="title">Experience and knowledge</label>
+              <input type="text" id="experience_describe" name="experience_describe" class="form-control"
+                placeholder="Experience" value="{{user.experience_describe}}" autofocus>
+              <small id="emailHelp" class="form-text text-muted">Describe your experience and knowledge</small>
+            </div>
+            <div class="mt-3">
+              <label for="title">Add a profile image</label>
+              <div class="custom-file">
+
+                <input type="file" id="inputGroupFile01" name="imageProfile"
+                  class="custom-file-input custom-file-input-page" autofocus>
+                <label for="inputGroupFile01" class="custom-file-label " id="label-inputGroupFile01">Choose File</label>
+                <!--  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+              </div>
+            </div>
+            <div class="mt-3">
+              <label for="button">Change Password:</label>
+              <a href="/users/newpassword"><button type="button" id="" class="button-main-2">New Password</button></a>
+            </div>
+
+            <div class="mt-3 container-button">
+              <button class="button-main-1 mt-5" type="submit"> Save </button>
+            </div>
+
+
+          </form>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</div>

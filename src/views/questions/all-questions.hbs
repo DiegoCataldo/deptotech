@@ -1,0 +1,132 @@
+<!-- Search form -->
+<div class="row card border-card">
+  <!--  HEADEER --->
+  <div class="banner-question u-section-2">
+    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">QUESTIONS</h3>
+    <h2 class="u-heading-font u-text u-text-2">FIND QUESTIONS</h2>
+    <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+  </div>
+  <!-- /HEADER -->
+
+
+  <div class="tm-main row justify-content-md-center margin-x-0">
+      {{> errors}}
+    <div class="col-md-7 search">
+      <form method="POST" action="/questions/allquestionsfilter" class="form-inline mb-4 tm-search-form">
+        <div class="container-tag2">
+          <div class="container-search-tags">
+            <input class="form-control tm-search-input tag-input" name="query" id="tags-id" type="text"
+              placeholder="Search by tags..." aria-label="Search">
+            <input type="hidden" name="skip" value="{{skipObject.currentSkip}}">
+            <button class="tm-search-button" type="submit">
+              <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
+            </button>
+          </div>
+
+
+          <div class="tags-added-container" contenteditable="false">
+            {{#each filters}}
+            <span href='#' class='tag-added'>{{this}} <i class="fas fa-times cross"></i> <input type='text'
+                value="{{this}}" class='tag-hidden' name='tagsArray' /> </span>
+            {{/each}}
+          </div>
+
+        </div>
+      </form>
+    </div>
+
+    <div class="col-md-7">
+      <div class="row ">
+        {{#each questions}}
+        <div class="col-md-12 col-lg-12 container-question ">
+          <div class="login-container">
+            <div class="body-question row">
+              <div class="col-md-8">
+                <div class="body-question-title title-h1">
+                  {{title}}
+                </div>
+                <div class="body-question-description">
+                  {{{description}}}
+                </div>
+                <div class="tags-container">
+                  <span class="titule-tags-question"><i class="fas fa-tags"></i></span>
+                  {{#each tags }}
+                  <span class="tagspan-question">{{this}} </span>
+                  {{/each}}
+                </div>
+                <div class="stats-question-container">
+                  <div class="stats-question-footer">
+                    <i class="fas fa-question-circle icon-answers-question"></i>
+                    <div class="description-footer-question"> {{countLength answers_info}} Answer(s)</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="question-header-reward">
+                  <div class="reward-price-question">
+                    <i class="fas fa-dollar-sign"></i>
+                    {{reward_offered}} USD
+                  </div>
+                  <div class="">
+                    <span class="question-header-time"> <i class="fas fa-hourglass-half"></i> Asked {{formatDate
+                      createdAt}} </span>
+                  </div>
+                  <div>
+                    <a href="/questions/doanswer/{{_id}}"><button class="button-main-1">Answer</button></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+
+        <!-- Pagination -->
+        <div class="pagination-container col-md-12">
+          <nav class="pagination-nav" aria-label="Page navigation example ">
+            <ul class="pagination">
+              <!-- si existen filtros entonces los paginations serán form -->
+              {{#if filters}}
+              <form method="POST" id="formprev" action="/questions/allquestionsfilter"
+                class="">
+                <li class="page-item">
+                  <a class="page-link" href="javascript:;"
+                    onclick="document.getElementById('formprev').submit();">Previous</a>
+                </li>
+                <input type="hidden" name="skip" value="{{skipObject.prevSkip}}">
+                {{#each filters}}
+                <input type='hidden' value="{{this}}" name='tagsArray' />
+                {{/each}}
+              </form>
+               <li class="page-item"> <a class="page-link">Page {{skipObject.nextSkip}}</a>
+              </li>
+              <form method="POST" id="formnext" action="/questions/allquestionsfilter"
+                class="">
+                <li class="page-item">
+                  <a class="page-link" href="javascript:;"
+                    onclick="document.getElementById('formnext').submit();">Next</a>
+                </li>
+                <input type="hidden" name="skip" value="{{skipObject.nextSkip}}">
+                {{#each filters}}
+                <input type='hidden' value="{{this}}" name='tagsArray' />
+                {{/each}}
+              </form>
+              {{else}}
+              <!-- si no hay filters entonces se envie un get normal -->
+              <li class="page-item"><a class="page-link" href="/questions/allquestions/{{skipObject.prevSkip}}">
+                  Previous </a> 
+              </li>
+              <li class="page-item"> <a class="page-link">Page {{skipObject.nextSkip}}</a>
+              </li>
+              <li class="page-item"><a class="page-link" href="/questions/allquestions/{{skipObject.nextSkip}}">Next</a>
+              </li>
+              {{/if}}
+
+            </ul>
+          </nav>
+        </div>
+        <!-- end pagination -->
+      </div>
+    </div>
+  </div>
+</div>

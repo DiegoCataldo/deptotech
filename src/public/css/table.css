@@ -1,0 +1,48 @@
+.table-answers thead{
+  background: #019ac1;
+  color: white;
+}
+.true-table{
+  background: #00e16e;
+  width: fit-content;
+  padding: 5px 15px 8px 15px;
+  border-radius: 20px;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  margin: auto;
+}
+.false-table{
+  background: #fd9c00;
+  width: fit-content;
+  padding: 5px 15px 8px 15px;
+  border-radius: 20px;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  margin: auto;
+
+}
+
+.button-question-table {
+  width: 150px;
+  height: 40px;
+  font-size: 1rem;
+  /* margin: 30px 0 30px 0; */
+  color: #fffffb;
+  border: none;
+  box-shadow: 5px 5px 10px rgb(0 0 0 / 50%);
+  border-radius: 5px;
+  background: linear-gradient(45deg, #02b6e1, #008cb1, #005a63, #00ff43);
+  background-size: 300% 300%;
+  outline: none;
+  transition: all 200ms ease-in-out;
+}
+.tabletd{
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+.cont-truefalse{
+  display: flex;
+}

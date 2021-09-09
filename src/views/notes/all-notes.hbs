@@ -1,0 +1,51 @@
+
+
+    <!-- Search form -->
+    <div class="row tm-row">
+      <div class="col-12">
+        <form method="GET" class="form-inline tm-mb-80 tm-search-form">
+          <input class="form-control tm-search-input" name="query" type="text" placeholder="Search..."
+            aria-label="Search">
+          <button class="tm-search-button" type="submit">
+            <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="row ">
+      {{#each notes}}
+
+     <div class="col-12 col-md-3 text-center">
+      <article class=" tm-post post">
+        <hr class="tm-hr-primary">
+        <a href="post.html" class="effect-lily tm-post-link tm-pt-60">
+          <span class="position-absolute tm-new-badge">New</span>
+          <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{title}}</h2>
+        </a>
+        <p class="tm-pt-30">
+         {{description}}
+        </p>
+        <div class="d-flex justify-content-between tm-pt-45">
+          <span class="tm-color-primary">Travel . Events</span>
+          <span class="tm-color-primary">June 24, 2020</span>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between">
+          <span>36 comments</span>
+          <span>by Admin Nat</span>
+        </div>
+      </article>
+      </div>
+
+      {{else}}
+      <div class="card mx-auto">
+        <div class="card-body">
+          <h1> Hello {{userInfo.name}} </h1>
+          <p class="lead"> There are not notes yet</p>
+          <a href="/notes/add" class="btn btn-success btn-block">Create new Notes </a>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+

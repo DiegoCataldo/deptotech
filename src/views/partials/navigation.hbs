@@ -1,0 +1,36 @@
+<header id="header">
+  <div class="container-fluid">
+
+    <div id="logo" class="pull-left">
+      <h1><a href="index.php" class="scrollto logov3"><img src="/img/logoprice.png" alt='logov1' /> </a></h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href="#intro"><img src="img/logo.png" alt="" title="" /></a>-->
+    </div>
+    <nav id="nav-menu-container">
+      <ul class="nav-menu">
+        <li class="menu-active"><a href="/">Home</a></li>
+        {{#if user}}
+        <li class="dropdown"> <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"
+            data-toggle="dropdown " aria-haspopup="true" aria-expanded="false">
+            Questions
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="/questions/add">New Question</a>
+            <a class="dropdown-item" href="/questions/allquestions">Find Questions</a>
+            <a class="dropdown-item" href="/questions/ownquestions">My Questions</a>
+          </div>
+        </li>
+        <li><a href="/questions/myanswers">My Answers</a></li>
+        <li><a href="/users/myprofile">Profile</a></li>
+        <li><a href="/users/logout">Logout</a></li>
+        {{ else}}
+        <li><a href="/users/signin">Sign In</a></li>
+        <li><a href="/users/signup">Sign Up</a></li>
+        {{/if}}
+
+        <li><a href="/stripeaccount/addcustomer">What is PriceAnswers?</a></li>
+
+      </ul>
+    </nav><!-- #nav-menu-container -->
+  </div>
+</header>

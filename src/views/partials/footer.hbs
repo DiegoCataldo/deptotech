@@ -1,0 +1,44 @@
+<footer id="footer">
+  <div class="footer-top">
+    <div class="container">
+      <div class="row">
+        <div id="logo" class="pull-left">
+          <h1><a href="#intro" class="scrollto logov5"><img src="/img/logoprice.png" alt="logov1" />
+            </a>
+          </h1>
+          <!-- Uncomment below if you prefer to use an image logo -->
+          <!-- <a href="#intro"><img src="img/logo.png" alt="" title="" /></a>-->
+        </div>
+
+        <div class="col-lg-3 col-md-6 footer-links">
+          <h4>Useful links</h4>
+          <ul>
+            <li><i class="ion-ios-arrow-right"></i> <a href="/">Home</a></li>
+            {{#if user}}
+            <li><i class="ion-ios-arrow-right"></i> <a href="/questions/add">New Question</a></li>
+            <li><i class="ion-ios-arrow-right"></i> <a href="/questions/add">New Question</a></li>
+            <li><i class="ion-ios-arrow-right"></i> <a href="/questions/ownquestions">Own Questions</a></li>
+            <li><i class="ion-ios-arrow-right"></i> <a href="/users/myprofile">Profile</a></li>
+            <li><i class="ion-ios-arrow-right"></i> <a href="/users/logout">Logout</a></li>
+            {{else}}
+            <li><i class="ion-ios-arrow-right"></i> <a href="/users/signin">Sign In</a></li>
+            <li><i class="ion-ios-arrow-right"></i> <a href="/users/signup">Sign Up</a></li>
+            {{/if}}
+             <li><i class="ion-ios-arrow-right"></i> <a href="/">What is PriceAnswers?</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3 col-md-6 footer-contact">
+          <h4>Contact us</h4>
+          <p>
+            <strong>Email:</strong>
+            contacto@priceanswers.com<br />
+          </p>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</footer><!-- #footer -->

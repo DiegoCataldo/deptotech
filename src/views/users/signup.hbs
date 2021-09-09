@@ -1,0 +1,38 @@
+<div class="row card border-card">
+  <div class="banner-question u-section-2">
+    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">USER</h3>
+    <h2 class="u-heading-font u-text u-text-2">SIGN UP</h2>
+    <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+  </div>
+  {{> errors}}
+
+  <div class="row">
+    <div class="col-md-3 mx-auto">
+      <div class="card mt-4 text-center ">
+
+        <img src="/img/logoprice.png" class=" mx-auto display-block m-4 login-logo" alt="">
+        <div class="card-body card-body-signup">
+          <form action="/users/signup" method="POST">
+            <div class="mt-3">
+              <input type="text" class="form-control" name="name" placeholder="Name" value="{{name}}" />
+            </div>
+            <div class="mt-3">
+              <input type="email" class="form-control" name="email" placeholder="Email" value="{{email}}" />
+            </div>
+            <div class="mt-3">
+              <input type="password" class="form-control" name="password" placeholder="Password" value="{{password}}" />
+            </div>
+            <div class="mt-3">
+              <input type="password" class="form-control" name="confirmPassword" placeholder="Password"
+                value="{{confirmPassword}}" />
+            </div>
+            <div class="mt-5 col-md-10 mx-auto">
+              <button type="submit" class="btn btn-primary btn-block"> SignUp</button>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

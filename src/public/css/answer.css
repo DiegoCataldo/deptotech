@@ -1,0 +1,292 @@
+.answer-container {
+  min-height: 500px;
+  border-radius: 5px;
+  background: #fffffb;
+  position: relative;
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  margin: 1rem;
+  padding:1.5rem !important;
+
+}
+
+.answer-header{
+  border-bottom: 1px solid #dedede;
+
+}
+.answer-title{
+
+
+}
+.answer-title h1{
+  font-family: 'Sriracha', arial, sans-serif;
+  text-align: left;
+  margin-bottom: 20px;
+  color: #007fed;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.answer-header-right{
+  margin-left: auto;
+  display: block;
+}
+
+.answer-header-reward{
+  font-size: 20px;
+  text-align: right;
+  font-weight: 600;
+ 
+}
+.answer-header-reward i{
+
+
+}
+.reward-price i{
+  color:rgb(91 91 91);
+  color: #6be100;
+  font-size: 25px;
+  margin-right:0.3rem;
+  vertical-align: sub;
+}
+.answer-header-time{
+  font-size: 13px;
+  color: #848282
+}
+
+.answer-header-time i{
+  font-size: 15px;
+  color: darkcyan;
+}
+.answer-body{
+
+  padding: 1.5rem 1rem 1rem 0rem;
+}
+
+.tagspan-answer{
+  text-align: center;
+  width: 75px;
+  border-radius: 20px;
+  color: #2c2b2b;
+  padding: 5px;
+  border: 1px solid rgb(202 202 202);
+}
+.answer-body-tags{
+  bottom: 0;
+}
+.answer-body-description{
+  min-height: 280px;
+}
+
+.profile-answer{
+  min-height: auto;
+  border-radius: 5px;
+  background: #fffffb;
+  position: relative;
+  box-shadow: 5px 5px 10px rgb(0 0 0 / 50%);
+  margin: 1rem;
+  padding: 1.5rem !important;
+}
+.profile-answer-header{
+  border-bottom: 1px solid #dedede;
+  
+}
+.profile-answer-header h1{
+  font-size: 1.2rem;
+  padding-top: 0.3rem;
+  text-align: center;
+}
+
+.profile-answer-body{
+  margin: 1.5rem 1rem 1rem 1rem;
+  text-align: left;
+
+}
+.profile-country i{
+  margin-right: 0.5rem;
+  color: darkcyan;
+
+}
+.profile-allquestions i{
+  margin-right: 0.5rem;
+  color: #f97f00
+
+}
+.profile-questions-paid i{
+  margin-right: 0.5rem;
+  color: #12d806
+}
+.profile-question-info{
+  margin-bottom: 0.8rem;
+}
+.profile-allquestions-likes i{
+  margin-right: 0.5rem;
+  color: #00a5f2
+}
+
+.title-tags-question{
+  color: darkcyan;
+}
+
+.answer-container button{
+  width: 40%;
+  height: 40px;
+  font-size: 1rem;
+  margin: 30px 30% 0 30%;
+  color: #fffffb;
+  border: none;
+  box-shadow: 5px 5px 10px rgb(0 0 0 / 50%);
+  border-radius: 5px;
+  background: linear-gradient(
+45deg
+, #ff6b6c, #ffc145, #ffc145, #ff6b6c);
+  background-size: 300% 300%;
+  outline: none;
+  transition: all 200ms ease-in-out;
+}
+.answer-do-container {
+  min-height: 200px;
+  border-radius: 5px;
+  background: #fffffb;
+  position: relative;
+  box-shadow: 5px 5px 10px rgb(0 0 0 / 50%);
+  margin: 1rem;
+  padding: 1.5rem !important;
+  text-align: center;
+}
+
+
+.answer-describe {
+  background-color: #FAFAFA;
+  border: 1px solid #EFEFEF;
+  padding: 15px 15px 20px 15px;
+  border-radius: 3px;
+  text-align: center;
+}
+.rating-block2{
+  background: linear-gradient(to bottom, #0494ab 0%, rgb(2 62 74) 99%);
+  border: 1px solid #EFEFEF;
+  padding: 15px 15px 20px 15px;
+  border-radius: 3px;
+  text-align: center;
+  margin: auto !important;
+  color: #fff;
+  
+}
+
+/* //////////////////// STARS   //////////////////////**/
+
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: #F4F2F3;
+  text-align: center;
+ /* display: contents;*/
+  justify-content: center;
+}
+
+h1 {
+  font-family: 'Fjalla One', sans-serif;
+  margin-bottom: 0.15rem;
+}
+
+h2 {
+  font-family: 'Cutive Mono', 'Courier New';
+  font-size: 1rem;
+  letter-spacing: 1px;
+  margin-bottom: 4rem;
+}
+
+label {
+  cursor: pointer;
+}
+
+svg {
+  width: 3rem;
+  height: 3rem;
+  padding: 0.15rem;
+}
+
+
+/* hide radio buttons */
+
+input[name="star"] {
+  display: inline-block;
+  width: 0;
+  opacity: 0;
+  margin-left: -2px;
+}
+
+/* hide source svg */
+
+.star-source {
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+
+/* set initial color to transparent so fill is empty*/
+
+.star {
+  color: transparent;
+  transition: color 0.2s ease-in-out;
+}
+
+
+/* set direction to row-reverse so 5th star is at the end and ~ can be used to fill all sibling stars that precede last starred element*/
+
+.star-container {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+}
+
+label:hover~label .star,
+svg.star:hover,
+ input[name="star"]:focus~label .star,
+ input[name="star"]:checked~label .star {
+  color: #FFCC00;
+}
+
+ input[name="star"]:checked+label .star {
+  animation: starred 0.5s;
+}
+
+ input[name="star"]:checked+label {
+  animation: scaleup 1s;
+}
+
+@keyframes scaleup {
+  from {
+    transform: scale(1.2);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes starred {
+  from {
+    color: #a38300;
+  }
+
+  to {
+    color: #FFCC00;
+  }
+}
+
+.star-input-button {
+  border-width: 0px;
+  background-color: transparent !important;
+}
+

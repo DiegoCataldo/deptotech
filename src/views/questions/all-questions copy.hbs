@@ -1,0 +1,85 @@
+<!-- Search form -->
+<div class="row card border-card">
+  <!--  HEADEER --->
+  <div class="banner-question u-section-2">
+    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">PORTAFOLIO</h3>
+    <h2 class="u-heading-font u-text u-text-2">PROYECTOS RECIENTES</h2>
+    <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+  </div>
+  <!-- /HEADER -->
+  <div class="tm-main">
+    <div class="col-12 search">
+      <form method="GET" class="form-inline tm-mb-80 tm-search-form">
+        <input class="form-control tm-search-input" name="query" type="text" placeholder="Search..."
+          aria-label="Search">
+        <button class="tm-search-button" type="submit">
+          <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
+        </button>
+      </form>
+    </div>
+
+
+    <div class="col-12">
+      <div class="row ">
+        {{#each questions}}
+
+        <div class="login-container col-lg-3 col-md-4 col-sm-12">
+          <div class="body-question">
+
+            <h1>
+              {{description}}
+            </h1>
+            <div class="tags">
+              <div class="row text-align-center">
+                <div class="col-md-12 margin-bottom-10px">
+                  <span class="titule-tags-question"> Tags</span>
+                </div>
+                <div class="col-md-12">
+                  {{#each tags }}
+                  <span class="tagspan">{{this}}</span>
+
+                  {{/each}}
+                </div>
+              </div>
+            </div>
+            <a href="/questions/doanswer/{{_id}}"><button>Answer</button> </a>
+          </div>
+          <div class="footer-card-question text-align-center padding-15">
+            <div class="row ">
+              <div class="col-6 ">
+                <div class="stats-ownquestion ">Answers</div>
+                <i class="fas fa-home "></i>
+                <div class="value ">27</div>
+              </div>
+              <div class="col-6">
+                <div class="stats-ownquestion "> Reward offered </div>
+                <i class="fas fa-home "></i>
+                <div class="value ">{{reward_offered}}</div>
+              </div>
+
+
+
+            </div>
+
+          </div>
+        </div>
+
+
+
+
+
+
+        {{else}}
+        <div class="card mx-auto">
+          <div class="card-body">
+            <h1> Hello {{userInfo.name}} </h1>
+            <p class="lead"> There are not notes yet</p>
+            <a href="/notes/add" class="btn btn-success btn-block">Create new Notes </a>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,54 @@
+<!-- Search form -->
+<div class="row card border-card">
+  <!--  HEADEER --->
+  <div class="banner-question u-section-2">
+    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">ANSWERS</h3>
+    <h2 class="u-heading-font u-text u-text-2">YOUR ANSWERS</h2>
+    <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+  </div>
+  <!-- /HEADER -->
+  {{> errors}}
+
+  <div class="tm-main row justify-content-md-center margin-x-0 mt-5">
+
+    <div class="col-md-7">
+      <div class="row ">
+        <table id="example" class="table table-answers table-striped table-bordered" style="width:100%">
+          <thead>
+            <tr>
+              <th>Question Title</th>
+              <th>Answers Enabled</th>
+              <th>Best Answer Chosen</th>
+              <th>Your Answer Was The Best</th>
+              <th>Question Created At</th>
+              <th>Link Question</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            {{#each answers}}
+            <tr>
+              {{#each question_info}}
+              <td>{{title}} </td>
+              <td class=""> <div class="cont-truefalse"> <div class="{{answers_enabled}}-table">{{answers_enabled}}</div> </div> </td>
+              <td> <div class="cont-truefalse"> <div class="{{best_answer_chosen}}-table">{{best_answer_chosen}} </div></div> </td>
+              <td> <div class="cont-truefalse"><div class="{{../best_answer}}-table">{{../best_answer}} </div> </div> </td>
+              <td>{{formatDate ../createdAt}}</td>
+              <td><a href="/questions/doanswer/{{_id}}"><button class="button-question-table">Link</button></a></td>
+
+
+              {{/each}}
+
+            </tr>
+            {{/each}}
+
+          </tbody>
+
+
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>
+

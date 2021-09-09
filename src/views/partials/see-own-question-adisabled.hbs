@@ -1,0 +1,314 @@
+<!-- Search form -->
+<div class="row card border-card">
+  <!--  HEADEER --->
+  <div class="banner-question u-section-2">
+    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">PORTAFOLIO</h3>
+    <h2 class="u-heading-font u-text u-text-2">PROYECTOS RECIENTES</h2>
+    <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+  </div>
+  {{> errors}}
+
+  <!-- /HEADER -->
+  <div class="tm-main">
+
+    <div class="col-12">
+      <div class="row">
+        <div class="answer-container col-md-8">
+          <div class="answer-header row">
+            <div class="answer-title col-md-8">
+              <h1 class=""> {{question.title}} </h1>
+            </div>
+            <div class="answer-header-right col-md-4">
+              <div class="answer-header-reward">
+                <div class="reward-price">
+                  <i class="fas fa-dollar-sign"></i>
+                  {{question.reward_offered}}
+                  USD
+                </div>
+                <span class="answer-header-time">
+                  <i class="fas fa-hourglass-half"></i>
+                  Asked {{formatDate  question.createdAt}}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="answer-body">
+            <div class="answer-body-description">
+              {{{question.description}}}
+            </div>
+            <div class="answer-body-tags">
+              <div class="answer-body-tags-title">
+
+                <div class="row text-align-center">
+                  <div class="col-md-12 margin-bottom-10px">
+                    <span class="title-tags-question">
+                      <i class="fas fa-tags"></i>
+                      Tags</span>
+                  </div>
+                  <div class="col-md-12">
+                    {{#each question.tags}}
+                    <span class="tagspan-answer">{{this}}</span>
+                    {{/each}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 profile-answer">
+          <div class="profile-answer-header">
+            <h1>About The Client</h1>
+          </div>
+          <div class="profile-answer-body">
+            <div class="profile-question-info profile-country">
+              <i class="fas fa-map-marker-alt"></i>
+              Chile
+            </div>
+            <div class="profile-question-info profile-allquestions">
+              <i class="fas fa-question-circle"></i>
+              5 Questions Asked
+            </div>
+            <div class="profile-question-info profile-questions-paid">
+              <i class="fas fa-money-bill-alt"></i>
+              3 Questions answered
+            </div>
+            <div class="profile-question-info profile-allquestions-likes">
+              <i class="fas fa-thumbs-up"></i>
+              100 likes in all his questions
+            </div>
+          </div>
+        </div>
+
+      </div>
+      {{#each answers}}
+      <div class="answer-own-question col-md-8">
+        <form action="" method="POST">
+          <div class="answer-own-question-header">
+            {{#each user_info}}
+            <div class="header-title row">
+              <div class="col-lg-1">
+
+                <img class="profile-img" src="{{imageProfileUrl}}" />
+
+              </div>
+
+              <div class="col-lg-11">
+                <div class="header-name">
+                  {{name}}
+                </div>
+                <div class="header-short_describe">
+                  {{short_describe}}
+                </div>
+                <div class="header-short_features">
+
+                </div>
+              </div>
+
+            </div>
+            <div class="body-answer-not-check">
+              <div class="row">
+                <div class="col-md-6">
+                  <!-- rating block --->
+                  <div class="rating-block">
+                    <h4>Average user rating</h4>
+                    <h2 class="bold padding-bottom-7">
+                      {{ratingUserAVG
+                      answerRating.star1
+                      answerRating.star2
+                      answerRating.star3
+                      answerRating.star4
+                      answerRating.star5
+                      }}
+                      <small>/ 5</small>
+                    </h2>
+                    <div class="stars-content">
+
+                      <div class="">
+                        {{#isGreater
+                        (ratingUserAVG
+                        answerRating.star1
+                        answerRating.star2
+                        answerRating.star3
+                        answerRating.star4
+                        answerRating.star5
+                        )
+                        1
+                        }}
+                        <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
+                        {{else}}
+                        <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
+                        {{/isGreater}}
+
+                      </div>
+                      <div class="">
+                        {{#isGreater
+                        (ratingUserAVG
+                        answerRating.star1
+                        answerRating.star2
+                        answerRating.star3
+                        answerRating.star4
+                        answerRating.star5
+                        )
+                        2
+                        }}
+                        <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
+                        {{else}}
+                        <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
+                        {{/isGreater}}
+
+                      </div>
+                      <div class="">
+                        {{#isGreater
+                        (ratingUserAVG
+                        answerRating.star1
+                        answerRating.star2
+                        answerRating.star3
+                        answerRating.star4
+                        answerRating.star5
+                        )
+                        3
+                        }}
+                        <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
+                        {{else}}
+                        <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
+                        {{/isGreater}}
+
+                      </div>
+                      <div class="">
+                        {{#isGreater
+                        (ratingUserAVG
+                        answerRating.star1
+                        answerRating.star2
+                        answerRating.star3
+                        answerRating.star4
+                        answerRating.star5
+                        )
+                        4
+                        }}
+                        <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
+                        {{else}}
+                        <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
+                        {{/isGreater}}
+
+                      </div>
+                      <div class="">
+                        {{#isGreater
+                        (ratingUserAVG
+                        answerRating.star1
+                        answerRating.star2
+                        answerRating.star3
+                        answerRating.star4
+                        answerRating.star5
+                        )
+                        5
+                        }}
+                        <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
+                        {{else}}
+                        <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
+                        {{/isGreater}}
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- rating breakdown -->
+                <div class="col-md-6 rating-breakdown">
+                  <h4>Rating breakdown</h4>
+                  <div class="rating-bar-answer">
+                    <div class="" style="width:35px; line-height:1;">
+                      <div style="height:9px; margin:5px 0;">5
+                        <i class="fontawesome-icons fa-star" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="" style="width:180px;">
+                      <div class="progress" style="height:9px; margin:8px 0;">
+                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="5" aria-valuemin="0"
+                          aria-valuemax="5" style="width: 1000%">
+                          <span class="sr-only">80% Complete (danger)</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="float-right" style="margin-left:10px;">{{answerRating.star5}}</div>
+                  </div>
+                  <div class="rating-bar-answer">
+                    <div class="" style="width:35px; line-height:1;">
+                      <div style="height:9px; margin:5px 0;">4
+                        <i class="fontawesome-icons fa-star" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="" style="width:180px;">
+                      <div class="progress" style="height:9px; margin:8px 0;">
+                        <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="4" aria-valuemin="0"
+                          aria-valuemax="5" style="width: 80%">
+                          <span class="sr-only">80% Complete (danger)</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="float-right" style="margin-left:10px;">{{answerRating.star4}}</div>
+                  </div>
+                  <div class="rating-bar-answer">
+                    <div class="" style="width:35px; line-height:1;">
+                      <div style="height:9px; margin:5px 0;">3
+                        <i class="fontawesome-icons fa-star" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="" style="width:180px;">
+                      <div class="progress" style="height:9px; margin:8px 0;">
+                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="3" aria-valuemin="0"
+                          aria-valuemax="5" style="width: 60%">
+                          <span class="sr-only">80% Complete (danger)</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="float-right" style="margin-left:10px;">{{answerRating.star3}}</div>
+                  </div>
+                  <div class="rating-bar-answer">
+                    <div class="" style="width:35px; line-height:1;">
+                      <div style="height:9px; margin:5px 0;">2
+                        <i class="fontawesome-icons fa-star" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="" style="width:180px;">
+                      <div class="progress" style="height:9px; margin:8px 0;">
+                        <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="2" aria-valuemin="0"
+                          aria-valuemax="5" style="width: 40%">
+                          <span class="sr-only">80% Complete (danger)</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="float-right" style="margin-left:10px;">{{answerRating.star2}}</div>
+                  </div>
+                  <div class="rating-bar-answer">
+                    <div class="" style="width:35px; line-height:1;">
+                      <div style="height:9px; margin:5px 0;">1
+                        <i class="fontawesome-icons fa-star" aria-hidden="true"></i>
+                      </div>
+                    </div>
+                    <div class="" style="width:180px;">
+                      <div class="progress" style="height:9px; margin:8px 0;">
+                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="1" aria-valuemin="0"
+                          aria-valuemax="5" style="width: 20%">
+                          <span class="sr-only">80% Complete (danger)</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="float-right" style="margin-left:10px;">{{answerRating.star1}}</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <!-- /container -->
+            {{/each}}
+          </div>
+
+        </form>
+                  <div class="button-see-answer2">
+            <a href="/questions/enable_answers/{{../question.id}}"> <button class="button-see-answer2"> See all Answers </button></a>
+          </div>
+
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</div>
