@@ -84,6 +84,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //Server is listening
 
-app.listen(app.get('port'), () => {
+const server = app.listen(app.get('port'), () => {
   console.log('Server on port', app.get('port'));
 })
+
+server.keepAliveTimeout = 65000
