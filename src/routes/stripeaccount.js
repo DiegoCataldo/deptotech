@@ -29,9 +29,9 @@ router.get("/stripeaccount/refresh", async (req, res) => {
     return;
   }
   try {
-    const {accountID} = req.session;
+    const { accountID } = req.session;
     const origin = `${req.secure ? "https://" : "https://"}${req.headers.host}`;
-    
+
     const accountLinkURL = await generateAccountLink(accountID, origin)
     res.redirect(accountLinkURL);
   } catch (err) {
@@ -83,14 +83,17 @@ router.post('/stripeaccount/addcustomerbutton', isAuthenticated, async (req, res
 });
 
 
-router.post('/webhookstripe', express.json({type: 'application/json'}), (request, response) => {
+// webhook de stripe, cada vez que se pague una pregunta llegará una solicitud de stripe a esta url
+router.post('/webhookstripe', express.json({ type: 'application/json' }), (request, response) => {
   const event = request.body;
-
+  console.log(event);
   // Handle the event
   switch (event.type) {
-    case 'payment_intent.succeeded':
+    case 'checkout.session.completed':
       const paymentIntent = event.data.object;
-      console.log(paymentIntent);
+      console.log(event.data.object);
+
+      updatePaidQuestion(event.data.object);
       break;
     case 'payment_method.attached':
       const paymentMethod = event.data.object;
@@ -103,13 +106,15 @@ router.post('/webhookstripe', express.json({type: 'application/json'}), (request
   }
 
   // Return a response to acknowledge receipt of the event
-  response.json({received: true});
+  response.json({ received: true });
 });
 
 
 router.post('/create-checkout-session', async (req, res) => {
+
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
+    client_reference_id: 'question.id',
     line_items: [
       {
         price_data: {
@@ -130,6 +135,48 @@ router.post('/create-checkout-session', async (req, res) => {
   res.redirect(303, session.url);
 });
 
+/// procesar por stripe el pago de una pregunta para habilitar sus respuestas ///
+router.post('/checkout-session-enableanswers', async (req, res) => {
+
+  const idQuestion = mongoose.Types.ObjectId(req.body.idquestion);
+  const question = await Question.findById(req.body.idquestion).lean()
+    .then(data => {
+      return {
+        _id: data._id,
+        user_question: data.user_question,
+        reward_offered: data.reward_offered,
+        title: data.title
+      }
+    });
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+
+      {
+        price_data:{
+          currency: 'usd',
+          product_data: {
+            name: "question",
+            metadata: {
+                title: question.title,
+                id_question: idQuestion.toString(),
+                user_question: question.user_question.toString()
+            }
+          },
+          
+        unit_amount: question.reward_offered*100,
+        },
+        quantity: 1,
+      }
+    ],
+    mode: 'payment',
+    success_url: 'https://example.com/success',
+    cancel_url: 'https://example.com/cancel',
+  });
+
+  res.redirect(303, session.url);
+});
 function generateAccountLink(stripeaccountID, origin) {
   return stripe.accountLinks.create({
     type: "account_onboarding",
@@ -137,6 +184,16 @@ function generateAccountLink(stripeaccountID, origin) {
     refresh_url: `${origin}/stripeaccount/refresh`,
     return_url: `${origin}/stripeaccount/successNewCostumer`,
   }).then((link) => link.url);
+}
+
+const updatePaidQuestion = async session => {
+  const idQuestion = mongoose.Types.ObjectId(session.client_reference_id);
+  const update = { answers_enabled: true };
+  const filter = { _id: idQuestion };
+
+  await Question.findOneAndUpdate(filter, update, { new: true }).lean();
+
+
 }
 
 module.exports = router;

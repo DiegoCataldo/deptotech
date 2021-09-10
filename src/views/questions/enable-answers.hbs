@@ -4,7 +4,8 @@
  <!-- <a href="/questions/get_enable_answers/{{id_question}}"> <button class="button-see-answer2"> Confirm Pay
     </button></a> -->
 
-    <form action="/create-checkout-session" method="POST">
+    <form action="/checkout-session-enableanswers" method="POST">
+      <input type="hidden" value="{{id_question}}" name="idquestion" readonly>
       <button type="submit">Checkout</button>
     </form>
 </div>
