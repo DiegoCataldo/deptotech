@@ -93,9 +93,9 @@ const server = app.listen(app.get('port'), () => {
 
 /// stripe webhook ///////
 
-app.post('/webhookstripe', bodyParser.raw ({type: 'application/json'}), function(req, res) {
+/* app.post('/webhookstripe', bodyParser.raw ({type: 'application/json'}), function(req, res) {
   stripeacccount.webhookstripe2
 } )
-
+ */
 
 server.keepAliveTimeout = 65000

@@ -84,7 +84,7 @@ router.post('/stripeaccount/addcustomerbutton', isAuthenticated, async (req, res
 
 
 // webhook de stripe, cada vez que se pague una pregunta llegará una solicitud de stripe a esta url
-/*
+
 router.post('/webhookstripe', express.json({ type: 'application/json' }), (request, response) => {
   const event = request.body;
   console.log(event);
@@ -101,13 +101,13 @@ router.post('/webhookstripe', express.json({ type: 'application/json' }), (reque
   }
 
   // Return a response to acknowledge receipt of the event
-  response.json({ received: true });
+  response.json({ received: true, event: event, eventype: event.type  });
 });
-*/
+
 
 
 // webhook de stripe, cada vez que se pague una pregunta llegará una solicitud de stripe a esta url
-exports.webhookstripe2 = (request, response, next) => {
+/* exports.webhookstripe2 = (request, response, next) => {
   const signature = req.headers['stripe-signature'];
 
  let event;
@@ -134,7 +134,7 @@ exports.webhookstripe2 = (request, response, next) => {
   // Return a response to acknowledge receipt of the event
    response.status(200).json({ received: true });
 };
-
+ */
 
 router.post('/create-checkout-session', async (req, res) => {
 
