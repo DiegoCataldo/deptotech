@@ -177,6 +177,7 @@ router.post('/checkout-session-enableanswers', async (req, res) => {
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
+    client_reference_id: idQuestion.toString(),
     line_items: [
 
       {
