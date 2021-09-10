@@ -84,6 +84,7 @@ router.post('/stripeaccount/addcustomerbutton', isAuthenticated, async (req, res
 
 
 // webhook de stripe, cada vez que se pague una pregunta llegará una solicitud de stripe a esta url
+/*
 router.post('/webhookstripe', express.json({ type: 'application/json' }), (request, response) => {
   const event = request.body;
   console.log(event);
@@ -95,12 +96,6 @@ router.post('/webhookstripe', express.json({ type: 'application/json' }), (reque
 
       updatePaidQuestion(event.data.object);
       break;
-    case 'payment_method.attached':
-      const paymentMethod = event.data.object;
-      // Then define and call a method to handle the successful attachment of a PaymentMethod.
-      // handlePaymentMethodAttached(paymentMethod);
-      break;
-    // ... handle other event types
     default:
       console.log(`Unhandled event type ${event.type}`);
   }
@@ -108,6 +103,37 @@ router.post('/webhookstripe', express.json({ type: 'application/json' }), (reque
   // Return a response to acknowledge receipt of the event
   response.json({ received: true });
 });
+*/
+
+
+// webhook de stripe, cada vez que se pague una pregunta llegará una solicitud de stripe a esta url
+exports.webhookstripe2 = (request, response, next) => {
+  const signature = req.headers['stripe-signature'];
+
+ let event;
+
+  try{
+    event = stripe.webhooks.constructEvent(request.body, signature,  process.env.STRIPE_WEBHOOK_SECRET);
+  }catch(err) {
+  return res.status(400).send(`Webhook error: ${err.message}`);
+  }
+
+  console.log(event);
+  // Handle the event
+  switch (event.type) {
+    case 'checkout.session.completed':
+      const paymentIntent = event.data.object;
+      console.log(event.data.object);
+
+      updatePaidQuestion(event.data.object);
+      break;
+    default:
+      console.log(`Unhandled event type ${event.type}`);
+  }
+
+  // Return a response to acknowledge receipt of the event
+   response.status(200).json({ received: true });
+};
 
 
 router.post('/create-checkout-session', async (req, res) => {
@@ -177,6 +203,7 @@ router.post('/checkout-session-enableanswers', async (req, res) => {
 
   res.redirect(303, session.url);
 });
+
 function generateAccountLink(stripeaccountID, origin) {
   return stripe.accountLinks.create({
     type: "account_onboarding",

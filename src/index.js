@@ -7,6 +7,7 @@ const session = require('express-session');  // es para guardar los datos de los
 const flash = require('connect-flash'); // para enviar mensajes por pantalla
 const passport = require ('passport');
 const multer = require('multer');
+const bodyParser = require('body-parser');
 const stripeacccount = require('./routes/stripeaccount');
 if(process.env.NODE_ENV !== 'production'){
   require('dotenv').config();
@@ -92,6 +93,9 @@ const server = app.listen(app.get('port'), () => {
 
 /// stripe webhook ///////
 
+app.post('/webhookstripe', bodyParser.raw ({type: 'application/json'}), function(req, res) {
+  stripeacccount.webhookstripe2
+} )
 
 
 server.keepAliveTimeout = 65000
