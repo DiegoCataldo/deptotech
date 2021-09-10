@@ -17,7 +17,7 @@ require('./config/passport');
 
 
 /////////////////// Settings  ////////////////////////////
-app.set('port', process.env.PORT || 8080);
+app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views')); //es para tener el path de la carpeta views
 app.engine('.hbs', exphbs({
   defaultLayout: 'main',
