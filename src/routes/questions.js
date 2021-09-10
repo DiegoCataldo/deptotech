@@ -567,28 +567,7 @@ router.get('/questions/get_enable_answers/:id', isAuthenticated, async (req, res
   res.redirect('/questions/seeownquestion/' + req.params.id)
 });
 
-router.post('/create-checkout-session', async (req, res) => {
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
-    line_items: [
-      {
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: 'T-shirt',
-          },
-          unit_amount: 2000,
-        },
-        quantity: 1,
-      },
-    ],
-    mode: 'payment',
-    success_url: 'https://example.com/success',
-    cancel_url: 'https://example.com/cancel',
-  });
 
-  res.redirect(303, session.url);
-});
 
 ///// Agregar una nueva puntuación (rating) a una respuesta ////////////
 router.get('/questions/add_rating/:idanswer&:rating', isAuthenticated, async (req, res) => {
