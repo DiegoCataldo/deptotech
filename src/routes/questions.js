@@ -446,6 +446,34 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
 
       }
     })
+
+  const userQuestion = mongoose.Types.ObjectId(question.user_question);
+  const queryMatchUserInfo = { '_id': userQuestion };
+
+  const userallInfo = await User.aggregate([
+    { $match: queryMatchUserInfo },
+    {
+      $lookup: {
+        from: "questions",
+        let: { "user_question": "$_id" },
+        pipeline: [
+          { $match: { $expr: { $eq: ["$user_question", "$$user_question"] } } }
+          // { $project: { "password": 0, "createdAt": 0, "email": 0 } }
+        ],
+        as: "user_questions"
+      }
+    }, {
+      $lookup: {
+        from: "answers",
+        let: { "user_answer": "$_id" },
+        pipeline: [
+          { $match: { $expr: { $eq: ["$user_answer", "$$user_answer"] } } }
+          // { $project: { "password": 0, "createdAt": 0, "email": 0 } }
+        ],
+        as: "user_answers"
+      }
+    }
+  ]);
   // busco los datos de cada respuesta a la pregunta
   const idparamsObjectTypeID = mongoose.Types.ObjectId(req.params.id);
   const queryMatch = { 'id_question': idparamsObjectTypeID };
@@ -468,7 +496,7 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
   /*console.log(JSON.stringify(answers, null, 2)); */
 
   res.render('questions/see-own-question', {
-    question, answers,
+    question, answers, userallInfo,
     helpers: {
       ratingUserAVG: function (star1, star2, star3, star4, star5) {
         var totalRatings = star1 + star2 + star3 + star4 + star5;
@@ -509,7 +537,6 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
 
 
 ///// crear respuesta a una pregunta ///////
-
 router.put('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
 
   const answer = req.body.new_answer;

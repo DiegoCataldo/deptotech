@@ -83,7 +83,7 @@
       <div class="answer-do-container col-md-8">
           <form action="/questions/doanswer/{{question.id}}?_method=PUT" method="POST">
              <input type ="hidden" name ="_method" value="PUT">
-        <textarea id="new_answer" name="new_answer"></textarea>
+        <textarea  name="new_answer" class="trumbowyg-textarea" required="required" ></textarea>
          <button class="button-main-1 mt-5" type="submit"> Save </button>
         </form>
       </div>

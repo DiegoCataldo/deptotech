@@ -1,6 +1,57 @@
 
 
 $(function () {
+
+  $('.trumbowyg-textarea').trumbowyg({
+
+    btns: [
+      ['highlight'],
+      ['viewHTML'],
+      ['formatting'],
+      ['strong', 'em', 'del'],
+      ['justifyLeft', 'justifyCenter'],
+      ['superscript', 'subscript'],
+        ['link'],
+        ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+        ['unorderedList', 'orderedList'],
+        ['horizontalRule'],
+        ['removeformat'],
+        ['fullscreen']
+      
+  ]
+  });
+
+
+  let elmButton = document.querySelector("#addcustomerbutton");
+  // botón para agregar un nuevo costumer en connect de stripe y que pueda recibir plata al responder
+if (elmButton) {
+  elmButton.addEventListener(
+    "click",
+    e => {
+      elmButton.setAttribute("disabled", "disabled");
+      elmButton.textContent = "Opening...";
+
+      fetch("/stripeaccount/addcustomerbutton", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.url) {
+            window.location = data.url;
+          } else {
+            elmButton.removeAttribute("disabled");
+            elmButton.textContent = "<Something went wrong>";
+            console.log("data", data);
+          }
+        });
+    },
+    false
+  );
+}
+
   $('#Modal').modal('show');
 
   $(".navbar-toggler").on("click", function (e) {
@@ -20,15 +71,6 @@ $(function () {
     $(".tm-header").removeClass("show");
   });
 
-  /// editor de texto froala ////
-  new FroalaEditor('textarea', {
-    // Set custom buttons with separator between them.
-    toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent', 'clearFormatting', 'html'],
-    toolbarButtonsXS: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent', 'clearFormatting', 'html'],
-    quickInsertButtons: [],
-    charCounterMax: 10000
-  });
-
   $(".button-best-answer").on("click", function (e) {
 
     var answer = confirm("Are you sure this is the best answer? this user will be the only one who will receive the reward of the question");
@@ -39,13 +81,11 @@ $(function () {
     }
   });
 
+  // para que no se vea toda la descripción de la pregunta y aparezca el botón more and less
 $('.body-question-description').each(function(e) {
-
 
     var $pTag = $(this).find('p');
     console.log($pTag.text());
-
-    console.log($pTag.text().length);
     if($pTag.text().length > 200){
         var shortText = $pTag.text();
         shortText = shortText.substring(0, 200);
@@ -64,13 +104,14 @@ $(document).on('click', '.read-less-link', function () {
   $(this).parent().hide().next().show();
 });
 
+/// cerrar el dialogo de alerta //
   $("#alertbutton").click(function (e) {
     console.log(e);
     $(".alert").fadeOut();
   });
 });
 
-
+// eliminar los tags que se están agregando al hacer click en la x //
 $('body').on('click', 'i.cross', function () {
   console.log("entro");
   var removedItem = $(this).parent().contents(':not(i)').text();
@@ -79,7 +120,7 @@ $('body').on('click', 'i.cross', function () {
     return value != removedItem;
   });
 });
-
+ /// agregar tags //
 $(".tag-input").keyup(function (e) {
   var code = e.key; // recommended to use e.key, it's normalized across devices and languages
   if (code === "Enter") e.preventDefault();
@@ -99,11 +140,13 @@ $(".tag-input").keyup(function (e) {
   }
 });
 
+
 var tags = [];
 $(document).ready(function () {
 
   $('#example').DataTable();
   
+  // subir imagenes //
   const fileSelector = document.getElementById('inputGroupFile01');
   fileSelector.addEventListener('change', (event) => {
 
@@ -136,54 +179,22 @@ $(document).ready(function () {
   });
 
 
-
-  /// editor de texto froala ////
-  new FroalaEditor('textarea', {
-    // Set custom buttons with separator between them.
-    toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent', 'clearFormatting', 'html'],
-    toolbarButtonsXS: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent', 'clearFormatting', 'html'],
-    quickInsertButtons: [],
-    charCounterMax: 10000
-  });
-
-
-
 });
 
 $(document).on("keydown", ":input:not(textbox)", function (event) {
-  return event.key != "Enter";
+
+
+  var classe =  $(event.target).attr('class');
+  console.log(classe.indexOf("tag-input"));
+
+  if(classe == "tag-input" || classe.indexOf("tag-input") !== -1){
+    return event.key != "Enter";
+  }
+
 });
 
-let elmButton = document.querySelector("#addcustomerbutton");
 
-if (elmButton) {
-  elmButton.addEventListener(
-    "click",
-    e => {
-      elmButton.setAttribute("disabled", "disabled");
-      elmButton.textContent = "Opening...";
-
-      fetch("/stripeaccount/addcustomerbutton", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.url) {
-            window.location = data.url;
-          } else {
-            elmButton.removeAttribute("disabled");
-            elmButton.textContent = "<Something went wrong>";
-            console.log("data", data);
-          }
-        });
-    },
-    false
-  );
-}
-
+// agregar rating a las respuestas //
 function addRatingAnswerAjax(p_idanswer, p_rating) {
 
   document.getElementById('1_' + p_idanswer).disabled = true;
@@ -216,15 +227,8 @@ fileSelector.addEventListener('change', (event) => {
   console.log(fileList);
   $("#label-inputGroupFile01").val(fileList);
 
-});
-/// editor de texto froala ////
-new FroalaEditor('textarea', {
-  // Set custom buttons with separator between them.
-  toolbarButtons: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent', 'clearFormatting', 'html'],
-  toolbarButtonsXS: ['undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'outdent', 'indent', 'clearFormatting', 'html'],
-  quickInsertButtons: [],
-  charCounterMax: 10000
-});
-//new FroalaEditor('textarea#new_answer');
+}); 
+
+
 
 

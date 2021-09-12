@@ -31,8 +31,10 @@
     "nodemailer": "^6.6.3",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "prismjs": "^1.24.1",
     "stripe": "^8.174.0",
-    "tags-input": "^1.1.1"
+    "tags-input": "^1.1.1",
+    "trumbowyg": "^2.25.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"

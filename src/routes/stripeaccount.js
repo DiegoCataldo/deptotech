@@ -15,15 +15,15 @@ const stripe = require("stripe")('sk_test_51Ibu5uDyfMeOA6sJnuFnlxOrrT2nR4nmhiFzr
 
 
 //////////// Crear nuevap costumer /////////
-router.get('/stripeaccount/addcustomer', (req, res) => {
+router.get('/stripeaccount/addcustomer', isAuthenticated,  (req, res) => {
   res.render('stripeaccount/new-customer');
 });
-router.get('/stripeaccount/successNewCostumer', (req, res) => {
+router.get('/stripeaccount/successNewCostumer', isAuthenticated,  (req, res) => {
   res.render('stripeaccount/success-new-costumer');
 });
 
 
-router.get("/stripeaccount/refresh", async (req, res) => {
+router.get("/stripeaccount/refresh", isAuthenticated, async (req, res) => {
   if (!req.session.accountID) {
     res.redirect("/");
     return;
@@ -42,7 +42,7 @@ router.get("/stripeaccount/refresh", async (req, res) => {
 });
 
 
-
+/// botón para crear una nueva cuenta de stripe y que puedan responder//
 router.post('/stripeaccount/addcustomerbutton', isAuthenticated, async (req, res) => {
 
   try {
@@ -68,23 +68,8 @@ router.post('/stripeaccount/addcustomerbutton', isAuthenticated, async (req, res
       error: err.message
     });
   }
-
-
-
-
-  /*
-    const account = await stripe.accounts.retrieve(
-      'd'
-    ).catch(console.error)
-    .then(() => console.log('We do cleanup here'));
-  
-    console.log(account);
-     */
 });
-
-
 // webhook de stripe, cada vez que se pague una pregunta llegará una solicitud de stripe a esta url
-
 router.post('/webhookstripe', express.json({ type: 'application/json' }), (request, response) => {
   const event = request.body;
   console.log(event);
@@ -104,65 +89,8 @@ router.post('/webhookstripe', express.json({ type: 'application/json' }), (reque
   response.json({ received: true, event: event, eventype: event.type  });
 });
 
-
-
-// webhook de stripe, cada vez que se pague una pregunta llegará una solicitud de stripe a esta url
-/* exports.webhookstripe2 = (request, response, next) => {
-  const signature = req.headers['stripe-signature'];
-
- let event;
-
-  try{
-    event = stripe.webhooks.constructEvent(request.body, signature,  process.env.STRIPE_WEBHOOK_SECRET);
-  }catch(err) {
-  return res.status(400).send(`Webhook error: ${err.message}`);
-  }
-
-  console.log(event);
-  // Handle the event
-  switch (event.type) {
-    case 'checkout.session.completed':
-      const paymentIntent = event.data.object;
-      console.log(event.data.object);
-
-      updatePaidQuestion(event.data.object);
-      break;
-    default:
-      console.log(`Unhandled event type ${event.type}`);
-  }
-
-  // Return a response to acknowledge receipt of the event
-   response.status(200).json({ received: true });
-};
- */
-
-router.post('/create-checkout-session', async (req, res) => {
-
-  const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card'],
-    client_reference_id: 'question.id',
-    line_items: [
-      {
-        price_data: {
-          currency: 'usd',
-          product_data: {
-            name: 'T-shirt',
-          },
-          unit_amount: 2000,
-        },
-        quantity: 1,
-      },
-    ],
-    mode: 'payment',
-    success_url: 'https://example.com/success',
-    cancel_url: 'https://example.com/cancel',
-  });
-
-  res.redirect(303, session.url);
-});
-
 /// procesar por stripe el pago de una pregunta para habilitar sus respuestas ///
-router.post('/checkout-session-enableanswers', async (req, res) => {
+router.post('/checkout-session-enableanswers', isAuthenticated,  async (req, res) => {
 
   const idQuestion = mongoose.Types.ObjectId(req.body.idquestion);
   const question = await Question.findById(req.body.idquestion).lean()
