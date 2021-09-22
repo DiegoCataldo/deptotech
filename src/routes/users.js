@@ -210,7 +210,7 @@ router.put('/users/recoverypass', async (req, res) => {
 
     const linkUrlNewPass = 'https://www.priceanswers.com/users/recoverypassnew/' + user._id;
     // send mail with defined transport object
-    let info =  transporter.sendMail({
+    let info = await transporter.sendMail({
       from: 'contact@priceanswers.com', // sender address
       to: emailUser, // list of receivers
       subject: "Hello ✔", // Subject line
