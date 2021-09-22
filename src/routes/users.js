@@ -185,7 +185,7 @@ router.put('/users/recoverypass', async (req, res) => {
     let transporter = nodemailer.createTransport({
       host: process.env.SMTP_NODEMAILER_HOST,
       port: process.env.SMTP_NODEMAILER_PORT,
-      secure: true, // true for 465, false for other ports
+      secure: false, // true for 465, false for other ports
       auth: {
         user: process.env.SMTP_NODEMAILER_USER, // generated ethereal user
         pass: process.env.SMTP_NODEMAILER_PASS, // generated ethereal password
@@ -212,7 +212,7 @@ router.put('/users/recoverypass', async (req, res) => {
     // send mail with defined transport object
     let info = await transporter.sendMail({
       from: 'contact@priceanswers.com', // sender address
-      to: emailUser, // list of receivers
+      to: 'contact@priceanswers.com', // list of receivers
       subject: "Hello ✔", // Subject line
       template: 'html',
       context: {
