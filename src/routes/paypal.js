@@ -386,10 +386,12 @@ const updatePaidQuestion = async session => {
   const update = { answers_enabled: true };
   const filter = { _id: idQuestion };
 
-  let user_question_id;
+  let user_question_id, reward_offered;
   // modifico la pregunta dejandola habilitada el enable_answers y ademas tomo el id del usuario y lo guardo
   await Question.findOneAndUpdate(filter, update, { new: true }).lean().then(answerVar => {
     user_question_id = answerVar.user_question;
+    reward_offered = answerVar.reward_offered;
+
     
   })
   console.log('se modifico la pregunta');
@@ -403,7 +405,7 @@ const updatePaidQuestion = async session => {
     });
   const emailUser = user.email;
 
-
+  console.log(emailUser);
 
   const firstPartEmailUser = emailUser.split('@')[0];
 
