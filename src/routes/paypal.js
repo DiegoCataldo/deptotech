@@ -414,7 +414,7 @@ const updatePaidQuestion = async session => {
   let transporter = nodemailer.createTransport({
     host: process.env.SMTP_NODEMAILER_HOST,
     port: process.env.SMTP_NODEMAILER_PORT,
-    secure: false, // true for 465, false for other ports
+    secure: true, // true for 465, false for other ports
     auth: {
       user: process.env.SMTP_NODEMAILER_USER, // generated ethereal user
       pass: process.env.SMTP_NODEMAILER_PASS, // generated ethereal password
