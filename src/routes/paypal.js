@@ -361,27 +361,29 @@ router.get('/paypal/login-not-verified', (req, res) => {
 // webhook de PAYPAL, cada vez que se pague una pregunta llegará una solicitud de PAYPAL a esta url
 router.post('/webhookpaypal', express.json({ type: 'application/json' }), (request, response) => {
   const event = request.body;
-
-
-  return console.log(JSON.stringify(event, null, 2));
-  
+   console.log(JSON.stringify(event, null, 2));
 
   // Handle the event
-  /*
-  switch (event.type) {
-    case 'checkout.session.completed':
-      const paymentIntent = event.data.object;
-      console.log(event.data.object);
-
-      updatePaidQuestion(event.data.object);
+  
+  switch (event.event_type) {
+    case 'CHECKOUT.ORDER.APPROVED':
+      updatePaidQuestion(event);
       break;
     default:
       console.log(`Unhandled event type ${event.type}`);
   }
-
-  // Return a response to acknowledge receipt of the event
-  response.json({ received: true, event: event, eventype: event.type  });
-  */
 });
+
+
+const updatePaidQuestion = async session => {
+  const idQuestion = mongoose.Types.ObjectId(session.resource.purchase_units[0].custom_id);
+  const update = { answers_enabled: true };
+  const filter = { _id: idQuestion };
+
+  await Question.findOneAndUpdate(filter, update, { new: true }).lean();
+  console.log('se pago la pregunta');
+
+
+}
 
 module.exports = router;
