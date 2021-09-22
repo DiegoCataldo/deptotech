@@ -195,7 +195,7 @@ router.put('/users/recoverypass', async (req, res) => {
       }
     });
 
-    await transporter.verify().catch(console.error);
+     transporter.verify().catch(console.error);
 
     var options = {
       viewEngine: {
@@ -212,7 +212,7 @@ router.put('/users/recoverypass', async (req, res) => {
 
     const linkUrlNewPass = 'https://www.priceanswers.com/users/recoverypassnew/' + user._id;
     // send mail with defined transport object
-    let info = await transporter.sendMail({
+    let info =  transporter.sendMail({
       from: 'contact@priceanswers.com', // sender address
       to: 'contact@priceanswers.com', // list of receivers
       subject: "Hello ✔", // Subject line
