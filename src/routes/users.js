@@ -181,10 +181,11 @@ router.put('/users/recoverypass', async (req, res) => {
 
     // Generate test SMTP service account from ethereal.email
     // create reusable transporter object using the default SMTP transport
+    console.log(process.env.SMTP_NODEMAILER_HOST)
     let transporter = nodemailer.createTransport({
       host: process.env.SMTP_NODEMAILER_HOST,
       port: process.env.SMTP_NODEMAILER_PORT,
-      secure: false, // true for 465, false for other ports
+      secure: true, // true for 465, false for other ports
       auth: {
         user: process.env.SMTP_NODEMAILER_USER, // generated ethereal user
         pass: process.env.SMTP_NODEMAILER_PASS, // generated ethereal password
