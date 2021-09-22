@@ -195,6 +195,8 @@ router.put('/users/recoverypass', async (req, res) => {
       }
     });
 
+    await transporter.verify().catch(console.error);
+    
     var options = {
       viewEngine: {
         extname: '.hbs', // handlebars extension
