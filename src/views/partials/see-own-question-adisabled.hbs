@@ -2,8 +2,8 @@
 <div class="row card border-card">
   <!--  HEADEER --->
   <div class="banner-question u-section-2">
-    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">PORTAFOLIO</h3>
-    <h2 class="u-heading-font u-text u-text-2">PROYECTOS RECIENTES</h2>
+    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">QUESTIONS</h3>
+    <h2 class="u-heading-font u-text u-text-2">MY QUESTIONS</h2>
     <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
   </div>
   {{> errors}}
@@ -62,19 +62,20 @@
           <div class="profile-answer-body">
             <div class="profile-question-info profile-country">
               <i class="fas fa-map-marker-alt"></i>
-              Chile
-            </div>
+
+
+              {{userallInfo.country_birth}}            </div>
             <div class="profile-question-info profile-allquestions">
               <i class="fas fa-question-circle"></i>
-              5 Questions Asked
+              {{countLength userallInfo.user_questions}} Questions asked
             </div>
             <div class="profile-question-info profile-questions-paid">
               <i class="fas fa-money-bill-alt"></i>
-              3 Questions answered
+              {{countQuestionEnabled userallInfo.user_questions}} Questions enabled
             </div>
             <div class="profile-question-info profile-allquestions-likes">
               <i class="fas fa-thumbs-up"></i>
-              100 likes in all his questions
+              {{countLength userallInfo.user_answers}} Questions answered
             </div>
           </div>
         </div>

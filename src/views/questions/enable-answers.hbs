@@ -8,23 +8,18 @@
       <div class="carousel-inner" role="listbox">
 
         <div class="carousel-item active">
-          <div class="carousel-background"><img src="img/back5.jpg" alt=""></div>
+          <div class="carousel-background"><img src="/img/back5.jpg" alt=""></div>
           <div class="carousel-container">
             <div class="carousel-content">
 
               <div class="row container-title-index">
                 <div class="col-md-10 offset-md-2">
-                  <h1><a href="#intro" class="scrollto logov1"><img src="img/logoprice.png" alt='logov1' /> </a></h1>
+                  <h1><a href="#intro" class="scrollto logov1"><img src="/img/logoprice.png" alt='logov1' /> </a></h1>
                   <h1 class="h1-title-index">
-                    Do you need a quick answer?</h1>
-                  <h1 class="h1-title-index">
-                    Get it!</h1>
-                  <p class="subtitle-index">Put a reward on your question and just wait for the quick answers.</p>
+                    Pay your reward and view the answers!</h1>
+                  <p class="subtitle-index">We will redirect you to the payment method so that you can pay the reward and then be able to view the answers to your question.</p>
                   <div class="mt-3">
-                    <form action="/checkout-session-enableanswers" method="POST">
-                      <input type="hidden" value="{{id_question}}" name="idquestion" readonly>
-                      <button type="submit" class="button-main-3" >Checkout</button>
-                    </form>
+                     <a href="/paypal/create-payment/{{id_question}}"> <button class="button-main-4">Go to payment method!</button></a>
                   </div>
                 </div>
               </div>

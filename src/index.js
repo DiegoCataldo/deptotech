@@ -77,6 +77,8 @@ app.use(require('./routes/notes'));
 app.use(require('./routes/users'));
 app.use(require('./routes/questions'));
 app.use(require('./routes/stripeaccount'));
+app.use(require('./routes/paypal'));
+
 
 
 

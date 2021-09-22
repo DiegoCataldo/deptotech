@@ -1,0 +1,44 @@
+<div class="row height100">
+  <div class="card card-question border-card">
+    <div class="banner-question u-section-2">
+      <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">PROFILE</h3>
+      <h2 class="u-heading-font u-text u-text-2">NEW PASSWORD</h2>
+      <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+    </div>
+    <br>
+      {{> errors}}
+    <section id="services">
+      <div class="container">
+
+        <header class="section-header wow fadeInUp">
+          <h3>SEND NEW PASSWORD TO YOUR EMAIL</h3>
+          <p>
+            We are going to send you your new password, to your email associated with the account, please enter your email</p>
+        </header>
+      </div>
+    </section>
+ <div class="row">
+    <div class="col-md-7 mx-auto ">
+    <fieldset class="fieldset-question">
+      <legend class="legend-question">Recovery password</legend>
+      <div class="card-body">
+        <form action="/users/recoverypass?_method=PUT" method="POST" enctype="multipart/form-data">
+          <div class="mt-3">
+            <label for="currentpassword">Email</label>
+            <input type="email" id="email" name="email" class="form-control" placeholder="Email" value=""
+              autofocus>
+            <small id="emailHelp" class="form-text text-muted">Enter your email.</small>
+          </div>
+          <div class="mt-3 container-button">
+            <button class="button-main-1 mt-5" type="submit"> Save </button>
+          </div>
+
+        </form>
+      </div>
+    </fieldset>
+  </div>
+  </div>
+  </div>
+
+  </div>
+  

@@ -26,11 +26,18 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
   if (!description) {
     errors.push({ text: 'Please Write a Description' })
   }
+  if (!reward) {
+    errors.push({ text: 'Please Add a valid Reward' })
+  }
+  if (!tagsArray) {
+    errors.push({ text: 'Please Add tags (press Enter to add it)' })
+  }
   if (errors.length > 0) {
     res.render('questions/new-question', {
       errors,
       title,
-      description
+      description,
+      reward
     })
   } else {
     const newQuestion = new Question({ title, description, tags: tagsArray, reward_offered: reward, answers_enabled: false, best_answer_chosen: false });
@@ -210,7 +217,6 @@ router.post('/questions/allquestionsfilter', isAuthenticated, async (req, res) =
     tagsArray = [tagsArray];
   }
 
-  console.log(JSON.stringify(tagsArray, null, 2));
   if (tagsArray == null) {
 
     const questions = await Question.aggregate([
@@ -289,20 +295,15 @@ router.post('/questions/allquestionsfilter', isAuthenticated, async (req, res) =
 /////// Obtener info de la pregunta a responder /////////
 router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
 
-  // primero veo si en la bd está el account id de stripe para este usuario
+  // primero veo si en la bd está el account id de paypal para este usuario
   const user = await User.findById(req.user.id).lean();
-    var stripeaccountID = user.stripe_account_id;
+  var paypal_account_verified = user.paypal_account_verified;
 
-    const accountStripe = await stripe.accounts.retrieve(
-      stripeaccountID
-    ).catch(console.error)
-  
-  
-      // en caso que no exista el account_id de stripe o si existe pero no tiene habilitado el payouts enabled lo redirecciono para que se registre en stripe
-    if (typeof accountStripe === 'undefined' || accountStripe == null || accountStripe == '' || !accountStripe.payouts_enabled) {
-      res.redirect('/stripeaccount/addcustomer');  return;
-    }
-    /// obtengo la info de la pregunta ////
+  //en caso que el paypal account no esté verificado según la bd de priceanswers, lo reenvío para que se logee en paypal y para ver si está verificado
+  if (typeof paypal_account_verified === 'undefined' || paypal_account_verified == null || !paypal_account_verified) {
+    res.redirect('/paypal/addcustomer'); return;
+  }
+  /// obtengo la info de la pregunta ////
   const question = await Question.findById(req.params.id).lean()
     .then(data => {
       return {
@@ -317,7 +318,7 @@ router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
       }
     })
 
-    /// obtengo la info del usuario que hico la pregunta ////
+  /// obtengo la info del usuario que hico la pregunta ////
   const userQuestion = mongoose.Types.ObjectId(question.user_question);
   const queryMatch = { '_id': userQuestion };
 
@@ -369,7 +370,6 @@ router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
     req.flash('error', 'You cannot answer your own question');
     res.redirect('/questions/allquestions');
   } else {
-    console.log(question.best_answer_chosen)
     res.render('questions/do-answer', {
       question, userallInfo: userallInfo[0], answers: answers,
       helpers: {
@@ -395,7 +395,7 @@ router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
           var totalRatings = star1 + star2 + star3 + star4 + star5;
           var percentageStar = (star1 * 1 + star2 * 2 + star3 * 3 + star4 * 4 + star5 * 5) / totalRatings;
           var percentageStarRounded = Math.round(percentageStar * 10) / 10;
-  
+
           return percentageStarRounded;
         },
         isGreater: function (a, b, options) {
@@ -409,7 +409,7 @@ router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
         },
         RatingEnabled: function (rating_by, options) {
           var FoundID = rating_by.find(function (doc, index) {
-  
+
             if (doc.idUser == req.user.id) {
               return true;
             } else {
@@ -447,7 +447,7 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
       }
     })
 
-  const userQuestion = mongoose.Types.ObjectId(question.user_question);
+  const userQuestion = mongoose.Types.ObjectId(req.user.id);
   const queryMatchUserInfo = { '_id': userQuestion };
 
   const userallInfo = await User.aggregate([
@@ -474,6 +474,7 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
       }
     }
   ]);
+
   // busco los datos de cada respuesta a la pregunta
   const idparamsObjectTypeID = mongoose.Types.ObjectId(req.params.id);
   const queryMatch = { 'id_question': idparamsObjectTypeID };
@@ -493,10 +494,8 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
     }
   ])
 
-  /*console.log(JSON.stringify(answers, null, 2)); */
-
   res.render('questions/see-own-question', {
-    question, answers, userallInfo,
+    question, answers, userallInfo: userallInfo[0],
     helpers: {
       ratingUserAVG: function (star1, star2, star3, star4, star5) {
         var totalRatings = star1 + star2 + star3 + star4 + star5;
@@ -512,10 +511,11 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
         return (a >= b) ? options.fn(this) : options.inverse(this);
       },
       log: function (something) {
-        console.log(something);
+        return console.log(JSON.stringify(something, null, 2));
       },
       json: function (something) {
-        return JSON.stringify(something);
+        return console.log(JSON.stringify(something, null, 2));
+
       },
       RatingEnabled: function (rating_by, options) {
         var FoundID = rating_by.find(function (doc, index) {
@@ -530,7 +530,23 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
       },
       ifExist: function (variable, options) {
         return (variable != null) ? options.fn(this) : options.inverse(this);
-      }
+      },
+      countLength: function (something) {
+        return something.length;
+      },
+      countQuestionEnabled: function (something) {
+
+        var count = 0;
+        if (typeof something !== 'undefined') {
+
+          for (var x of something) {
+            if (x.answers_enabled) {
+              count++;
+            }
+          }
+        }
+        return count;
+      },
     }
   })
 });
@@ -649,22 +665,77 @@ router.get('/questions/add_rating/:idanswer&:rating', isAuthenticated, async (re
 router.get('/questions/choose_best_answer/:idanswer', isAuthenticated, async (req, res) => {
 
   const idanswer = mongoose.Types.ObjectId(req.params.idanswer);
-  const update = { best_answer: true }
-  const filter = { _id: idanswer };
 
-  //// modifico el Answer con la nueva puntuación ///
-  var questionID;
+  ///// obtengo el id del usuario de la respuesta elegida como la mejor //////
+  const answer = await Answer.findById(req.params.idanswer).lean()
+    .then(data => {
+      return {
+        _id: data._id,
+        user_question: data.user_question,
+        user_answer: data.user_answer,
+        id_question: data.id_question
+      }
+    })
 
-  await Answer.findOneAndUpdate(filter, update, { new: true }).lean().then(answerVar => {
-
-    /// ahora hago lo mismo con la puntuación del usuario ///
-    questionID = answerVar.id_question;
-    filterUser = { _id: questionID };
-    updateUser = { best_answer_chosen: true };
+  const id_question = answer.id_question;
+  /////// obtengo los datos de la pregunta ///////
+  const question = await Question.findById(id_question).lean()
+  .then(data => {
+    return {
+      _id: data._id,
+      reward_offered: data.reward_offered
+    }
   });
-  await Question.findOneAndUpdate(filterUser, updateUser);
-  req.flash('success_msg', 'Gracias por elegir la mejor respuesta');
-  res.redirect('/questions/seeownquestion/' + questionID);
+  const reward_offered = question.reward_offered;
+
+  /////// obtengo los datos del usuario elegido como la mejor respuesta ///////
+  const user_answer = await User.findById(answer.user_answer).lean()
+    .then(data => {
+      return {
+        _id: data._id,
+        stripe_account_id: data.stripe_account_id,
+        email: data.email,
+      }
+    });
+
+
+  if (user_answer.stripe_account_id == null) {
+    req.flash('success_msg', 'Gracias por elegir la mejor respuesta');
+    res.redirect('/questions/seeownquestion/' + id_question);
+    return;
+  
+  } else {
+      /////// si es que tiene stripe_account (cosa que debería ser si o si ya que si no no permite responder) /////
+    const stripe_id_user = user_answer.stripe_account_id;
+
+    var questionID, filterQuestion, updateAnswerChosen;
+
+    /// le transfiero el dinero al usuario ///
+    const transfer = await stripe.transfers.create({
+      amount: reward_offered,
+      currency: "usd",
+      destination: stripe_id_user,
+      receipt_email: user_answer.email
+    });
+
+    const update = { best_answer: true }
+    const filter = { _id: idanswer };
+    /// modifico la respuesta como la mejor //
+    await Answer.findOneAndUpdate(filter, update, { new: true }).lean().then(answerVar => {
+
+      /// obtengo los datos dela pregunta ///
+      questionID = answerVar.id_question;
+      filterQuestion = { _id: questionID };
+      updateAnswerChosen = { best_answer_chosen: true };
+    });
+    //// modifico la pregunta  como la mejor respuesta ///
+    await Question.findOneAndUpdate(filterQuestion, updateAnswerChosen);
+
+    req.flash('success_msg', 'Gracias por elegir la mejor respuesta');
+    res.redirect('/questions/seeownquestion/' + id_question);
+
+  }
+
 
 })
 
@@ -713,4 +784,8 @@ router.get('/notes/delete/:id',  isAuthenticated, async (req, res) => {
 
 });
 */
+
+
+
+
 module.exports = router;

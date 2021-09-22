@@ -21,6 +21,21 @@ $(function () {
   ]
   });
 
+paypal.use( ['login'], function (login) {
+  login.render ({
+    "appid":"AY-Pud-9fb5-xD8hTzYsFqv0x_a0QTaQY9g5Th47pHqZrCAVIIzV259K5fQ4569xuuuVs2NffkgQJdEa",
+    "authend":"sandbox",
+    "scopes":"openid email https://uri.paypal.com/services/paypalattributes ",
+    "containerid":"lippButton",
+    "responseType":"code",
+    "locale":"en-us",
+    "buttonType":"LWP",
+    "buttonShape":"pill",
+    "buttonSize":"lg",
+    "fullPage":"true",
+    "returnurl":"https://www.priceanswers.com/paypal/return"
+  });
+});
 
   let elmButton = document.querySelector("#addcustomerbutton");
   // botón para agregar un nuevo costumer en connect de stripe y que pueda recibir plata al responder
@@ -86,14 +101,15 @@ $('.body-question-description').each(function(e) {
 
     var $pTag = $(this).find('p');
     console.log($pTag.text());
-    if($pTag.text().length > 200){
+    if($pTag.text().length > 100){
         var shortText = $pTag.text();
-        shortText = shortText.substring(0, 200);
+        shortText = shortText.substring(0, 100);
         $pTag.addClass('fullArticle').hide();
         shortText += '<a href="#" class="read-more-link">Read More</a>';
         $pTag.append('<a href="#" class="read-less-link">Show less</a>');
         $(this).append('<p class="preview">'+shortText+'</p>');
     }
+
 });
 
 $(document).on('click', '.read-more-link', function () {

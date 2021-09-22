@@ -11,14 +11,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.4",
     "bcryptjs": "^2.4.3",
+    "bluebird": "^3.7.2",
     "body-parser": "^1.19.0",
     "cloudinary": "^1.26.3",
     "connect-flash": "^0.1.1",
     "countries-list": "^2.6.1",
     "cross-env": "^7.0.3",
+    "crypto-js": "^4.1.1",
+    "cryptojs": "^2.5.3",
     "date-fns": "^2.23.0",
     "dotenv": "^10.0.0",
+    "email-templates": "^8.0.8",
     "express": "^4.17.1",
     "express-handlebars": "^5.3.3",
     "express-session": "^1.17.2",
@@ -29,12 +34,15 @@
     "mongoose-paginate-v2": "^1.4.2",
     "multer": "^1.4.3",
     "nodemailer": "^6.6.3",
+    "nodemailer-express-handlebars": "^4.0.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "prismjs": "^1.24.1",
+    "request": "^2.88.2",
     "stripe": "^8.174.0",
     "tags-input": "^1.1.1",
-    "trumbowyg": "^2.25.1"
+    "trumbowyg": "^2.25.1",
+    "uniqid": "^5.4.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.12"

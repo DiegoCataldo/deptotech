@@ -49,9 +49,9 @@ router.post('/stripeaccount/addcustomerbutton', isAuthenticated, async (req, res
     const user = await User.findById(req.user.id).lean();
     var stripeaccountID = user.stripe_account_id;
 
-
+// en el caso que el usuario no tengo stripeaccountid, creo uno nuevo ///
     if (typeof stripeaccountID === 'undefined' || stripeaccountID == null || stripeaccountID == '') {
-      const stripeaccountNew = await stripe.accounts.create({ type: "express", business_type: 'individual' });
+      const stripeaccountNew = await stripe.accounts.create({ type: "standard",  email: user.email});
       stripeaccountID = stripeaccountNew.id;
       const filter_new_account = { _id: req.user.id };
       const update_new_account = { stripe_account_id: stripeaccountID };
@@ -59,7 +59,7 @@ router.post('/stripeaccount/addcustomerbutton', isAuthenticated, async (req, res
     }
     req.session.accountID = stripeaccountID;
     const origin = `${req.headers.origin}`;
-
+    /// lo envío a la página de stripe para que se registre ////
     const accountLinkURL = await generateAccountLink(stripeaccountID, origin);
     res.send({ url: accountLinkURL });
 

@@ -659,7 +659,7 @@ h2:not(.u-subtitle) {
     font-size: 20px;
     text-align: center;
     font-weight: 600;
-    margin-top: 25px;
+    margin-top: 10px;
 
   }
 }
@@ -713,8 +713,21 @@ h2:not(.u-subtitle) {
   align-items: center;
 }
 .body-question-description{
+  max-height: 150px;
+  overflow: auto;
   margin-bottom: 1.5rem;
   color: #4d525b;
   font-size: 15px;
   line-height: 1.43;
+}
+.tm-main{
+  width: stretch;
+  width: 100%;
+    width: -moz-available;          /* WebKit-based browsers will ignore this. */
+    width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+    width: fill-available;
+}
+.alert{
+  height: 50px !important;
+  max-height: 50px !important;
 }

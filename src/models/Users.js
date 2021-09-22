@@ -16,7 +16,9 @@ const UserSchema  = new Schema({
   experience_describe: {type: String, required: false},
   answerRating:{type: Object, required: false},
   country_birth:{type: String, required: false},
-  stripe_account_id: {type: String, required: false}
+  paypal_account_verified: {type: Boolean, required: false},
+  paypal_email: {type: String, required: false},
+  paypal_date_verified: {type: Date, required: false}
 
 
 })
