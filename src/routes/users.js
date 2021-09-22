@@ -195,8 +195,6 @@ router.put('/users/recoverypass', async (req, res) => {
       }
     });
 
-     transporter.verify().catch(console.error);
-
     var options = {
       viewEngine: {
         extname: '.hbs', // handlebars extension
@@ -214,7 +212,7 @@ router.put('/users/recoverypass', async (req, res) => {
     // send mail with defined transport object
     let info =  transporter.sendMail({
       from: 'contact@priceanswers.com', // sender address
-      to: 'contact@priceanswers.com', // list of receivers
+      to: emailUser, // list of receivers
       subject: "Hello ✔", // Subject line
       template: 'html',
       context: {
