@@ -437,6 +437,7 @@ const updatePaidQuestion = async session => {
 
   transporter.use('compile', hbs(options));
 
+  console.log('llego1');
   const datenow = datefns.formatRelative(Date.now(), new Date());
   const paypal_fee = 4.5;
   const total_paypal_fee = (reward_offered*(paypal_fee/100));
@@ -444,6 +445,7 @@ const updatePaidQuestion = async session => {
   const total_priceanswers_fee = (reward_offered*(priceanswers_fee/100));
 
   const total_paid = reward_offered + (reward_offered*(priceanswers_fee/100)) + (reward_offered*(paypal_fee/100));
+  console.log('llego2');
 
   // send mail with defined transport object
   let info = await transporter.sendMail({
