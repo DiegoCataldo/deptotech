@@ -153,7 +153,9 @@ router.get('/paypal/create-payment/:idQuestion', isAuthenticated, async (req, re
       amount: {
         currency_code: 'USD', //https://developer.paypal.com/docs/api/reference/currency-codes/
         value: reward_offered
-      }
+      },
+      custom_id : question._id,
+      id_question: question._id
     }],
     application_context: {
       brand_name: `Priceanswers.com`,
