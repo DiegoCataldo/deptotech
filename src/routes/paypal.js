@@ -193,7 +193,7 @@ const executePayment = (req, res) => {
 }
 
 /// este router captura el dinero pagado desde una persona hacia una emrpesa
-router.get('/paypal/execute-payment', isAuthenticated, async (req, res) => {
+router.get('/paypal/execute-payment', async (req, res) => {
   const token = req.query.token; //<-----------
 
   request.post(`${PAYPAL_API}/v2/checkout/orders/${token}/capture`, {
@@ -469,5 +469,11 @@ const updatePaidQuestion = async session => {
   console.log('se modifico envió correo');
 
 }
+
+
+//////////// Pagina de explicación Paypal y botón para redirigirlo al login de paypal /////////
+router.get('/paypal/testing', (req, res) => {
+  res.render('emailtemplates/invoicepaidquestion/html');
+});
 
 module.exports = router;
