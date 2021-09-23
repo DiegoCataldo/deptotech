@@ -364,7 +364,7 @@ router.get('/paypal/login-not-verified', (req, res) => {
 
 ///////////////////////  [4] WEBHOOKS ////////////
 // webhook de PAYPAL, cada vez que se pague una pregunta llegará una solicitud de PAYPAL a esta url
-router.post('/webhookpaypal', express.json({ type: 'application/json' }), (request, response) => {
+router.post('/webhookpaypal', express.json({ type: 'application/json' }), async (request, response) => {
   const event = request.body;
   console.log(JSON.stringify(event, null, 2));
 
@@ -372,8 +372,9 @@ router.post('/webhookpaypal', express.json({ type: 'application/json' }), (reque
 
   switch (event.event_type) {
     case 'CHECKOUT.ORDER.APPROVED':
-      updatePaidQuestion(event);
-      res.sendStatus(200);
+     await updatePaidQuestion(event);
+     response.sendStatus(200);
+
       break;
     default:
       console.log(`Unhandled event type ${event.type}`);
