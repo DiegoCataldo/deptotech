@@ -373,7 +373,7 @@ router.post('/webhookpaypal', express.json({ type: 'application/json' }), (reque
   switch (event.event_type) {
     case 'CHECKOUT.ORDER.APPROVED':
       updatePaidQuestion(event);
-      break;
+      return HTMLService.createHtmlOutput('<b></b>');
     default:
       console.log(`Unhandled event type ${event.type}`);
   }
