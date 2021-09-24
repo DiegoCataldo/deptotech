@@ -114,9 +114,10 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
       return {
         _id: data._id,
         paypal_email: data.paypal_email,
+        email: data.email
       }
     });
-
+    const email_user_priceanswers = user_answer.email;
   const paypal_email = user_answer.paypal_email;
 
   const update = { best_answer: true }
@@ -215,7 +216,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
       // send mail with defined transport object
       let info = await transporter.sendMail({
         from: 'contact@priceanswers.com', // sender address
-        to: paypal_email, // list of receivers
+        to: email_user_priceanswers, // list of receivers
         subject: "Invoice Priceanswers", // Subject line
         template: 'html',
         context: {
@@ -490,6 +491,10 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
         break;
 
       case 'PAYMENT.PAYOUTSBATCH.SUCCESS':
+        response.sendStatus(200);
+        break;
+
+        case 'PAYMENT.PAYOUTSBATCH.PROCESSING':
         response.sendStatus(200);
         break;
 
