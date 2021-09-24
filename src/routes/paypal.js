@@ -86,7 +86,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
   const idanswer = mongoose.Types.ObjectId(req.params.id_answer);
 
   ///// obtengo el id del usuario y el id de la pregutna de la respuesta elegida como la mejor //////
-  const answer = await Answer.findById(req.params.idanswer).lean()
+  const answer = await Answer.findById(req.params.id_answer).lean()
     .then(data => {
       return {
         _id: data._id,
