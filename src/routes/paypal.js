@@ -176,7 +176,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     auth,
     body,
     json: true
-  }, async (err, response) => {
+  }, async ( err, res) => {
 
     /// envío correo de invoice al user_answer ///
 
@@ -214,7 +214,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     // send mail with defined transport object
     let info = await transporter.sendMail({
       from: 'contact@priceanswers.com', // sender address
-      to: emailUser, // list of receivers
+      to: paypal_email, // list of receivers
       subject: "Invoice Priceanswers", // Subject line
       template: 'html',
       context: {
@@ -227,11 +227,9 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
   
       }
     }).catch(console.error);
-
-    req.flash('success_msg', 'Gracias por elegir la mejor respuesta');
-    res.redirect('/questions/seeownquestion/' + questionID);
-  })
-
+  });
+  req.flash('success_msg', 'Gracias por elegir la mejor respuesta');
+  res.redirect('/questions/seeownquestion/' + questionID);
 })
 
 
@@ -482,8 +480,12 @@ router.post('/webhookpaypal', express.json({ type: 'application/json' }), async 
     case 'CHECKOUT.ORDER.APPROVED':
       await updatePaidQuestion(event);
       response.sendStatus(200);
-
       break;
+      
+    case 'PAYMENT.PAYOUTSBATCH.SUCCESS':
+    response.sendStatus(200);
+    break;
+
     default:
       console.log(`Unhandled event type ${event.type}`);
       response.sendStatus(200);
