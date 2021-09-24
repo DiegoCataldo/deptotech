@@ -694,7 +694,7 @@ router.get('/questions/choose_best_answer/:idanswer', isAuthenticated, async (re
       return {
         _id: data._id,
         stripe_account_id: data.stripe_account_id,
-        email: data.email,
+        paypal_email: data.paypal_email,
       }
     });
 

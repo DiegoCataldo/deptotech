@@ -36,12 +36,12 @@ const auth = { user: CLIENT, pass: SECRET }
 /////////////////// [1] GENERAR PAGO BUSINESS ---> PERSONA ////////////////////
 
 //// solicitud para realizar pago
-router.get('/paypal/test', async (req, res) => {
+router.get('/paypal/payanswer/:id_answer', async (req, res) => {
 
   // paso 1 generar access token
   //clientid = username, secret = password
-  let username = 'AeemLG4CKrCSxYOhQiK1FFZGMpVOXtCfvEmr8TkCJKFbSuH4G6dgZNjvYjLltETx1SeB4rx0UT8vTch6';
-  let password = 'EGE66_Y6dFf_TNRqooZ0GxsK4KZ8JnbDSP6Mpw7xM_SIq55yY-lUptV-xi_rj9z1aDr6ywA_0pIcLfM9';
+
+  const id_answer = req.params.id_answer;
 
   (async () => {
     try {
@@ -55,8 +55,8 @@ router.get('/paypal/test', async (req, res) => {
           'content-type': 'application/x-www-form-urlencoded',
         },
         auth: {
-          username: username,
-          password: password,
+          username: CLIENT,
+          password: SECRET,
         },
         params: {
           grant_type: 'client_credentials',
@@ -65,7 +65,7 @@ router.get('/paypal/test', async (req, res) => {
       });
 
       /// devoler respuiesta de exito
-      return res.redirect('/paypal-new-checkout/' + access_token + '&' + token_type);
+      return res.redirect('/paypal-new-checkout/' + access_token + '&' + token_type + '&' + id_answer);
 
     } catch (error) {
       console.log('error: ', error);
@@ -78,21 +78,81 @@ router.get('/paypal/test', async (req, res) => {
 
 });
 
-const createPayout = (req, res) => {
+
+
+/// este genera el pago desde la empresa a una persona /////
+router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (req, res) => {
+
+  const idanswer = mongoose.Types.ObjectId(req.params.id_answer);
+
+  ///// obtengo el id del usuario y el id de la pregutna de la respuesta elegida como la mejor //////
+  const answer = await Answer.findById(req.params.idanswer).lean()
+    .then(data => {
+      return {
+        _id: data._id,
+        user_question: data.user_question,
+        user_answer: data.user_answer,
+        id_question: data.id_question
+      }
+    });
+
+  const id_question = answer.id_question;
+  /////// obtengo los datos de la pregunta ///////
+  const question = await Question.findById(id_question).lean()
+    .then(data => {
+      return {
+        _id: data._id,
+        reward_offered: data.reward_offered
+      }
+    });
+  const reward_offered = question.reward_offered;
+
+
+  /////// obtengo los datos del usuario elegido como la mejor respuesta (paypal_email)  ///////
+  const user_answer = await User.findById(answer.user_answer).lean()
+    .then(data => {
+      return {
+        _id: data._id,
+        paypal_email: data.paypal_email,
+      }
+    });
+
+  const paypal_email = user_answer.paypal_email;
+
+  const update = { best_answer: true }
+  const filter = { _id: idanswer };
+  /// modifico la respuesta como la mejor //
+  var questionID, filterQuestion, updateAnswerChosen;
+
+  await Answer.findOneAndUpdate(filter, update, { new: true }).lean().then(answerVar => {
+
+    /// obtengo los datos dela pregunta ///
+    questionID = answerVar.id_question;
+    filterQuestion = { _id: questionID };
+    updateAnswerChosen = { best_answer_chosen: true, paid_to: paypal_email};
+  });
+  //// modifico la pregunta  como la mejor respuesta ///
+  await Question.findOneAndUpdate(filterQuestion, updateAnswerChosen);
+
+  ////// comienzo  con la transferencia /////
+
+  const datenow = datefns.formatRelative(Date.now(), new Date());
+  const paypal_fee = 4.5;
+  var total_paypal_fee = (reward_offered * (paypal_fee / 100));
+  total_paypal_fee = Number.parseFloat(total_paypal_fee).toFixed(2);
+
+
+  var total_paid = reward_offered - total_paypal_fee;
+  total_paid = Number.parseFloat(total_paid).toFixed(2);
+
   let access_token = req.params.access_token;
   let token_type = req.params.token_type;
-
-  console.log(access_token);
 
   let modo = "EMAIL";
   let batch_code = uniqid(); // numero de factura unico
 
-
-  console.log(modo);
-
-
-  let email = 'sb-5hus47716300@personal.example.com';
-  let monto_a_cobrar = '3.00';
+  let email = paypal_email;
+  let monto_a_cobrar = total_paid;
 
   const authorization = 'Bearer ' + access_token;
 
@@ -116,15 +176,63 @@ const createPayout = (req, res) => {
     auth,
     body,
     json: true
-  }, (err, response) => {
-    res.json({ data: response.body })
+  }, async (err, response) => {
+
+    /// envío correo de invoice al user_answer ///
+
+    const firstPartEmailUser = paypal_email.split('@')[0];
+
+    // Generate test SMTP service account from ethereal.email
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      host: process.env.SMTP_NODEMAILER_HOST,
+      port: process.env.SMTP_NODEMAILER_PORT,
+      secure: true, // true for 465, false for other ports
+      auth: {
+        user: process.env.SMTP_NODEMAILER_USER, // generated ethereal user
+        pass: process.env.SMTP_NODEMAILER_PASS, // generated ethereal password
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
+    });
+  
+    var options = {
+      viewEngine: {
+        extname: '.hbs', // handlebars extension
+        layoutsDir: path.join(__dirname, '../views/emailtemplates/invoicepaidanswer'), // location of handlebars templates
+        defaultLayout: 'html', // name of main template
+        partialsDir: path.join(__dirname, '../views/emailtemplates/invoicepaidanswer'), // location of your subtemplates aka. header, footer etc
+      },
+      viewPath: path.join(__dirname, '../views/emailtemplates/invoicepaidanswer'),
+      extName: '.hbs'
+    };
+  
+    transporter.use('compile', hbs(options));
+  
+  
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: 'contact@priceanswers.com', // sender address
+      to: emailUser, // list of receivers
+      subject: "Invoice Priceanswers", // Subject line
+      template: 'html',
+      context: {
+        name: firstPartEmailUser,
+        datenow: datenow,
+        idQuestion: questionID.toString(),
+        paypal_fee: paypal_fee,
+        total_paid: total_paid,
+        total_paypal_fee: total_paypal_fee,
+  
+      }
+    }).catch(console.error);
+
+    req.flash('success_msg', 'Gracias por elegir la mejor respuesta');
+    res.redirect('/questions/seeownquestion/' + questionID);
   })
 
-
-}
-
-/// este genera el pago desde la empresa a una persona /////
-router.get('/paypal-new-checkout/:access_token&:token_type', createPayout)
+})
 
 
 
@@ -372,12 +480,13 @@ router.post('/webhookpaypal', express.json({ type: 'application/json' }), async 
 
   switch (event.event_type) {
     case 'CHECKOUT.ORDER.APPROVED':
-     await updatePaidQuestion(event);
-     response.sendStatus(200);
+      await updatePaidQuestion(event);
+      response.sendStatus(200);
 
       break;
     default:
       console.log(`Unhandled event type ${event.type}`);
+      response.sendStatus(200);
   }
 });
 
@@ -394,9 +503,8 @@ const updatePaidQuestion = async session => {
     user_question_id = answerVar.user_question;
     reward_offered = answerVar.reward_offered;
 
-    
+
   })
-  console.log('se modifico la pregunta');
   //prosigo a obtener la info para enviarle un correo con el invoice de lo pagado //
   ///// obtengo la info del usuario, en este caso el email  //////
   const user = await User.findById(user_question_id).lean()
@@ -439,15 +547,13 @@ const updatePaidQuestion = async session => {
 
   transporter.use('compile', hbs(options));
 
-  console.log('llego1');
   const datenow = datefns.formatRelative(Date.now(), new Date());
   const paypal_fee = 4.5;
-  const total_paypal_fee = (reward_offered*(paypal_fee/100));
+  const total_paypal_fee = (reward_offered * (paypal_fee / 100));
   const priceanswers_fee = 10;
-  const total_priceanswers_fee = (reward_offered*(priceanswers_fee/100));
+  const total_priceanswers_fee = (reward_offered * (priceanswers_fee / 100));
 
-  const total_paid = reward_offered + (reward_offered*(priceanswers_fee/100)) + (reward_offered*(paypal_fee/100));
-  console.log('llego2');
+  const total_paid = reward_offered + (reward_offered * (priceanswers_fee / 100)) + (reward_offered * (paypal_fee / 100));
 
   // send mail with defined transport object
   let info = await transporter.sendMail({

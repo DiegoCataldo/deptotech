@@ -1,16 +1,25 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <div class="container" style="margin-top: 5rem; align-content: center;
     margin-left: auto;
-    margin-right: auto;"> 
+    margin-right: auto;">
   <div class="col-md-12">
     <div class="invoice" style="background: #fff; padding: 20px">
       <!-- begin invoice-company -->
-      <div class="invoice-company text-inverse f-w-600" style="font-size: 20px">
-        <span class="pull-right hidden-print">
-          <!-- <a href="javascript:;" class="btn btn-sm btn-white m-b-10 p-l-5"><i class="fa fa-file t-plus-1 text-danger fa-fw fa-lg"></i> Export as PDF</a>
-            <a href="javascript:;" onclick="window.print()" class="btn btn-sm btn-white m-b-10 p-l-5"><i class="fa fa-print t-plus-1 fa-fw fa-lg"></i> Print</a> -->
-        </span>
-        Priceanswers.com
+      <div class="invoice-company text-inverse f-w-600" style="
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;">
+        <span style="font-size: 30px;"> Priceanswers.com</span>
+        <span style="font-size: 20px;"> Receipt Transaction</span>
+        <span style="font-size: 15px;">
+          Dear {{name}}, congratulations! You have been chosen as the best answer to the question ID: "{{idQuestion}}",
+          if you would
+          like
+          to review your answers please go to the "My answers" section on priceanswers.com.
+          Below is your receipt please keep it in a safe place</span>
+
+
+
       </div>
       <!-- end invoice-company -->
       <!-- begin invoice-header -->
@@ -25,6 +34,7 @@
             Phone: (123) 456-7890<br>
             Fax: (123) 456-7890
           </address>
+
         </div>
         <div class="invoice-to" style="    display: table-cell;
     width: 1%; padding-right: 20px">
@@ -32,6 +42,7 @@
           <address class="m-t-5 m-b-5">
             <strong class="text-inverse" style="    font-size: 16px;
     font-weight: 600;">{{name}}</strong><br>
+          </address>
         </div>
         <div class="invoice-date" style="    display: table-cell;
     width: 1%;     font-size: 16px;     text-align: right;
@@ -100,6 +111,21 @@
     vertical-align: middle;
     padding: 0 20px">
                 <i class="fa fa-plus text-muted"></i>
+                =
+              </div>
+              <div class="sub-price" style="    display: table-cell;
+    vertical-align: middle;
+    padding: 0 20px">
+                <small style="    font-size: 12px;
+    font-weight: 400;
+    display: block">PRICEANSWERS REWARD</small>
+                <span class="text-inverse">{{reward_offered}}</span>
+              </div>
+              <div class="sub-price" style="display: table-cell;
+    vertical-align: middle;
+    padding: 0 20px">
+                <i class="fa fa-plus text-muted"></i>
+                -
               </div>
               <div class="sub-price" style="    display: table-cell;
     vertical-align: middle;
@@ -109,17 +135,16 @@
     display: block">PAYPAL FEE ({{paypal_fee}}%)</small>
                 <span class="text-inverse">{{total_paypal_fee}}</span>
               </div>
-              <div class="sub-price" style="    display: table-cell;
+                            <div class="sub-price" style="display: table-cell;
     vertical-align: middle;
     padding: 0 20px">
-                <small style="    font-size: 12px;
-    font-weight: 400;
-    display: block">PRICEANSWERS FEE ({{priceanswers_fee}}%)</small>
-                <span class="text-inverse">{{total_priceanswers_fee}}</span>
+                <i class="fa fa-plus text-muted"></i>
+                =
               </div>
+
             </div>
           </div>
-          <div class="invoice-price-right" style="    display: table-cell;
+          <div class="invoice-price-right" style=" display: table-cell;
     padding: 20px;
     font-size: 20px;
     font-weight: 600;
@@ -170,4 +195,3 @@
     </div>
   </div>
 </div>
-
