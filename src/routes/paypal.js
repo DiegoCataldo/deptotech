@@ -232,10 +232,12 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
 
       if (err) { reject(err); } else { resolve(body); }
     });
-    
+
     req.flash('success_msg', 'Gracias por elegir la mejor respuesta');
     res.redirect('/questions/seeownquestion/' + questionID);
   })
+
+})
 
 
 
