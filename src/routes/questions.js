@@ -42,7 +42,7 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
   } else {
     var priceanswers_fee = reward * 0.05;
     priceanswers_fee = parseFloat(priceanswers_fee).toFixed(2);
-    var paypal_fee = reward * 0.045;
+    var paypal_fee = reward * 0.1;
     paypal_fee = parseFloat(paypal_fee).toFixed(2);
 
     priceanswers_fee = parseFloat(priceanswers_fee);

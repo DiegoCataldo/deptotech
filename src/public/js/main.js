@@ -165,7 +165,7 @@ $('#reward').on('input', function() {
 
 var priceanswers_fee = $('#reward').val()*0.05;
 priceanswers_fee =parseFloat(priceanswers_fee).toFixed(2);
-var paypal_fee = $('#reward').val()*0.045;
+var paypal_fee = $('#reward').val()*0.1;
 paypal_fee =parseFloat(paypal_fee).toFixed(2);
 var reward = parseFloat( $('#reward').val()).toFixed(2);
 

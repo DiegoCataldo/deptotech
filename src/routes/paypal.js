@@ -136,12 +136,9 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
   ////// comienzo  con la transferencia /////
 
   const datenow = datefns.formatRelative(Date.now(), new Date());
-  const paypal_fee = 4.5;
-  var total_paypal_fee = (reward_offered * (paypal_fee / 100));
-  total_paypal_fee = Number.parseFloat(total_paypal_fee).toFixed(2);
 
 
-  var total_paid = reward_offered - total_paypal_fee;
+  var total_paid = reward_offered;
   total_paid = Number.parseFloat(total_paid).toFixed(2);
 
   let access_token = req.params.access_token;
@@ -158,7 +155,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
   const body = {
     sender_batch_header:
     {
-      email_subject: 'Pago realizado',
+      email_subject: 'Payment made',
       sender_batch_id: 'batch-' + batch_code
     },
     items: [
@@ -166,7 +163,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
         recipient_type: 'EMAIL',
         amount: { value: monto_a_cobrar, currency: 'USD' },
         receiver: email,
-        note: 'Pago desde el backendo con node token working'
+        note: 'Priceanswers.com payment for being chosen the best answer.'
       }
     ]
   }
@@ -233,7 +230,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
       if (err) { reject(err); } else { resolve(body); }
     });
 
-    req.flash('success_msg', 'Gracias por elegir la mejor respuesta');
+    req.flash('success_msg', 'Thank you for choosing the best answer.');
     res.redirect('/questions/seeownquestion/' + questionID);
   })
 
@@ -253,18 +250,18 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
         return {
           _id: data._id,
           user_question: data.user_question,
-          reward_offered: data.reward_offered
+          total_price_question: data.total_price_question
         }
       });
 
-    const reward_offered = question.reward_offered;
+    const total_price_question = question.total_price_question;
 
     const body = {
       intent: 'CAPTURE',
       purchase_units: [{
         amount: {
           currency_code: 'USD', //https://developer.paypal.com/docs/api/reference/currency-codes/
-          value: reward_offered
+          value: total_price_question
         },
         custom_id: question._id,
         id_question: question._id
@@ -273,8 +270,8 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
         brand_name: `Priceanswers.com`,
         landing_page: 'NO_PREFERENCE', // Default, para mas informacion https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context
         user_action: 'PAY_NOW', // Accion para que en paypal muestre el monto del pago
-        return_url: `http://localhost:3000/paypal/execute-payment`, // Url despues de realizar el pago
-        cancel_url: `http://localhost:3000/paypal/cancel-payment` // Url despues de realizar el pago
+        return_url: `https://www.priceanswers.com/paypal/execute-payment`, // Url despues de realizar el pago
+        cancel_url: `https://www.priceanswers.com` // Url despues de realizar el pago
       }
     }
     //https://api-m.sandbox.paypal.com/v2/checkout/orders [POST]
