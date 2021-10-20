@@ -2,6 +2,7 @@
 
 $(function () {
 
+
   $('.trumbowyg-textarea').trumbowyg({
 
     btns: [
@@ -20,6 +21,8 @@ $(function () {
       
   ]
   });
+
+  $('#myModal').modal('show');
 
 paypal.use( ['login'], function (login) {
   login.render ({
@@ -156,6 +159,36 @@ $(".tag-input").keyup(function (e) {
   }
 });
 
+//$('#priceanswers-reward').text($('#reward').val());
+
+$('#reward').on('input', function() {
+
+var priceanswers_fee = $('#reward').val()*0.05;
+priceanswers_fee =parseFloat(priceanswers_fee).toFixed(2);
+var paypal_fee = $('#reward').val()*0.045;
+paypal_fee =parseFloat(paypal_fee).toFixed(2);
+var reward = parseFloat( $('#reward').val()).toFixed(2);
+
+priceanswers_fee =parseFloat(priceanswers_fee);
+paypal_fee =parseFloat(paypal_fee);
+reward = parseFloat( reward);
+
+var total = reward +  paypal_fee + priceanswers_fee;
+console.log("total1 "+total);
+total =parseFloat(total).toFixed(2);
+total = total+ ' USD';
+priceanswers_fee = priceanswers_fee+ ' USD';
+paypal_fee = paypal_fee+ ' USD';
+
+
+
+
+  $('#priceanswers-reward').text(priceanswers_fee);
+  $('#paypal-reward').text(paypal_fee);
+  $('#total-reward').text(total);
+
+
+});
 
 var tags = [];
 $(document).ready(function () {
@@ -173,6 +206,10 @@ $(document).ready(function () {
     document.getElementById('label-inputGroupFile01').val(file);
 
   });
+  $('#reward').on('input', function() {
+    console.log('tes');
+   });
+ 
 
   $('body').on('click', 'i.cross', function () {
     console.log("entro");
@@ -201,7 +238,6 @@ $(document).on("keydown", ":input:not(textbox)", function (event) {
 
 
   var classe =  $(event.target).attr('class');
-  console.log(classe.indexOf("tag-input"));
 
   if(classe == "tag-input" || classe.indexOf("tag-input") !== -1){
     return event.key != "Enter";
@@ -244,6 +280,7 @@ fileSelector.addEventListener('change', (event) => {
   $("#label-inputGroupFile01").val(fileList);
 
 }); 
+
 
 
 

@@ -511,6 +511,7 @@
 }
 .alert-dismissible .close{
     right: auto !important;
+    left: auto !important;
 }
 
 .read-more-link{
@@ -546,4 +547,7 @@ margin-left: 1rem;
 .link-forgot-pass{
     float:right;
     margin-bottom: 1rem;
+}
+.close-x-span{
+    float: left;
 }

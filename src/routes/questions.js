@@ -26,7 +26,7 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
   if (!description) {
     errors.push({ text: 'Please Write a Description' })
   }
-  if (!reward) {
+  if (!reward || reward > 25 || reward < 5) {
     errors.push({ text: 'Please Add a valid Reward' })
   }
   if (!tagsArray) {
@@ -40,10 +40,21 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
       reward
     })
   } else {
-    const newQuestion = new Question({ title, description, tags: tagsArray, reward_offered: reward, answers_enabled: false, best_answer_chosen: false });
+    var priceanswers_fee = reward * 0.05;
+    priceanswers_fee = parseFloat(priceanswers_fee).toFixed(2);
+    var paypal_fee = reward * 0.045;
+    paypal_fee = parseFloat(paypal_fee).toFixed(2);
+
+    priceanswers_fee = parseFloat(priceanswers_fee);
+    paypal_fee = parseFloat(paypal_fee);
+    var reward_float = parseFloat(reward);
+    var total_price_question = reward_float + paypal_fee + priceanswers_fee;
+    console.log(total_price_question);
+
+    const newQuestion = new Question({ title, description, tags: tagsArray, reward_offered: reward_float, total_price_question: total_price_question, answers_enabled: false, best_answer_chosen: false });
     newQuestion.user_question = mongoose.Types.ObjectId(req.user.id);
     await newQuestion.save()
-    req.flash('success_msg', 'Note Added Successfully');
+    req.flash('success_msg', 'Question Added Successfully');
     res.redirect('/questions/ownquestions')
 
   }
@@ -51,7 +62,14 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
 
 //////////////// PREGUNTAS DEL USUARIO sin filtro///////////////
 
-router.get('/questions/ownquestions', isAuthenticated, async (req, res) => {
+router.get('/questions/ownquestions/:skip?', isAuthenticated, async (req, res) => {
+
+  var skip;
+  if (typeof req.params.skip === 'undefined' || parseInt(req.params.skip) < 0) {
+    skip = 0
+  } else {
+    skip = parseInt(req.params.skip);
+  }
 
   const idparamsObjectTypeID = mongoose.Types.ObjectId(req.user.id);
   const queryMatch = { 'user_question': idparamsObjectTypeID };
@@ -68,11 +86,14 @@ router.get('/questions/ownquestions', isAuthenticated, async (req, res) => {
         ],
         as: "answers_info"
       }
-    }
-  ])
+    },
+    { $skip: skip },
+    { $limit: 15 }
+  ]);
+  const skipObject = { currentSkip: skip, nextSkip: skip + 1, prevSkip: skip - 1 };
 
   res.render('questions/own-questions', {
-    questions: questions,
+    questions: questions,  skipObject: skipObject, 
     userInfo: { name: req.user.name },
     helpers: {
       formatDate: function (date) {
@@ -88,6 +109,14 @@ router.get('/questions/ownquestions', isAuthenticated, async (req, res) => {
 //////////////// PREGUNTAS DEL USUARIO con filtro///////////////
 router.post('/questions/ownquestionsfilter', isAuthenticated, async (req, res) => {
 
+  var tagsArray = req.body.tagsArray;
+  var skip;
+  if (typeof req.body.skip === 'undefined' || parseInt(req.body.skip) < 0) {
+    skip = 0
+  } else {
+    skip = parseInt(req.body.skip);
+  }
+  const limit = 15;
   var tagsArray = req.body.tagsArray;
   if (typeof tagsArray === 'string') {
     tagsArray = [tagsArray];
@@ -112,10 +141,15 @@ router.post('/questions/ownquestionsfilter', isAuthenticated, async (req, res) =
           ],
           as: "answers_info"
         }
-      }
+      },
+      { $skip: skip*limit },
+      { $limit: limit }
     ]);
+
+    const skipObject = { currentSkip: skip, nextSkip: skip + 1, prevSkip: skip - 1 };
+
     res.render('questions/own-questions', {
-      questions: questions,
+      questions: questions, skipObject: skipObject,
       userInfo: { name: req.user.name },
       filters: tagsArray,
       helpers: {
@@ -142,10 +176,15 @@ router.post('/questions/ownquestionsfilter', isAuthenticated, async (req, res) =
           ],
           as: "answers_info"
         }
-      }
+      },
+      { $skip: skip*limit },
+      { $limit: limit }
     ]);
+
+    const skipObject = { currentSkip: skip, nextSkip: skip + 1, prevSkip: skip - 1 }
+
     res.render('questions/own-questions', {
-      questions: questions,
+      questions: questions, skipObject: skipObject,
       userInfo: { name: req.user.name },
       filters: tagsArray,
       helpers: {
@@ -170,6 +209,8 @@ router.get('/questions/allquestions/:skip?', isAuthenticated, async (req, res) =
   } else {
     skip = parseInt(req.params.skip);
   }
+  const limit = 15;
+
   const questions = await Question.aggregate([
     {
       $lookup: {
@@ -182,28 +223,58 @@ router.get('/questions/allquestions/:skip?', isAuthenticated, async (req, res) =
         as: "answers_info"
       }
     },
-    { $skip: skip },
-    { $limit: 15 }
+    { $skip: skip*limit },
+    { $limit: limit }
   ]);
+
+    /////// obtengo los datos del usuario ///////
+  const id_user = mongoose.Types.ObjectId(req.user.id);
+
+  const user_data = await User.findById(id_user).lean()
+    .then(data => {
+      return {
+        _id: data._id,
+        paypal_account_verified: data.paypal_account_verified,
+        paypal_email: data.paypal_email,
+        paypal_date_verified: data.paypal_date_verified
+      }
+    });
 
   const skipObject = { currentSkip: skip, nextSkip: skip + 1, prevSkip: skip - 1 };
 
   res.render('questions/all-questions', {
     questions: questions, skipObject: skipObject,
     userInfo: { name: req.user.name },
+    user_data: user_data,
     helpers: {
       formatDate: function (date) {
         return datefns.formatRelative(date, new Date());
       },
       countLength: function (something) {
         return something.length;
+      },
+      accountVerified: function(user_data, options){
+        var instanciar = false;
+        console.log(user_data.paypal_account_verified);
+        if(user_data.paypal_account_verified){
+          const date1 = user_data.paypal_date_verified;
+          const date2 = new Date();
+          const diffTime = Math.abs(date2 - date1);
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+          console.log(diffTime + " milliseconds");
+          console.log(diffDays + " days");
+          if(diffDays > 24){
+            instanciar = true;
+          }
+        }
+        return (instanciar) ? options.fn(this) : options.inverse(this);
       }
     }
   })
 
 })
 ///////////////// PREGUNTAS DE TODOS con filtro /////////////////
-router.post('/questions/allquestionsfilter', isAuthenticated, async (req, res) => {
+router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req, res) => {
 
   var tagsArray = req.body.tagsArray;
   var skip;
@@ -212,7 +283,7 @@ router.post('/questions/allquestionsfilter', isAuthenticated, async (req, res) =
   } else {
     skip = parseInt(req.body.skip);
   }
-
+  const limit = 15;
   if (typeof tagsArray === 'string') {
     tagsArray = [tagsArray];
   }
@@ -231,8 +302,10 @@ router.post('/questions/allquestionsfilter', isAuthenticated, async (req, res) =
           as: "answers_info"
         }
       },
-      { $skip: skip },
-      { $limit: 15 }
+      {$sort: {createdAt: -1}},
+      { $skip: skip*limit },
+      { $limit: limit }
+
     ])
 
     const skipObject = { currentSkip: skip, nextSkip: skip + 1, prevSkip: skip - 1 };
@@ -255,6 +328,7 @@ router.post('/questions/allquestionsfilter', isAuthenticated, async (req, res) =
     const queryMatch = { 'tags': { '$in': tagsArray } }
 
     const questions = await Question.aggregate([
+ 
       { $match: queryMatch },
       {
         $lookup: {
@@ -262,13 +336,15 @@ router.post('/questions/allquestionsfilter', isAuthenticated, async (req, res) =
           let: { "questionid": "$_id" },
           pipeline: [
             { $match: { $expr: { $eq: ["$id_question", "$$questionid"] } } },
-            { $project: { "answer": 0, "createdAt": 0, "raging_by": 0, "answerRating": 0 } }
+            { $project: { "answer": 0, "createdAt": 0, "rating_by": 0, "answerRating": 0 } }
           ],
           as: "answers_info"
         }
       },
-      { $skip: skip },
-      { $limit: 15 }
+      {$sort: {createdAt: -1}},
+      { $skip: skip*limit },
+      { $limit: limit }
+
     ]);
 
     const skipObject = { currentSkip: skip, nextSkip: skip + 1, prevSkip: skip - 1 }
@@ -610,8 +686,6 @@ router.get('/questions/get_enable_answers/:id', isAuthenticated, async (req, res
   res.redirect('/questions/seeownquestion/' + req.params.id)
 });
 
-
-
 ///// Agregar una nueva puntuación (rating) a una respuesta ////////////
 router.get('/questions/add_rating/:idanswer&:rating', isAuthenticated, async (req, res) => {
 
@@ -680,12 +754,12 @@ router.get('/questions/choose_best_answer/:idanswer', isAuthenticated, async (re
   const id_question = answer.id_question;
   /////// obtengo los datos de la pregunta ///////
   const question = await Question.findById(id_question).lean()
-  .then(data => {
-    return {
-      _id: data._id,
-      reward_offered: data.reward_offered
-    }
-  });
+    .then(data => {
+      return {
+        _id: data._id,
+        reward_offered: data.reward_offered
+      }
+    });
   const reward_offered = question.reward_offered;
 
   /////// obtengo los datos del usuario elegido como la mejor respuesta ///////
@@ -703,9 +777,9 @@ router.get('/questions/choose_best_answer/:idanswer', isAuthenticated, async (re
     req.flash('success_msg', 'Gracias por elegir la mejor respuesta');
     res.redirect('/questions/seeownquestion/' + id_question);
     return;
-  
+
   } else {
-      /////// si es que tiene stripe_account (cosa que debería ser si o si ya que si no no permite responder) /////
+    /////// si es que tiene stripe_account (cosa que debería ser si o si ya que si no no permite responder) /////
     const stripe_id_user = user_answer.stripe_account_id;
 
     var questionID, filterQuestion, updateAnswerChosen;

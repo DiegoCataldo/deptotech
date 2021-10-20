@@ -10,7 +10,6 @@
 
 
   <div class="tm-main row justify-content-md-center margin-x-0">
-      {{> errors}}
     <div class="col-md-7 search">
       <form method="POST" action="/questions/allquestionsfilter" class="form-inline mb-4 tm-search-form">
         <div class="container-tag2">
@@ -34,6 +33,9 @@
         </div>
       </form>
     </div>
+    {{#accountVerified user_data }}
+      {{> verification-account-modal}}
+    {{/accountVerified}}
 
     <div class="col-md-7">
       <div class="row ">

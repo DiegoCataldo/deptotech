@@ -9,6 +9,7 @@ const  QuestionSchema = new Schema({
   createdAt: {type: Date, default: Date.now},
   tags: {type: [String], required: true},
   reward_offered: {type: Number, required: true},
+  total_price_question: {type: Number, required: true},
   user_question: { type: mongoose.Schema.Types.ObjectId, required: true},
   allanswerinfo: {type: Object , required: false},
   answers_enabled: {type: Boolean, required: true},

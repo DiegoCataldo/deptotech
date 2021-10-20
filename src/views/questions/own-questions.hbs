@@ -16,11 +16,11 @@
           <div class="container-search-tags">
             <input class="form-control tm-search-input tag-input" name="query" id="tags-id" type="text"
               placeholder="Search by tags..." aria-label="Search">
+              <input type="hidden" name="skip" value="{{skipObject.currentSkip}}">
             <button class="tm-search-button" type="submit">
               <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
             </button>
           </div>
-  {{> errors}}
 
           <div class="tags-added-container" contenteditable="false">
             {{#each filters}}
@@ -74,6 +74,52 @@
         </div>
 
     {{/each}}
+    
+        <!-- Pagination -->
+        <div class="pagination-container col-md-12">
+          <nav class="pagination-nav" aria-label="Page navigation example ">
+            <ul class="pagination">
+              <!-- si existen filtros entonces los paginations serán form -->
+              {{#if filters}}
+              <form method="POST" id="formprev" action="/questions/ownquestionsfilter"
+                class="">
+                <li class="page-item">
+                  <a class="page-link" href="javascript:;"
+                    onclick="document.getElementById('formprev').submit();">Previous</a>
+                </li>
+                <input type="hidden" name="skip" value="{{skipObject.prevSkip}}">
+                {{#each filters}}
+                <input type='hidden' value="{{this}}" name='tagsArray' />
+                {{/each}}
+              </form>
+               <li class="page-item"> <a class="page-link">Page {{skipObject.nextSkip}}</a>
+              </li>
+              <form method="POST" id="formnext" action="/questions/ownquestionsfilter"
+                class="">
+                <li class="page-item">
+                  <a class="page-link" href="javascript:;"
+                    onclick="document.getElementById('formnext').submit();">Next</a>
+                </li>
+                <input type="hidden" name="skip" value="{{skipObject.nextSkip}}">
+                {{#each filters}}
+                <input type='hidden' value="{{this}}" name='tagsArray' />
+                {{/each}}
+              </form>
+              {{else}}
+              <!-- si no hay filters entonces se envie un get normal -->
+              <li class="page-item"><a class="page-link" href="/questions/ownquestions/{{skipObject.prevSkip}}">
+                  Previous </a> 
+              </li>
+              <li class="page-item"> <a class="page-link">Page {{skipObject.nextSkip}}</a>
+              </li>
+              <li class="page-item"><a class="page-link" href="/questions/ownquestions/{{skipObject.nextSkip}}">Next</a>
+              </li>
+              {{/if}}
+
+            </ul>
+          </nav>
+        </div>
+        <!-- end pagination -->
       </div>
     </div>
   </div>

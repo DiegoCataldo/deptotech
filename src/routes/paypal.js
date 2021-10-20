@@ -78,8 +78,6 @@ router.get('/paypal/payanswer/:id_answer', async (req, res) => {
 
 });
 
-
-
 /// este genera el pago desde la empresa a una persona /////
 router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (req, res) => {
 
@@ -182,7 +180,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
 
       /// envío correo de invoice al user_answer ///
 
-      const firstPartEmailUser = paypal_email.split('@')[0];
+      const firstPartEmailUser = email_user_priceanswers.split('@')[0];
 
       // Generate test SMTP service account from ethereal.email
       // create reusable transporter object using the default SMTP transport
@@ -226,6 +224,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
           paypal_fee: paypal_fee,
           total_paid: total_paid,
           total_paypal_fee: total_paypal_fee,
+          reward_offered : reward_offered
 
         }
       }).catch(console.error);
@@ -241,13 +240,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
 })
 
 
-
   ////////////////// [2] GENERAR PAGO PERSONA ---> BUSSINESS /////////////////////////
-
-  const createPayment = async (req, res) => {
-
-
-  }
 
   /// este genera el link para que se le envíe a una persona y pague hacia la empresa ///
   router.get('/paypal/create-payment/:idQuestion', isAuthenticated, async (req, res) => {
@@ -301,11 +294,6 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     })
   })
 
-
-  const executePayment = (req, res) => {
-
-  }
-
   /// este router captura el dinero pagado desde una persona hacia una emrpesa
   router.get('/paypal/execute-payment', async (req, res) => {
     const token = req.query.token; //<-----------
@@ -321,6 +309,10 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
       console.log(err);
     })
   })
+
+  router.get('/paypal/cancel-payment', (req, res) => {
+    res.render('paypal/cancel-payment');
+  });
 
   router.get('/paypal/success-enable-answers', (req, res) => {
     res.render('paypal/success-enable-answers');

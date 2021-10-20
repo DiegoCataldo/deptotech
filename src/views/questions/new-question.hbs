@@ -6,7 +6,6 @@
       <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
     </div>
 
-    {{> errors}}
     <br>
     <div class="tm-main row justify-content-md-center margin-x-0">
       <fieldset class="fieldset-question col-md-7">
@@ -36,17 +35,59 @@
               "Enter" to add the tag)</small>
 
 
-            <div class="mt-3">
-              <label for="description">Reward</label>
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">$US</span>
+            <div class="mt-3 reward-container">
+              <div class="reward-sub-container row">
+                <div class="reward-left col-md-9">
+                  <div class="reward-left-item">
+                    <label for="description">Reward</label>
+                    <div class="input-group justify-content-center">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">$US</span>
+                      </div>
+                      <input type="number" class="reward"
+                        onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" id="reward"
+                        name="reward" min="5" max="25" step="0.1" value="{{reward}}" required="required" />
+                    </div>
+                    <small id="emailHelp" class="form-text text-muted">
+                      The amount that the person with the best answer will receive as a reward.</small>
+                  </div>
+                  <div class="reward-left-item">
+                    +
+                  </div>
+                  <div class="reward-left-item">
+                    <small class="reward-left-item-small">
+                      PRICEANSWERS REWARD (5%)
+                    </small>
+                    <div class="sub-price">
+                      <p id="priceanswers-reward"></p>
+                    </div>
+                  </div>
+                  <div class="reward-left-item">
+                    +
+                  </div>
+                  <div class="reward-left-item">
+                    <small class="reward-left-item-small">
+                      PAYPAL FEE (4.5%)
+                    </small>
+                    <div class="sub-price">
+                      <p id="paypal-reward"></p>
+                    </div>
+                  </div>
+                  <div class="reward-left-item">
+                    =
+                  </div>
                 </div>
-                <input type="number" name="reward" min="0.00" max="10000.00" step="0.1" value="{{reward}}"
-                  required="required" />
+                <div class="reward-right col-md-3">
+                  <div class="reward-right-item">
+                    <small class="reward-right-small">TOTAL TO PAY</small>
+                    <span id="total-reward" class="f-w-600"></span>
+                    <small id="emailHelp" class="form-text reward-right-text">Specify the amount you will pay to see the
+                      answers.</small>
+                  </div>
+
+                </div>
               </div>
-              <small id="emailHelp" class="form-text text-muted">Specify the amount you will pay to see the
-                answers.</small>
+
             </div>
             <div class="mt-3 container-button">
               <button class="button-main-1 mt-5" type="submit"> Save </button>
