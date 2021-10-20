@@ -218,9 +218,6 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
           name: firstPartEmailUser,
           datenow: datenow,
           idQuestion: questionID.toString(),
-          paypal_fee: paypal_fee,
-          total_paid: total_paid,
-          total_paypal_fee: total_paypal_fee,
           reward_offered : reward_offered
 
         }
@@ -505,6 +502,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     await Question.findOneAndUpdate(filter, update, { new: true }).lean().then(answerVar => {
       user_question_id = answerVar.user_question;
       reward_offered = answerVar.reward_offered;
+      total_price_question = answerVar.total_price_question;
 
 
     })
@@ -551,12 +549,17 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     transporter.use('compile', hbs(options));
 
     const datenow = datefns.formatRelative(Date.now(), new Date());
-    const paypal_fee = 4.5;
-    const total_paypal_fee = (reward_offered * (paypal_fee / 100));
-    const priceanswers_fee = 10;
-    const total_priceanswers_fee = (reward_offered * (priceanswers_fee / 100));
+    var total_priceanswers_fee = reward_offered * 0.05;
+    total_priceanswers_fee = parseFloat(total_priceanswers_fee).toFixed(2);
+    var total_paypal_fee = reward_offered * 0.1;
+    total_paypal_fee = parseFloat(total_paypal_fee).toFixed(2);
 
-    const total_paid = reward_offered + (reward_offered * (priceanswers_fee / 100)) + (reward_offered * (paypal_fee / 100));
+    total_priceanswers_fee = parseFloat(total_priceanswers_fee);
+    total_paypal_fee = parseFloat(total_paypal_fee);
+    var reward_float = parseFloat(reward_offered);
+    var total_paid = reward_float + total_paypal_fee + total_priceanswers_fee;
+    
+
 
     // send mail with defined transport object
     let info = await transporter.sendMail({
@@ -568,11 +571,12 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
         name: firstPartEmailUser,
         datenow: datenow,
         idQuestion: idquestionString,
-        paypal_fee: paypal_fee,
-        priceanswers_fee: priceanswers_fee,
+        paypal_fee: '10',
+        priceanswers_fee: '5',
         total_paid: total_paid,
         total_paypal_fee: total_paypal_fee,
-        total_priceanswers_fee: total_priceanswers_fee
+        total_priceanswers_fee: total_priceanswers_fee,
+        reward_offered: reward_offered
 
       }
     }).catch(console.error);
