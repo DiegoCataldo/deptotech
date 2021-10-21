@@ -551,7 +551,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     const datenow = datefns.formatRelative(Date.now(), new Date());
 
         //paso 1 obtener pago total (lo saco de la formula --> reward = x - x*0.054 -3 -x*0.05)
-        var reward_float = parseFloat(reward);
+        var reward_float = parseFloat(reward_offered);
         var total_pay = (reward_float+parseFloat(0.3))/0.846;
 
     var total_priceanswers_fee = total_pay * 0.08;
@@ -561,7 +561,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
 
     total_priceanswers_fee = parseFloat(total_priceanswers_fee);
     total_paypal_fee = parseFloat(total_paypal_fee);
-    var reward_float = parseFloat(reward_offered);
+
     var total_paid = question.total_price_question;
     
 
