@@ -497,7 +497,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     const update = { answers_enabled: true };
     const filter = { _id: idQuestion };
 
-    let user_question_id, reward_offered;
+    let user_question_id, reward_offered, total_price_question;
     // modifico la pregunta dejandola habilitada el enable_answers y ademas tomo el id del usuario y lo guardo
     await Question.findOneAndUpdate(filter, update, { new: true }).lean().then(answerVar => {
       user_question_id = answerVar.user_question;
@@ -562,7 +562,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     total_priceanswers_fee = parseFloat(total_priceanswers_fee);
     total_paypal_fee = parseFloat(total_paypal_fee);
 
-    var total_paid = question.total_price_question;
+    var total_paid = total_price_question;
     
 
 

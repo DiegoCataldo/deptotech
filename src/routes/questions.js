@@ -44,6 +44,8 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
     //paso 1 obtener pago total (lo saco de la formula --> reward = x - x*0.054 -3 -x*0.05)
     var reward_float = parseFloat(reward);
   var total_pay = (reward_float+parseFloat(0.3))/0.846;
+  total_pay = parseFloat(total_pay).toFixed(2);
+  total_pay = parseFloat(total_pay);
 
     var priceanswers_fee = total_pay * 0.08;
     priceanswers_fee = parseFloat(priceanswers_fee).toFixed(2);
