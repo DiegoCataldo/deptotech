@@ -41,13 +41,13 @@
       <div class="invoice-header" style="margin: 0 -20px; background: #f0f3f4; padding: 20px; margin-top: 2rem;">
         <div class="invoice-from" style="display: table-cell; width: 1%; padding-right: 20px; ">
           <small>from</small>
-          <address class="m-t-5 m-b-5">
+          <address class="m-t-5 m-b-5" style="color:#1b1b1c !important">
             <strong class="text-inverse" style="font-size: 16px;
     font-weight: 600;">Priceanswers.com</strong><br>
-            Street Address<br>
+          <!--  Street Address<br>
             City, Zip Code<br>
             Phone: (123) 456-7890<br>
-            Fax: (123) 456-7890
+            Fax: (123) 456-7890 -->
           </address>
 
         </div>
@@ -113,13 +113,13 @@
     position: relative;
     vertical-align: middle">
             <div class="invoice-price-row" style="    display: table;
-    float: left">
+    float: right">
               <div class="sub-price" style="    display: table-cell;
     vertical-align: middle;
     padding: 0 20px">
                 <small style="    font-size: 12px;
     font-weight: 400;
-    display: block">REWARD</small>
+    display: block">AMOUNT</small>
               </div>
               <div class="sub-price" style="    display: table-cell;
     vertical-align: middle;
@@ -153,7 +153,7 @@
     position: absolute;
     top: 10px;
     left: 10px;
-    font-size: 12px">TOTAL</small> <span class="f-w-600">{{total_paid}} USD</span>
+    font-size: 12px">TOTAL</small> <span class="f-w-600">{{reward_offered}} USD</span>
           </div>
         </div>
         <!-- end invoice-price -->

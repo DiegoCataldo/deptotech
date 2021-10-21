@@ -551,7 +551,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     const datenow = datefns.formatRelative(Date.now(), new Date());
     var total_priceanswers_fee = reward_offered * 0.05;
     total_priceanswers_fee = parseFloat(total_priceanswers_fee).toFixed(2);
-    var total_paypal_fee = reward_offered * 0.1;
+    var total_paypal_fee = reward_offered * 0.054 + 0.3;
     total_paypal_fee = parseFloat(total_paypal_fee).toFixed(2);
 
     total_priceanswers_fee = parseFloat(total_priceanswers_fee);
@@ -571,7 +571,8 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
         name: firstPartEmailUser,
         datenow: datenow,
         idQuestion: idquestionString,
-        paypal_fee: '10',
+        paypal_fee_1: '5.4',
+        paypal_fee_2: '0.3',
         priceanswers_fee: '5',
         total_paid: total_paid,
         total_paypal_fee: total_paypal_fee,

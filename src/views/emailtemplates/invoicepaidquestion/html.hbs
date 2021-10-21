@@ -17,19 +17,16 @@
       <div class="invoice-header" style="margin: 0 -20px; background: #f0f3f4; padding: 20px">
         <div class="invoice-from" style="display: table-cell; width: 1%; padding-right: 20px; ">
           <small>from</small>
-          <address class="m-t-5 m-b-5">
+          <address class="m-t-5 m-b-5" style="color:#1b1b1c !important">
             <strong class="text-inverse" style="font-size: 16px;
     font-weight: 600;">Priceanswers.com</strong><br>
-            Street Address<br>
-            City, Zip Code<br>
-            Phone: (123) 456-7890<br>
-            Fax: (123) 456-7890
+           
           </address>
         </div>
         <div class="invoice-to" style="    display: table-cell;
     width: 1%; padding-right: 20px">
           <small>to</small>
-          <address class="m-t-5 m-b-5">
+          <address class="m-t-5 m-b-5" style="color:#1b1b1c !important">
             <strong class="text-inverse" style="    font-size: 16px;
     font-weight: 600;">{{name}}</strong><br>
         </div>
@@ -106,7 +103,7 @@
     padding: 0 20px">
                 <small style="    font-size: 12px;
     font-weight: 400;
-    display: block">PAYPAL FEE ({{paypal_fee}}%)</small>
+    display: block">PAYPAL FEE ({{paypal_fee_1}}% + {{paypal_fee_2}} USD)</small>
                 <span class="text-inverse">{{total_paypal_fee}} USD</span>
               </div>
               <div class="sub-price" style="    display: table-cell;
@@ -146,7 +143,7 @@
     position: absolute;
     top: 10px;
     left: 10px;
-    font-size: 12px">TOTAL</small> <span class="f-w-600">{{total_paid}}</span>
+    font-size: 12px">TOTAL</small> <span class="f-w-600">{{total_paid}} USD</span>
           </div>
         </div>
         <!-- end invoice-price -->
