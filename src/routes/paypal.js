@@ -549,15 +549,20 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     transporter.use('compile', hbs(options));
 
     const datenow = datefns.formatRelative(Date.now(), new Date());
-    var total_priceanswers_fee = reward_offered * 0.05;
+
+        //paso 1 obtener pago total (lo saco de la formula --> reward = x - x*0.054 -3 -x*0.05)
+        var reward_float = parseFloat(reward);
+        var total_pay = (reward_float+parseFloat(0.3))/0.846;
+
+    var total_priceanswers_fee = total_pay * 0.08;
     total_priceanswers_fee = parseFloat(total_priceanswers_fee).toFixed(2);
-    var total_paypal_fee = reward_offered * 0.054 + 0.3;
+    var total_paypal_fee = total_pay * 0.074 + 0.3;
     total_paypal_fee = parseFloat(total_paypal_fee).toFixed(2);
 
     total_priceanswers_fee = parseFloat(total_priceanswers_fee);
     total_paypal_fee = parseFloat(total_paypal_fee);
     var reward_float = parseFloat(reward_offered);
-    var total_paid = reward_float + total_paypal_fee + total_priceanswers_fee;
+    var total_paid = question.total_price_question;
     
 
 
@@ -571,9 +576,9 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
         name: firstPartEmailUser,
         datenow: datenow,
         idQuestion: idquestionString,
-        paypal_fee_1: '5.4',
+        paypal_fee_1: '7.4',
         paypal_fee_2: '0.3',
-        priceanswers_fee: '5',
+        priceanswers_fee: '8',
         total_paid: total_paid,
         total_paypal_fee: total_paypal_fee,
         total_priceanswers_fee: total_priceanswers_fee,

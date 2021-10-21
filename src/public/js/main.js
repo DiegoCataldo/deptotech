@@ -163,18 +163,22 @@ $(".tag-input").keyup(function (e) {
 
 $('#reward').on('input', function() {
 
-var priceanswers_fee = $('#reward').val()*0.05;
+  //paso 1 obtener pago total (lo saco de la formula --> reward = x - x*0.054 -3 -x*0.05)
+  var reward =  parseFloat($('#reward').val());
+  var total_pay = (reward+0.3)/0.846;
+
+var priceanswers_fee = total_pay*0.08;
 priceanswers_fee =parseFloat(priceanswers_fee).toFixed(2);
-var paypal_fee = $('#reward').val()*0.054 + 0.3;
+var paypal_fee = total_pay*0.074 + 0.3;
 paypal_fee =parseFloat(paypal_fee).toFixed(2);
-var reward = parseFloat( $('#reward').val()).toFixed(2);
+ reward = parseFloat( $('#reward').val()).toFixed(2);
 
 priceanswers_fee =parseFloat(priceanswers_fee);
 paypal_fee =parseFloat(paypal_fee);
 reward = parseFloat( reward);
 
 var total = reward +  paypal_fee + priceanswers_fee;
-console.log("total1 "+total);
+
 total =parseFloat(total).toFixed(2);
 total = total+ ' USD';
 priceanswers_fee = priceanswers_fee+ ' USD';

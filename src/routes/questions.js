@@ -40,16 +40,21 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
       reward
     })
   } else {
-    var priceanswers_fee = reward * 0.05;
+
+    //paso 1 obtener pago total (lo saco de la formula --> reward = x - x*0.054 -3 -x*0.05)
+    var reward_float = parseFloat(reward);
+  var total_pay = (reward_float+parseFloat(0.3))/0.846;
+
+    var priceanswers_fee = total_pay * 0.08;
     priceanswers_fee = parseFloat(priceanswers_fee).toFixed(2);
-    var paypal_fee = reward * 0.054 + 0.3;
+    var paypal_fee = total_pay * 0.074 + 0.3;
     paypal_fee = parseFloat(paypal_fee).toFixed(2);
 
     priceanswers_fee = parseFloat(priceanswers_fee);
     paypal_fee = parseFloat(paypal_fee);
-    var reward_float = parseFloat(reward);
     var total_price_question = reward_float + paypal_fee + priceanswers_fee;
-    console.log(total_price_question);
+    console.log("total_price "+total_price_question);
+    console.log("total_pay "+total_pay);
 
     const newQuestion = new Question({ title, description, tags: tagsArray, reward_offered: reward_float, total_price_question: total_price_question, answers_enabled: false, best_answer_chosen: false });
     newQuestion.user_question = mongoose.Types.ObjectId(req.user.id);
