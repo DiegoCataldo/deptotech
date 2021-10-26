@@ -263,6 +263,7 @@ function addRatingAnswerAjax(p_idanswer, p_rating) {
   $.ajax({
     url: '/questions/add_rating/' + p_idanswer + '&' + p_rating,
     success: function (json) {
+      console.log('success');
     }
   });
 }

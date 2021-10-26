@@ -466,7 +466,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
   // webhook de PAYPAL, cada vez que se pague una pregunta llegará una solicitud de PAYPAL a esta url
   router.post('/webhookpaypal', express.json({ type: 'application/json' }), async (request, response) => {
     const event = request.body;
-    console.log(JSON.stringify(event, null, 2));
+    
 
     // Handle the event
 

@@ -5,7 +5,7 @@
   position: relative;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
   margin: 1rem;
-  padding:1.5rem !important;
+  padding: 1rem 2rem 1rem 2rem !important;
 
 }
 
@@ -16,6 +16,28 @@
 .answer-title{
 
 
+}
+.header-short_describe{
+  margin-bottom: 0.5rem;
+    font-size: 20px;
+    font-weight: 400;
+    color: #4d525b;
+}
+.header-title-experience-describe{
+  color: #0e1724;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.5;
+  text-align: center;
+}
+.experience-describe-answer{
+  color: #4d525b;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.5;
+  text-align: center;
+  margin-bottom: 2rem;
+  margin-top: 0.2rem;
 }
 .answer-title h1{
   font-family: 'Sriracha', arial, sans-serif;

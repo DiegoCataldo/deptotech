@@ -86,16 +86,13 @@
           <div class="answer-own-question-header">
             {{#each user_info}}
             <div class="header-title row">
-              <div class="col-lg-1">
+            
 
-                <img class="profile-img" src="{{imageProfileUrl}}" />
-
-              </div>
-
-              <div class="col-lg-11">
+              <div class="col-lg-12">
                 <div class="header-name">
                   {{name}}
                 </div>
+                
                 <div class="header-short_describe">
                   {{short_describe}}
                 </div>
@@ -107,6 +104,14 @@
             </div>
             <div class="body-answer-not-check">
               <div class="row">
+                <div class="col-md-12">
+                  <div class="header-title-experience-describe">
+                  Experience Description
+                </div>
+                  <div class="experience-describe-answer">
+                    {{experience_describe}} 
+                  </div>
+                </div>
                 <div class="col-md-6">
                   <!-- rating block --->
                   <div class="rating-block">

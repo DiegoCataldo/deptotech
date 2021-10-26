@@ -474,8 +474,14 @@ h2:not(.u-subtitle) {
 .answer-own-question-header .header-name {
   font-size: 20px;
   font-weight: 500;
+  
 }
-
+.header-name{
+  padding-left: 1rem;
+}
+.header-short_describe{
+  padding-left: 1rem;
+}
 .answer-own-question-header .header-short_describe {
   font-size: 20px;
   font-weight: 400;

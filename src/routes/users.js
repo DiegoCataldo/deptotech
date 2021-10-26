@@ -11,6 +11,7 @@ const Email = require('email-templates');
 const path = require('path');
 const Promise = require('bluebird');
 var hbs = require('nodemailer-express-handlebars');
+const imageConversion = require('image-conversion');
 
 
 //console.log(countriesList.countries);
@@ -108,7 +109,7 @@ router.put('/users/myprofile', isAuthenticated, async (req, res) => {
   const country_birth = req.body.country_birth;
 
   if (typeof req.file !== 'undefined' && typeof req.file.path !== 'undefined' && req.file.path) {
-    const result = await cloudinary.v2.uploader.upload(req.file.path);
+    const result = await cloudinary.v2.uploader.upload(res.path);
     const imageProfileUrl = result.url;
     const public_ImageId = result.public_id;
     const idparamsObjectTypeID = mongoose.Types.ObjectId(req.user.id);

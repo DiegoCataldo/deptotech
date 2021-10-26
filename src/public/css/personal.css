@@ -551,3 +551,7 @@ margin-left: 1rem;
 .close-x-span{
     float: left;
 }
+.note-filter{
+    color: #6f6f6f;
+    padding-left: 25px !important;
+}
