@@ -11,7 +11,6 @@ const Email = require('email-templates');
 const path = require('path');
 const Promise = require('bluebird');
 var hbs = require('nodemailer-express-handlebars');
-const imageConversion = require('image-conversion');
 
 
 //console.log(countriesList.countries);
