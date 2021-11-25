@@ -47,7 +47,7 @@ router.get('/paypal/payanswer/:id_answer', async (req, res) => {
     try {
       const { data: { access_token, token_type } } = await axios({
 
-        url: 'https://api.sandbox.paypal.com/v1/oauth2/token',
+        url: 'https://api-m.paypal.com/v1/oauth2/token',
         method: 'post',
         Headers: {
           Accept: 'application/json',
@@ -332,7 +332,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     try {
       const { data: { token_type, refresh_token } } = await axios({
 
-        url: 'https://api.sandbox.paypal.com/v1/oauth2/token',
+        url: 'https://api-m.paypal.com/v1/oauth2/token',
         method: 'post',
         headers: {
           Accept: 'application/json',
@@ -369,7 +369,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     try {
       const { data: { access_token, token_type, refresh_token } } = await axios({
 
-        url: 'https://api.sandbox.paypal.com/v1/oauth2/token',
+        url: 'https://api-m.paypal.com/v1/oauth2/token',
         method: 'post',
         headers: {
           Accept: 'application/json',
@@ -408,7 +408,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     try {
       const { data: { verified_account, emails } } = await axios({
 
-        url: 'https://api-m.sandbox.paypal.com/v1/identity/oauth2/userinfo?schema=paypalv1.1',
+        url: 'https://api-m.paypal.com/v1/identity/oauth2/userinfo?schema=paypalv1.1',
         method: 'GET',
         headers: {
           Accept: 'application/json',
