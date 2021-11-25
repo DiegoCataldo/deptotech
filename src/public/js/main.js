@@ -4,7 +4,13 @@ $(function () {
 
 
   $('.trumbowyg-textarea').trumbowyg({
-
+    btnsDef: {
+			// Customizables dropdowns
+			image: {
+				dropdown: ['insertImage', 'upload'],
+				ico: 'insertImage'
+			}
+		},
     btns: [
       ['highlight'],
       ['viewHTML'],
@@ -17,12 +23,17 @@ $(function () {
         ['unorderedList', 'orderedList'],
         ['horizontalRule'],
         ['removeformat'],
-        ['fullscreen']
+        ['fullscreen'],
+        ['image','noembed'],
       
   ]
   });
 
   $('#myModal').modal('show');
+
+  
+
+
 
 paypal.use( ['login'], function (login) {
   login.render ({
@@ -39,7 +50,7 @@ paypal.use( ['login'], function (login) {
     "returnurl":"https://www.priceanswers.com/paypal/return"
   });
 });
-
+/*
   let elmButton = document.querySelector("#addcustomerbutton");
   // botón para agregar un nuevo costumer en connect de stripe y que pueda recibir plata al responder
 if (elmButton) {
@@ -68,7 +79,7 @@ if (elmButton) {
     },
     false
   );
-}
+}*/
 
   $('#Modal').modal('show');
 
@@ -79,10 +90,12 @@ if (elmButton) {
 
   $("html").click(function (e) {
     var header = document.getElementById("tm-header");
-
-    if (!header.contains(e.target)) {
-      $(".tm-header").removeClass("show");
+    if(typeof header != "undefined" && header != null){
+      if (!header.contains(e.target)) {
+        $(".tm-header").removeClass("show");
+      }
     }
+
   });
 
   $("#tm-nav .nav-link").click(function (e) {
@@ -204,12 +217,14 @@ $(document).ready(function () {
   fileSelector.addEventListener('change', (event) => {
 
     var file = $('#inputGroupFile01')[0].files[0].name;
-    console.log(file);
     $(this).next('label').text(file);
 
     document.getElementById('label-inputGroupFile01').val(file);
 
   });
+
+
+
   $('#reward').on('input', function() {
     console.log('tes');
    });

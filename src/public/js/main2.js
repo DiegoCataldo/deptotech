@@ -206,7 +206,11 @@ $(function () {
     items: 1
   });
 
-
+  var valueDescriptionNewQuestion =$("#description").attr('value');
+  console.log('1: '+  document.getElementById('description').value);
+  console.log('1: '+ $("#description").val());
+  console.log(valueDescriptionNewQuestion);
+  $(valueDescriptionNewQuestion).appendTo('.trumbowyg-editor');
 
   
 })(jQuery);

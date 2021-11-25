@@ -1,13 +1,18 @@
 const express = require('express')
 const router = express.Router(); //me permite crear rutas
 const mongoose = require('mongoose');
-
+var fs = require('fs');
+var sharp = require('sharp');
+var path = require('path');
+const imageConversion = require('image-conversion');
+let imgConvert = require('image-convert');
 const Question = require('../models/Question');
 const Answer = require('../models/Answer');
 const User = require('../models/Users');
 const { isAuthenticated } = require('../helpers/auth');
 const { updateMany } = require('../models/Question');
 const datefns = require('date-fns');
+const fileUpload = require('express-fileupload');
 const stripe = require("stripe")('sk_test_51Ibu5uDyfMeOA6sJnuFnlxOrrT2nR4nmhiFzrbNhEcNXGXzdRSF9lCGVD80dFk3RcXoAgpkyKRkQ7RORPjZ6lEiL00vRPvaymY');
 
 
@@ -32,6 +37,12 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
   if (!tagsArray) {
     errors.push({ text: 'Please Add tags (press Enter to add it)' })
   }
+  const extImage = path.extname(req.file.originalname);
+  console.log(extImage);
+  if (extImage !== '.png' && extImage !== '.jpg' && extImage !== '.jpeg') {
+    errors.push({ text: 'Please Add image format png, jpg or jpeg' })
+
+  }
   if (errors.length > 0) {
     res.render('questions/new-question', {
       errors,
@@ -55,17 +66,92 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
     priceanswers_fee = parseFloat(priceanswers_fee);
     paypal_fee = parseFloat(paypal_fee);
     var total_price_question = reward_float + paypal_fee + priceanswers_fee;
-    console.log("total_price " + total_price_question);
-    console.log("total_pay " + total_pay);
 
-    const newQuestion = new Question({ title, description, tags: tagsArray, reward_offered: reward_float, total_price_question: total_price_question, answers_enabled: false, best_answer_chosen: false });
-    newQuestion.user_question = mongoose.Types.ObjectId(req.user.id);
-    await newQuestion.save()
-    req.flash('success_msg', 'Question Added Successfully');
-    res.redirect('/questions/ownquestions')
+    // proceso la imagen subida para intentar reducirla de tamaño
+    await processImage(100, 5, req.file.path, req.file.filename, res);
 
+    //la imagen reducida esata en la misma url que la orifinal solo que se le antepone un output_ al nombre
+    var fileoutput = path.join(__dirname + '/../public/uploads/output_' + req.file.filename);
+    //elimino la imagen original
+    fs.unlinkSync(path.join(__dirname + '/../public/uploads/' + req.file.filename));
+    // si no existe la  nueva imagen significa que hubo un problmea reduciendola y se debe reenviar el error al frontend
+    if (fs.existsSync(fileoutput)) {
+
+      const newQuestion = new Question({
+        title, description, tags: tagsArray, reward_offered: reward_float, total_price_question: total_price_question, answers_enabled: false, best_answer_chosen: false, img: {
+          data: fs.readFileSync(path.join(__dirname + '/../public/uploads/output_' + req.file.filename)),
+          contentType: 'image/png'
+        }
+      });
+      newQuestion.user_question = mongoose.Types.ObjectId(req.user.id);
+      await newQuestion.save()
+      //elimino la imagen comprimida
+      fs.unlinkSync(fileoutput);
+      req.flash('success_msg', 'Question Added Successfully');
+      res.redirect('/questions/ownquestions')
+        ;
+    }
+    else {
+      errors.push({ text: 'We could not upload your image please try with images of smaller size (200kb or smaller) and with format: png, jpg, jpeg ' })
+      res.render('questions/new-question', {
+        errors,
+        title,
+        description,
+        reward
+      })
+
+    }
   }
-})
+
+
+});
+
+
+async function processImage(quality, drop, filePath, filename, res) {
+
+  var outputFilePath = path.join(__dirname + '/../public/uploads/output_' + filename);
+  var originalFilePath = path.join(__dirname + '/../public/uploads/' + filename);
+
+
+  const done = await sharp(filePath).resize({
+    fit: sharp.fit.contain,
+    width: 300
+  })
+    .png({
+      quality
+    }).toBuffer();
+
+
+
+  if (done.byteLength < 50000) {
+    console.log(done.byteLength);
+    if (filePath) {
+      await sharp(filePath).resize({
+        fit: sharp.fit.contain,
+        width: 300
+      })
+        .png({
+          quality
+        })
+        .toFile(outputFilePath).then((data) => {
+          console.log('listo');
+          return true;
+        })
+    };
+
+
+
+  } else {
+    console.log('byte: ' + done.byteLength + 'quality: ' + quality);
+    if (quality - drop <= 0) {
+
+      return 'fal';
+    } else {
+      await processImage(quality - drop, 5, filePath, filename, res);
+    }
+  }
+
+}
 
 //////////////// PREGUNTAS DEL USUARIO sin filtro///////////////
 
@@ -322,7 +408,7 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
           paypal_date_verified: data.paypal_date_verified
         }
       });
-  
+
     const skipObject = { currentSkip: skip, nextSkip: skip + 1, prevSkip: skip - 1 };
 
     res.render('questions/all-questions', {
@@ -572,7 +658,8 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
         reward_offered: data.reward_offered,
         tags: data.tags,
         answers_enabled: data.answers_enabled,
-        best_answer_chosen: data.best_answer_chosen
+        best_answer_chosen: data.best_answer_chosen,
+        img: data.img
 
       }
     })
@@ -677,6 +764,9 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
         }
         return count;
       },
+      toString: function (something) {
+        return something.toString('base64');
+      }
     }
   })
 });

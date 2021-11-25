@@ -2,6 +2,9 @@ const express = require('express')
 const router = express.Router(); //me permite crear rutas
 const { isAuthenticated } = require('../helpers/auth');
 const User = require('../models/Users');
+const Question = require('../models/Question');
+const Transfer = require('../models/Transfer');
+const Answer = require('../models/Answer');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const crypto = require('crypto');
@@ -97,7 +100,8 @@ router.get('/users/myprofile', async (req, res) => {
         ranking: data.ranking,
         short_describe: data.short_describe,
         experience_describe: data.experience_describe,
-        country_birth: data.country_birth
+        country_birth: data.country_birth,
+        admin: data.admin
       }
     })
   res.render('users/myprofile', { user, countriesList: countriesList.countries });
@@ -263,4 +267,7 @@ router.put('/users/recoverypassnew', async (req, res) => {
 
   }
 })
+
+
+
 module.exports = router;

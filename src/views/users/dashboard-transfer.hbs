@@ -1,0 +1,94 @@
+<div class="row card border-card">
+  <div class="card card-question border-card">
+    <div class="banner-question u-section-2">
+      <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">ADMIN</h3>
+      <h2 class="u-heading-font u-text u-text-2">DASHBOARD TRANSFER</h2>
+      <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+    </div>
+    <br>
+  </div>
+</div>
+
+<div class="tm-main row justify-content-md-center margin-x-0 mt-5">
+  <fieldset class="fieldset-question col-md-5">
+    <legend class="legend-question">Add a taken utility</legend>
+    <div class="card-body">
+      <form action="/admin/dashboard-transfer?_method=PUT" method="POST" enctype="multipart/form-data">
+        <div class="">
+          <label for="description">Taken Utility</label>
+          <div class="input-group justify-content-center">
+            <div class="input-group-prepend">
+              <span class="input-group-text">$US</span>
+            </div>
+            <input type="number" class="reward"
+              onchange="(function(el){el.value=parseFloat(el.value).toFixed(2);})(this)" id="utility_taken_input"
+              name="utility_taken_input" min="1" max="1000" step="0.1" value="" required="required" />
+          </div>
+          <small id="emailHelp" class="form-text text-muted">
+            The amount that you will take.</small>
+        </div>
+        <div class="mt-3">
+          <label for="title">Description</label>
+          <input type="text" id="description" name="description" class="form-control" placeholder="Title"
+            maxlength="100" value="" required="required" autofocus>
+          <small id="emailHelp" class="form-text text-muted">Write a short summary of your taken .</small>
+        </div>
+        <div class="mt-1 container-button">
+          <button class="button-main-1" type="submit"> Save </button>
+        </div>
+
+      </form>
+    </div>
+  </fieldset>
+
+
+  <div class="col-md-7">
+    <div class="row ">
+      <table id="example" class="table table-answers table-striped table-bordered" style="width:100%">
+        <thead>
+          <tr>
+            <th>fee_paypal_import</th>
+            <th>fee_paypal_export</th>
+            <th>total_utility</th>
+            <th>current_utility</th>
+            <th>total taken_utility</th>
+            <th>current taken_utility</th>
+            <th>reward_fee_debt</th>
+            <th>description</th>
+            <th>createdAt</th>
+
+
+          </tr>
+        </thead>
+        <tbody>
+                    <tr>
+            <td>{{ parsefloat2 fee_paypal_import_last}} </td>
+            <td>{{ parsefloat2 fee_paypal_export_last}} </td>
+            <td>{{ parsefloat2 total_utility_last}} </td>
+            <td>{{ parsefloat2 current_utility_last}} </td>
+            <td>{{parsefloat2 total_taken_utility_last}} </td>
+            <td>{{parsefloat2 current_taken_utility_last}} </td>
+            <td>{{parsefloat2 reward_fee_debt_last}} </td>
+            <td>Actualmente </td>
+            <td>Actualmente </td>
+          </tr>
+          {{#each all_transfers}}
+          <tr>
+            <td>{{parsefloat2 fee_paypal_import}} </td>
+            <td>{{parsefloat2 fee_paypal_export}} </td>
+            <td>{{parsefloat2 total_utility}} </td>
+            <td>{{parsefloat2 current_utility}} </td>
+            <td>{{parsefloat2 total_taken_utility}} </td>
+            <td>{{parsefloat2 current_taken_utility}} </td>
+            <td>{{parsefloat2 reward_fee_debt}} </td>
+            <td>{{description}} </td>
+            <td>{{ formatDate createdAt}} </td>
+          </tr>
+          {{/each}}
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>

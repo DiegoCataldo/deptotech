@@ -34,6 +34,9 @@
           <div class="answer-body">
             <div class="answer-body-description">
               {{{question.description}}}
+                              <img src="data:image/{{question.img.contentType}};base64,
+                     {{ toString question.img.data}}">
+
             </div>
             <div class="answer-body-tags">
               <div class="answer-body-tags-title">

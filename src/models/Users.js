@@ -18,7 +18,9 @@ const UserSchema  = new Schema({
   country_birth:{type: String, required: false},
   paypal_account_verified: {type: Boolean, required: false},
   paypal_email: {type: String, required: false},
-  paypal_date_verified: {type: Date, required: false}
+  paypal_date_verified: {type: Date, required: false},
+  admin: {type: Boolean, required: false}
+  
 
 
 })

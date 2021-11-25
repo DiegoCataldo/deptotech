@@ -15,7 +15,12 @@ const  QuestionSchema = new Schema({
   answers_enabled: {type: Boolean, required: true},
   best_answer_chosen: { type: Boolean, required: true},
   best_answer_id: { type: mongoose.Schema.Types.ObjectId, required: false},
-  paid_to: { type: String, required: false}
+  paid_to: { type: String, required: false},
+  img:
+  {
+      data: Buffer,
+      contentType: String
+  }
 })
 
 QuestionSchema.plugin(aggregatePaginate );

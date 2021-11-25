@@ -47,12 +47,12 @@ app.use(express.json());
 const storage =multer.diskStorage({
   destination: path.join(__dirname, 'public/uploads'),
   filename : (req, file, cb) => {
-    cb(null, (new Date()).getTime() +  path.extname(file.originalname));
+    cb(null, file.fieldname + (new Date()).getTime() +  path.extname(file.originalname));
   }
 })
-app.use(multer({storage: storage}).single('imageProfile'));
+app.use(multer({storage: storage}).single('image'));
   //  end images config//
-
+  
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
@@ -78,6 +78,7 @@ app.use(require('./routes/users'));
 app.use(require('./routes/questions'));
 app.use(require('./routes/stripeaccount'));
 app.use(require('./routes/paypal'));
+app.use(require('./routes/transfer'));
 
 
 
@@ -101,3 +102,4 @@ const server = app.listen(app.get('port'), () => {
  */
 
 server.keepAliveTimeout = 65000
+

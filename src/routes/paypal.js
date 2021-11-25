@@ -26,9 +26,9 @@ const nodemailer = require('nodemailer');
 
 const paypal_controller = require('../controller/paypal_controller');
 
-const CLIENT = 'AY-Pud-9fb5-xD8hTzYsFqv0x_a0QTaQY9g5Th47pHqZrCAVIIzV259K5fQ4569xuuuVs2NffkgQJdEa';
-const SECRET = 'EAQvsaI0ROF9fjFYLPmjahWkB-qwC0AKDSe3dcs-PR_fecDEowd-e-REJXxRQFpMJ6Wr-JI-YHWEXzCG';
-const PAYPAL_API = 'https://api-m.sandbox.paypal.com'; // Live https://api-m.paypal.com
+const CLIENT = 'AUx5l4m-ir1TrT67uRBJhx-ewfG4r1PyTmE-XorhU8jJHk2TIw7lMvlOwCBmQWsjBQoI7Jpv0cns5Q_M';
+const SECRET = 'EA1DtIieQSy9jf8FxVHTQywSoIOfZY0jpTGcjlAjiVPmnntP3W-ROooBEdGtYtxJPjGEFJGPhR0g8CeP';
+const PAYPAL_API = 'https://api-m.paypal.com'; // Live https://api-m.paypal.com  // test https://api-m.sandbox.paypal.com
 
 const auth = { user: CLIENT, pass: SECRET }
 
