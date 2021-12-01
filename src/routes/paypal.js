@@ -12,10 +12,11 @@ const axios = require('axios');
 const uniqid = require('uniqid');
 const http = require('https');
 const request = require('request');
-const path = require('path');
+var path = require('path');
 const Promise = require('bluebird');
 var hbs = require('nodemailer-express-handlebars');
 const nodemailer = require('nodemailer');
+const fs = require('fs')
 
 
 
@@ -396,7 +397,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
   });
 
   /// logearse en paypal  [PASO 4]
-  //finalmente obtengo la indo del usuario
+  //finalmente obtengo la info del usuario
   router.get('/paypal/getaccountinfo/:access_token', async (req, res) => {
 
     console.log(req.params);
@@ -595,6 +596,34 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
   //////////// Pagina de explicación Paypal y botón para redirigirlo al login de paypal /////////
   router.get('/paypal/testing', (req, res) => {
     res.render('emailtemplates/invoicepaidquestion/html');
+  });
+
+  router.get('/useragreement', (req, res) => {
+
+    var path1 = path.join(__dirname + '/../public/uploads/User_agreement.pdf');
+
+    if (fs.existsSync(path1)) {
+        res.contentType("application/pdf");
+        fs.createReadStream(path1).pipe(res)
+    } else {
+        res.status(500)
+        console.log('File not found')
+        res.send('File not found')
+    }
+  });
+
+  router.get('/privacypolicy', (req, res) => {
+
+    var path1 = path.join(__dirname + '/../public/uploads/Privacy_Policy_Security.pdf');
+
+    if (fs.existsSync(path1)) {
+        res.contentType("application/pdf");
+        fs.createReadStream(path1).pipe(res)
+    } else {
+        res.status(500)
+        console.log('File not found')
+        res.send('File not found')
+    }
   });
 
   module.exports = router;
