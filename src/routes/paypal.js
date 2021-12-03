@@ -281,6 +281,9 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     }, (err, response) => {
       const data = response.body;
       JSON.stringify(response, null, 2);
+      JSON.stringify(err, null, 2);
+
+
 
       const links = data.links;
       const linkToPay = links.find(x => x.rel === 'approve').href;
