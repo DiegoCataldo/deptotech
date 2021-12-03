@@ -31,7 +31,7 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
   if (!description) {
     errors.push({ text: 'Please Write a Description' })
   }
-  if (!reward || reward > 25 || reward < 5) {
+  if (!reward || reward > 25 || reward < 1) {
     errors.push({ text: 'Please Add a valid Reward' })
   }
   if (!tagsArray) {
