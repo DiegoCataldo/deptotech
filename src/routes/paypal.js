@@ -169,7 +169,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     ]
   }
 
-  return new Promise(function (resolve, reject) {
+  return new Promise(function (resolve, reject) { 
     request.post(`${PAYPAL_API}/v1/payments/payouts`, {
       auth,
       body,
