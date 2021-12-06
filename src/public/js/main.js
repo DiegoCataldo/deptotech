@@ -37,8 +37,8 @@ $(function () {
 
 paypal.use( ['login'], function (login) {
   login.render ({
-    "appid":"AUx5l4m-ir1TrT67uRBJhx-ewfG4r1PyTmE-XorhU8jJHk2TIw7lMvlOwCBmQWsjBQoI7Jpv0cns5Q_M",
-    /*"authend":"sandbox",*/
+    "appid":"AY-Pud-9fb5-xD8hTzYsFqv0x_a0QTaQY9g5Th47pHqZrCAVIIzV259K5fQ4569xuuuVs2NffkgQJdEa",
+    "authend":"sandbox",
     "scopes":"openid email https://uri.paypal.com/services/paypalattributes ",
     "containerid":"lippButton",
     "responseType":"code",
@@ -112,6 +112,16 @@ if (elmButton) {
     }
   });
 
+  $(".button-delete-question").on("click", function (e) {
+
+    var answer = confirm("Are you sure you want to eliminate this question? It will be permanently deleted along with the responses associated with it.");
+    if (answer) {
+      return true;
+    } else {
+      e.preventDefault();
+    }
+  });
+
   // para que no se vea toda la descripción de la pregunta y aparezca el botón more and less
 $('.body-question-description').each(function(e) {
 
@@ -174,15 +184,22 @@ $(".tag-input").keyup(function (e) {
 
 //$('#priceanswers-reward').text($('#reward').val());
 
-$('#reward').on('input', function() {
+$('#reward').on('blur', function() {
 
-  //paso 1 obtener pago total (lo saco de la formula --> reward = x - x*0.054 -3 -x*0.05)
+ 
+  //paso 1 obtener pago total (lo saco de la formula --> reward = x - x*0.1 -5 -x*0.12)
   var reward =  parseFloat($('#reward').val());
-  var total_pay = (reward+0.3)/0.846;
+  if(reward >30 || reward <8){
+     alert('Please Add a valid Reward (greater than 8 USD and less than 30 USD)');
+     $('#reward').val('');
+     return
+  }
+ // old var total_pay = (reward+0.3)/0.846;
+ var total_pay = (reward+0.5)/0.78;
 
-var priceanswers_fee = total_pay*0.08;
+var priceanswers_fee = total_pay*0.12;
 priceanswers_fee =parseFloat(priceanswers_fee).toFixed(2);
-var paypal_fee = total_pay*0.074 + 0.3;
+var paypal_fee = total_pay*0.1 + 0.5;
 paypal_fee =parseFloat(paypal_fee).toFixed(2);
  reward = parseFloat( $('#reward').val()).toFixed(2);
 

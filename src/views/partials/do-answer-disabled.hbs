@@ -25,7 +25,7 @@
                   USD
                 </div>
                 <span class="answer-header-time">
-                  <i class="fas fa-hourglass-half"></i>   Asked {{formatDate question.createdAt}}
+                  <i class="fas fa-hourglass-half"></i> Asked {{formatDate question.createdAt}}
                 </span>
               </div>
             </div>
@@ -33,6 +33,12 @@
           <div class="answer-body">
             <div class="answer-body-description">
               {{{question.description}}}
+              {{#ifExist question.img.contentType }}
+              <div class="answer-body-image">
+                <img class="answer-body-image-img" src="data:image/{{question.img.contentType}};base64,
+                     {{ toString question.img.data}}">
+              </div>
+              {{/ifExist}}
             </div>
             <div class="answer-body-tags">
               <div class="answer-body-tags-title">
@@ -60,7 +66,7 @@
           <div class="profile-answer-body">
             <div class="profile-question-info profile-country">
               <i class="fas fa-map-marker-alt"></i>
-              
+
               {{userallInfo.country_birth}}
             </div>
             <div class="profile-question-info profile-allquestions">
@@ -81,15 +87,14 @@
 
       </div>
       <div class="row">
-      <div class="answer-do-container col-md-8">
+        <div class="answer-do-container col-md-8">
           <form action="/questions/doanswer/{{question.id}}?_method=PUT" method="POST">
-             <input type ="hidden" name ="_method" value="PUT">
-        <textarea  class="trumbowyg-textarea" name="new_answer" required="required"></textarea>
-         <button class="button-main-1 mt-5" type="submit"> Save </button>
-        </form>
-      </div>
+            <input type="hidden" name="_method" value="PUT">
+            <textarea class="trumbowyg-textarea" name="new_answer" required="required"></textarea>
+            <button class="button-main-1 mt-5" type="submit"> Save </button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 </div>
-

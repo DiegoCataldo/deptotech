@@ -27,9 +27,9 @@ const fs = require('fs')
 
 const paypal_controller = require('../controller/paypal_controller');
 
-const CLIENT = 'AUx5l4m-ir1TrT67uRBJhx-ewfG4r1PyTmE-XorhU8jJHk2TIw7lMvlOwCBmQWsjBQoI7Jpv0cns5Q_M';
-const SECRET = 'EA1DtIieQSy9jf8FxVHTQywSoIOfZY0jpTGcjlAjiVPmnntP3W-ROooBEdGtYtxJPjGEFJGPhR0g8CeP';
-const PAYPAL_API = 'https://api-m.paypal.com'; // Live https://api-m.paypal.com  // test https://api-m.sandbox.paypal.com
+const CLIENT = 'AY-Pud-9fb5-xD8hTzYsFqv0x_a0QTaQY9g5Th47pHqZrCAVIIzV259K5fQ4569xuuuVs2NffkgQJdEa';
+const SECRET = 'EAQvsaI0ROF9fjFYLPmjahWkB-qwC0AKDSe3dcs-PR_fecDEowd-e-REJXxRQFpMJ6Wr-JI-YHWEXzCG';
+const PAYPAL_API = 'https://api-m.sandbox.paypal.com'; // Live https://api-m.paypal.com  // test https://api-m.sandbox.paypal.com
 
 const auth = { user: CLIENT, pass: SECRET }
 
@@ -208,7 +208,6 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
 
       transporter.use('compile', hbs(options));
 
-      console.log('2');
       // send mail with defined transport object
       let info = await transporter.sendMail({
         from: 'contact@priceanswers.com', // sender address
@@ -223,7 +222,6 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
 
         }
       }).catch(console.error);
-      console.log('2');
 
       if (err) { reject(err); } else { resolve(body); }
     });
@@ -269,7 +267,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
         landing_page: 'NO_PREFERENCE', // Default, para mas informacion https://developer.paypal.com/docs/api/orders/v2/#definition-order_application_context
         user_action: 'PAY_NOW', // Accion para que en paypal muestre el monto del pago
         return_url: `https://www.priceanswers.com/paypal/execute-payment`, // Url despues de realizar el pago
-        cancel_url: `https://www.priceanswers.com` // Url despues de realizar el pago
+        cancel_url: `https://www.priceanswers.com/paypal/cancel-payment` // Url despues de realizar el pago
       }
     }
     //https://api-m.sandbox.paypal.com/v2/checkout/orders [POST]

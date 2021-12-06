@@ -27,7 +27,7 @@
                 </div>
                 <span class="answer-header-time">
                   <i class="fas fa-hourglass-half"></i>
-                 Asked {{formatDate question.createdAt}}
+                  Asked {{formatDate question.createdAt}}
                 </span>
               </div>
             </div>
@@ -35,6 +35,12 @@
           <div class="answer-body">
             <div class="answer-body-description">
               {{{question.description}}}
+              {{#ifExist question.img.contentType }}
+              <div class="answer-body-image">
+                <img class="answer-body-image-img" src="data:image/{{question.img.contentType}};base64,
+                     {{ toString question.img.data}}">
+              </div>
+              {{/ifExist}}
             </div>
             <div class="answer-body-tags">
               <div class="answer-body-tags-title">
@@ -128,99 +134,99 @@
                         </svg>
 
                       </div>
-                  
-                        {{#RatingEnabled ../rating_by }}
-                        <!-- en el caso que aun no le haya puesto nota -->
-                        <div class="stars-content">
 
-                          <div class="">
-                            {{#isGreater
-                            (ratingUserAVG
-                            ../answerRating.star1
-                            ../answerRating.star2
-                            ../answerRating.star3
-                            ../answerRating.star4
-                            ../answerRating.star5
-                            )
-                            1
-                            }}
-                            <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
-                            {{else}}
-                            <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
-                            {{/isGreater}}
+                      {{#RatingEnabled ../rating_by }}
+                      <!-- en el caso que aun no le haya puesto nota -->
+                      <div class="stars-content">
 
-                          </div>
-                          <div class="">
-                            {{#isGreater
-                            (ratingUserAVG
-                            ../answerRating.star1
-                            ../answerRating.star2
-                            ../answerRating.star3
-                            ../answerRating.star4
-                            ../answerRating.star5
-                            )
-                            2
-                            }}
-                            <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
-                            {{else}}
-                            <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
-                            {{/isGreater}}
+                        <div class="">
+                          {{#isGreater
+                          (ratingUserAVG
+                          ../answerRating.star1
+                          ../answerRating.star2
+                          ../answerRating.star3
+                          ../answerRating.star4
+                          ../answerRating.star5
+                          )
+                          1
+                          }}
+                          <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
+                          {{else}}
+                          <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
+                          {{/isGreater}}
 
-                          </div>
-                          <div class="">
-                            {{#isGreater
-                            (ratingUserAVG
-                            ../answerRating.star1
-                            ../answerRating.star2
-                            ../answerRating.star3
-                            ../answerRating.star4
-                            ../answerRating.star5
-                            )
-                            3
-                            }}
-                            <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
-                            {{else}}
-                            <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
-                            {{/isGreater}}
-
-                          </div>
-                          <div class="">
-                            {{#isGreater
-                            (ratingUserAVG
-                            ../answerRating.star1
-                            ../answerRating.star2
-                            ../answerRating.star3
-                            ../answerRating.star4
-                            ../answerRating.star5
-                            )
-                            4
-                            }}
-                            <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
-                            {{else}}
-                            <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
-                            {{/isGreater}}
-
-                          </div>
-                          <div class="">
-                            {{#isGreater
-                            (ratingUserAVG
-                            ../answerRating.star1
-                            ../answerRating.star2
-                            ../answerRating.star3
-                            ../answerRating.star4
-                            ../answerRating.star5
-                            )
-                            5
-                            }}
-                            <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
-                            {{else}}
-                            <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
-                            {{/isGreater}}
-
-                          </div>
                         </div>
-                        {{else}}
-                            <div class="star-container ">
+                        <div class="">
+                          {{#isGreater
+                          (ratingUserAVG
+                          ../answerRating.star1
+                          ../answerRating.star2
+                          ../answerRating.star3
+                          ../answerRating.star4
+                          ../answerRating.star5
+                          )
+                          2
+                          }}
+                          <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
+                          {{else}}
+                          <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
+                          {{/isGreater}}
+
+                        </div>
+                        <div class="">
+                          {{#isGreater
+                          (ratingUserAVG
+                          ../answerRating.star1
+                          ../answerRating.star2
+                          ../answerRating.star3
+                          ../answerRating.star4
+                          ../answerRating.star5
+                          )
+                          3
+                          }}
+                          <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
+                          {{else}}
+                          <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
+                          {{/isGreater}}
+
+                        </div>
+                        <div class="">
+                          {{#isGreater
+                          (ratingUserAVG
+                          ../answerRating.star1
+                          ../answerRating.star2
+                          ../answerRating.star3
+                          ../answerRating.star4
+                          ../answerRating.star5
+                          )
+                          4
+                          }}
+                          <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
+                          {{else}}
+                          <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
+                          {{/isGreater}}
+
+                        </div>
+                        <div class="">
+                          {{#isGreater
+                          (ratingUserAVG
+                          ../answerRating.star1
+                          ../answerRating.star2
+                          ../answerRating.star3
+                          ../answerRating.star4
+                          ../answerRating.star5
+                          )
+                          5
+                          }}
+                          <i class="fontawesome-icons fas fa-star star-success" aria-hidden="true"></i>
+                          {{else}}
+                          <i class="fontawesome-icons fas fa-star star-notsuccess" aria-hidden="true"></i>
+                          {{/isGreater}}
+
+                        </div>
+                      </div>
+                      {{else}}
+                      <div class="star-container ">
                         <!-- en el caso que ya le haya puesto la nota -->
                         <input type="radio" name="star" id="5_{{../_id}}"
                           onClick="addRatingAnswerAjax({{json ../_id}}, 5)">
@@ -257,8 +263,8 @@
                             <use xlink:href="#star" />
                           </svg>
                         </label>
-                        </div>
-                        {{/RatingEnabled}}
+                      </div>
+                      {{/RatingEnabled}}
                     </div>
                   </div>
                 </div>
@@ -279,7 +285,8 @@
                         </div>
                       </div>
                     </div>
-                    <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star5}} {{answerRating.star5}} {{else}} 0 {{/ifExist}} </div>
+                    <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star5}}
+                      {{answerRating.star5}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
                     <div class="" style="width:35px; line-height:1;">
@@ -295,7 +302,8 @@
                         </div>
                       </div>
                     </div>
-                    <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star4}} {{answerRating.star4}} {{else}} 0 {{/ifExist}} </div>
+                    <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star4}}
+                      {{answerRating.star4}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
                     <div class="" style="width:35px; line-height:1;">
@@ -311,7 +319,8 @@
                         </div>
                       </div>
                     </div>
-                    <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star3}} {{answerRating.star3}} {{else}} 0 {{/ifExist}} </div>
+                    <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star3}}
+                      {{answerRating.star3}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
                     <div class="" style="width:35px; line-height:1;">
@@ -327,7 +336,8 @@
                         </div>
                       </div>
                     </div>
-                   <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star2}} {{answerRating.star2}} {{else}} 0 {{/ifExist}} </div>
+                    <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star2}}
+                      {{answerRating.star2}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
                     <div class="" style="width:35px; line-height:1;">
@@ -343,7 +353,8 @@
                         </div>
                       </div>
                     </div>
-                   <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star1}} {{answerRating.star1}} {{else}} 0 {{/ifExist}} </div>
+                    <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star1}}
+                      {{answerRating.star1}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                 </div>
               </div>
@@ -356,7 +367,8 @@
         {{#if ../question.best_answer_chosen }}
         {{else}}
         <div class="button-see-answer2 ">
-          <a href="/paypal/payanswer/{{_id}}"> <button class="button-see-answer2 button-best-answer"> This is the best Answer!
+          <a href="/paypal/payanswer/{{_id}}"> <button class="button-see-answer2 button-best-answer"> This is the best
+              Answer!
             </button></a>
         </div>
         {{/if}}

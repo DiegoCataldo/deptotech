@@ -82,7 +82,7 @@
 }
 .answer-body{
 
-  padding: 1.5rem 1rem 1rem 0rem;
+  padding: 1.5rem 0rem 1rem 0rem;
 }
 
 .tagspan-answer{
@@ -98,6 +98,7 @@
 }
 .answer-body-description{
   min-height: 280px;
+  padding: 0rem 1rem 0rem 0rem;
 }
 
 .profile-answer{

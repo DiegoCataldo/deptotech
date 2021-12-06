@@ -16,19 +16,20 @@
           <div class="container-search-tags">
             <input class="form-control tm-search-input tag-input" name="query" id="tags-id" type="text"
               placeholder="Search by tags..." aria-label="Search">
-              <input type="hidden" name="skip" value="{{skipObject.currentSkip}}">
+            <input type="hidden" name="skip" value="{{skipObject.currentSkip}}">
             <button class="tm-search-button" type="submit">
               <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
             </button>
-            
+
           </div>
           <div class="row col-md-12 note-filter">
-              Press "Enter" to tag(s)
-            </div>
+            Press "Enter" to tag(s)
+          </div>
 
           <div class="tags-added-container" contenteditable="false">
             {{#each filters}}
-              <span href='#' class='tag-added' >{{this}} <i class="fas fa-times cross"></i> <input type='text' value="{{this}}" class='tag-hidden' name='tagsArray'/> </span>
+            <span href='#' class='tag-added'>{{this}} <i class="fas fa-times cross"></i> <input type='text'
+                value="{{this}}" class='tag-hidden' name='tagsArray' /> </span>
             {{/each}}
           </div>
 
@@ -66,27 +67,36 @@
                     {{reward_offered}} USD
                   </div>
                   <div class="">
-                    <span class="question-header-time"> <i class="fas fa-hourglass-half"></i> Asked {{formatDate createdAt}}  </span>
+                    <span class="question-header-time"> <i class="fas fa-hourglass-half"></i> Asked {{formatDate
+                      createdAt}} </span>
                   </div>
                   <div>
                     <a href="/questions/seeownquestion/{{_id}}"><button class="button-main-1">See Answers</button> </a>
+
                   </div>
+
+                   {{#ifFalse answers_enabled}} 
+                  <div>
+                    <a href="/questions/delete/{{_id}}"> <button class="button-delete-question btn btn-secondary"><i
+                          class="fas fa-trash-alt"></i></button> </a>
+                  </div>
+                  {{/ifFalse}}
                 </div>
               </div>
+              
             </div>
           </div>
         </div>
 
-    {{/each}}
-    
+        {{/each}}
+
         <!-- Pagination -->
         <div class="pagination-container col-md-12">
           <nav class="pagination-nav" aria-label="Page navigation example ">
             <ul class="pagination">
               <!-- si existen filtros entonces los paginations serán form -->
               {{#if filters}}
-              <form method="POST" id="formprev" action="/questions/ownquestionsfilter"
-                class="">
+              <form method="POST" id="formprev" action="/questions/ownquestionsfilter" class="">
                 <li class="page-item">
                   <a class="page-link" href="javascript:;"
                     onclick="document.getElementById('formprev').submit();">Previous</a>
@@ -96,10 +106,9 @@
                 <input type='hidden' value="{{this}}" name='tagsArray' />
                 {{/each}}
               </form>
-               <li class="page-item"> <a class="page-link">Page {{skipObject.nextSkip}}</a>
+              <li class="page-item"> <a class="page-link">Page {{skipObject.nextSkip}}</a>
               </li>
-              <form method="POST" id="formnext" action="/questions/ownquestionsfilter"
-                class="">
+              <form method="POST" id="formnext" action="/questions/ownquestionsfilter" class="">
                 <li class="page-item">
                   <a class="page-link" href="javascript:;"
                     onclick="document.getElementById('formnext').submit();">Next</a>
@@ -112,7 +121,7 @@
               {{else}}
               <!-- si no hay filters entonces se envie un get normal -->
               <li class="page-item"><a class="page-link" href="/questions/ownquestions/{{skipObject.prevSkip}}">
-                  Previous </a> 
+                  Previous </a>
               </li>
               <li class="page-item"> <a class="page-link">Page {{skipObject.nextSkip}}</a>
               </li>

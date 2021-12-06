@@ -31,18 +31,20 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
   if (!description) {
     errors.push({ text: 'Please Write a Description' })
   }
-  if (!reward || reward > 25 || reward < 1) {
-    errors.push({ text: 'Please Add a valid Reward' })
+  if (!reward || reward > 30 || reward < 8) {
+    errors.push({ text: 'Please Add a valid Reward (greater than 8 USD and less than 30 USD)' })
   }
   if (!tagsArray) {
     errors.push({ text: 'Please Add tags (press Enter to add it)' })
   }
-  const extImage = path.extname(req.file.originalname);
-  console.log(extImage);
-  if (extImage !== '.png' && extImage !== '.jpg' && extImage !== '.jpeg') {
-    errors.push({ text: 'Please Add image format png, jpg or jpeg' })
-
+  if ( typeof req.file !== 'undefined' && req.file != null ){
+    const extImage = path.extname(req.file.originalname);
+    console.log(extImage);
+    if (extImage !== '.png' && extImage !== '.jpg' && extImage !== '.jpeg') {
+      errors.push({ text: 'Please Add image format png, jpg or jpeg' })
+    }
   }
+ 
   if (errors.length > 0) {
     res.render('questions/new-question', {
       errors,
@@ -52,61 +54,70 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
     })
   } else {
 
-    //paso 1 obtener pago total (lo saco de la formula --> reward = x - x*0.054 -3 -x*0.05)
+    //paso 1 obtener pago total (lo saco de la formula --> reward = x - x*0.1 -5 -x*0.12)
     var reward_float = parseFloat(reward);
-    var total_pay = (reward_float + parseFloat(0.3)) / 0.846;
+    var total_pay = (reward_float + parseFloat(0.5)) / 0.78;
     total_pay = parseFloat(total_pay).toFixed(2);
     total_pay = parseFloat(total_pay);
 
-    var priceanswers_fee = total_pay * 0.08;
+    var priceanswers_fee = total_pay * 0.12;
     priceanswers_fee = parseFloat(priceanswers_fee).toFixed(2);
-    var paypal_fee = total_pay * 0.074 + 0.3;
+    var paypal_fee = total_pay * 0.1 + 0.5;
     paypal_fee = parseFloat(paypal_fee).toFixed(2);
 
     priceanswers_fee = parseFloat(priceanswers_fee);
     paypal_fee = parseFloat(paypal_fee);
     var total_price_question = reward_float + paypal_fee + priceanswers_fee;
 
-    // proceso la imagen subida para intentar reducirla de tamaño
-    await processImage(100, 5, req.file.path, req.file.filename, res);
+    // en caso que haya subido una imagen //
+    if (typeof req.file !== 'undefined' && req.file != null ) {
+      // proceso la imagen subida para intentar reducirla de tamaño
+      await processImage(100, 5, req.file.path, req.file.filename, res);
 
-    //la imagen reducida esata en la misma url que la orifinal solo que se le antepone un output_ al nombre
-    var fileoutput = path.join(__dirname + '/../public/uploads/output_' + req.file.filename);
-    //elimino la imagen original
-    fs.unlinkSync(path.join(__dirname + '/../public/uploads/' + req.file.filename));
-    // si no existe la  nueva imagen significa que hubo un problmea reduciendola y se debe reenviar el error al frontend
-    if (fs.existsSync(fileoutput)) {
+      //la imagen reducida esata en la misma url que la orifinal solo que se le antepone un output_ al nombre
+      var fileoutput = path.join(__dirname + '/../public/uploads/output_' + req.file.filename);
+      //elimino la imagen original
+      fs.unlinkSync(path.join(__dirname + '/../public/uploads/' + req.file.filename));
+      // si no existe la  nueva imagen significa que hubo un problmea reduciendola y se debe reenviar el error al frontend
+      if (fs.existsSync(fileoutput)) {
 
+        const newQuestion = new Question({
+          title, description, tags: tagsArray, reward_offered: reward_float, total_price_question: total_price_question, answers_enabled: false, best_answer_chosen: false, img: {
+            data: fs.readFileSync(path.join(__dirname + '/../public/uploads/output_' + req.file.filename)),
+            contentType: 'image/png'
+          }
+        });
+        newQuestion.user_question = mongoose.Types.ObjectId(req.user.id);
+        await newQuestion.save()
+        //elimino la imagen comprimida
+        fs.unlinkSync(fileoutput);
+        req.flash('success_msg', 'Question Added Successfully');
+        res.redirect('/questions/ownquestions');
+      }
+      else {
+        errors.push({ text: 'We could not upload your image please try with images of smaller size (200kb or smaller) and with format: png, jpg, jpeg ' })
+        res.render('questions/new-question', {
+          errors,
+          title,
+          description,
+          reward
+        })
+
+      }
+    } 
+     else {  // en caso que no haya subido imagen
       const newQuestion = new Question({
-        title, description, tags: tagsArray, reward_offered: reward_float, total_price_question: total_price_question, answers_enabled: false, best_answer_chosen: false, img: {
-          data: fs.readFileSync(path.join(__dirname + '/../public/uploads/output_' + req.file.filename)),
-          contentType: 'image/png'
-        }
+        title, description, tags: tagsArray, reward_offered: reward_float, total_price_question: total_price_question, answers_enabled: false, best_answer_chosen: false
       });
       newQuestion.user_question = mongoose.Types.ObjectId(req.user.id);
       await newQuestion.save()
-      //elimino la imagen comprimida
-      fs.unlinkSync(fileoutput);
       req.flash('success_msg', 'Question Added Successfully');
-      res.redirect('/questions/ownquestions')
-        ;
-    }
-    else {
-      errors.push({ text: 'We could not upload your image please try with images of smaller size (200kb or smaller) and with format: png, jpg, jpeg ' })
-      res.render('questions/new-question', {
-        errors,
-        title,
-        description,
-        reward
-      })
-
+      res.redirect('/questions/ownquestions');
     }
   }
-
-
 });
 
-
+/// proceso para recibir imagen y en new-question
 async function processImage(quality, drop, filePath, filename, res) {
 
   var outputFilePath = path.join(__dirname + '/../public/uploads/output_' + filename);
@@ -115,7 +126,7 @@ async function processImage(quality, drop, filePath, filename, res) {
 
   const done = await sharp(filePath).resize({
     fit: sharp.fit.contain,
-    width: 300
+    width: 200
   })
     .png({
       quality
@@ -123,12 +134,12 @@ async function processImage(quality, drop, filePath, filename, res) {
 
 
 
-  if (done.byteLength < 50000) {
+  if (done.byteLength < 15000) {
     console.log(done.byteLength);
     if (filePath) {
       await sharp(filePath).resize({
         fit: sharp.fit.contain,
-        width: 300
+        width: 200
       })
         .png({
           quality
@@ -166,6 +177,7 @@ router.get('/questions/ownquestions/:skip?', isAuthenticated, async (req, res) =
 
   const idparamsObjectTypeID = mongoose.Types.ObjectId(req.user.id);
   const queryMatch = { 'user_question': idparamsObjectTypeID };
+  const limit = 15;
   const questions = await Question.aggregate([
 
     { $match: queryMatch },
@@ -180,7 +192,7 @@ router.get('/questions/ownquestions/:skip?', isAuthenticated, async (req, res) =
         as: "answers_info"
       }
     },
-    { $skip: skip },
+    { $skip: skip * limit },
     { $limit: 15 }
   ]);
   const skipObject = { currentSkip: skip, nextSkip: skip + 1, prevSkip: skip - 1 };
@@ -194,6 +206,9 @@ router.get('/questions/ownquestions/:skip?', isAuthenticated, async (req, res) =
       },
       countLength: function (something) {
         return something.length;
+      },
+      ifFalse: function (variable, options) {
+        return (!variable) ? options.fn(this) : options.inverse(this);
       }
     }
   })
@@ -286,6 +301,9 @@ router.post('/questions/ownquestionsfilter', isAuthenticated, async (req, res) =
         },
         countLength: function (something) {
           return something.length;
+        },
+        ifFalse: function (variable, options) {
+          return (!variable) ? options.fn(this) : options.inverse(this);
         }
       }
     })
@@ -765,7 +783,12 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
         return count;
       },
       toString: function (something) {
-        return something.toString('base64');
+        if(something != null){
+          return something.toString('base64');
+        }else{
+          return '';
+        }
+
       }
     }
   })
@@ -994,15 +1017,15 @@ router.get('/questions/myanswers', isAuthenticated, async (req, res) => {
   })
 })
 
-/*
-router.get('/notes/delete/:id',  isAuthenticated, async (req, res) => {
 
-  await Note.findByIdAndDelete(req.params.id)
-  req.flash('success_msg', 'Note Deleted Successfully');
-  res.redirect('/notes');
+router.get('/questions/delete/:id',  isAuthenticated, async (req, res) => {
+
+  await Question.findByIdAndDelete(req.params.id)
+  req.flash('success_msg', 'Question Deleted Successfully');
+  res.redirect('/questions/ownquestions');
 
 });
-*/
+
 
 
 

@@ -458,7 +458,7 @@ h2:not(.u-subtitle) {
   background: #fffffb;
   position: relative;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-  margin: 1rem;
+
   padding: 1.5rem !important;
 }
 
@@ -796,12 +796,29 @@ h2:not(.u-subtitle) {
   padding: 0 20px; 
 }
 
+.answer-body-image-img{
+  margin-top: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 270px;
+  margin-bottom: 1rem;
+}
+
 @media (min-width: 600px) { 
   .reward-left-item {
     display: table-cell;
   }
   .reward-right-item{
     display: table-cell; 
+  }
+  .answer-body-image-img{
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 400px;
   }
 }
 .justify-content-center{
@@ -820,3 +837,4 @@ text-align: center;
 .second-modal-class{
   font-size: 15px; text-align: center; margin-top: 1rem;
 }
+

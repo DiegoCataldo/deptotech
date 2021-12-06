@@ -275,10 +275,10 @@
 }
 
 .button-main-1 {
-    width: 150px;
+    width: 150px !important;
     height: 40px;
     font-size: 1rem;
-    margin: 30px 0 30px 0;
+    margin: 30px 0 22px 0;
     color: #fffffb;
     border: none;
     box-shadow: 5px 5px 10px rgb(0 0 0 / 50%);
@@ -287,6 +287,13 @@
     background-size: 300% 300%;
     outline: none;
     transition: all 200ms ease-in-out;
+}
+.button-delete-question{
+
+    margin-bottom: 1rem;
+    width: 35px !important;
+    height: 35px !important;
+    padding: 0 !important;
 }
 
 .button-main-2 {
