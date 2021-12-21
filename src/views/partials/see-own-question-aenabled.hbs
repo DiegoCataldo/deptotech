@@ -117,7 +117,12 @@
                 <!-- rating block --->
                 <div class="col-md-12">
                   <div class="rating-block">
+                    {{#RatingEnabled ../rating_by }}
+                    
+                    <h4>Thanks for rating!</h4>
+                    {{else}}
                     <h4>Give It a Rating!</h4>
+                    {{/RatingEnabled}}
                     <div class="stars-content ">
                       <div class="star-source">
                         <svg>
@@ -137,6 +142,47 @@
 
                       {{#RatingEnabled ../rating_by }}
                       <!-- en el caso que aun no le haya puesto nota -->
+                      <div class="star-container ">
+                        <!-- en el caso que ya le haya puesto la nota -->
+                        <input type="radio" name="star" id="5_{{../_id}}"
+                          onClick="addRatingAnswerAjax({{json ../_id}}, 5)">
+                        <label for="5_{{../_id}}">
+                          <svg class="star">
+                            <use xlink:href="#star" />
+                          </svg>
+                        </label>
+                        <input type="radio" name="star" id="4_{{ ../_id}}"
+                          onClick="addRatingAnswerAjax({{json ../_id}}, 4)">
+                        <label for="4_{{../_id}}">
+                          <svg class="star">
+                            <use xlink:href="#star" />
+                          </svg>
+                        </label>
+                        <input type="radio" name="star" id="3_{{ ../_id}}"
+                          onClick="addRatingAnswerAjax({{json ../_id}}, 3)">
+                        <label for="3_{{../_id}}">
+                          <svg class="star">
+                            <use xlink:href="#star" />
+                          </svg>
+                        </label>
+                        <input type="radio" name="star" id="2_{{../_id}}"
+                          onClick="addRatingAnswerAjax({{json ../_id}}, 2)">
+                        <label for="2_{{../_id}}">
+                          <svg class="star">
+                            <use xlink:href="#star" />
+                          </svg>
+                        </label>
+                        <input type="radio" name="star" id="1_{{../_id}}"
+                          onClick="addRatingAnswerAjax({{json ../_id}}, 1)">
+                        <label for="1_{{../_id}}">
+                          <svg class="star">
+                            <use xlink:href="#star" />
+                          </svg>
+                        </label>
+                      </div>
+
+                      {{else}}
+
                       <div class="stars-content">
 
                         <div class="">
@@ -225,138 +271,146 @@
 
                         </div>
                       </div>
-                      {{else}}
-                      <div class="star-container ">
-                        <!-- en el caso que ya le haya puesto la nota -->
-                        <input type="radio" name="star" id="5_{{../_id}}"
-                          onClick="addRatingAnswerAjax({{json ../_id}}, 5)">
-                        <label for="5_{{../_id}}">
-                          <svg class="star">
-                            <use xlink:href="#star" />
-                          </svg>
-                        </label>
-                        <input type="radio" name="star" id="4_{{ ../_id}}"
-                          onClick="addRatingAnswerAjax({{json ../_id}}, 4)">
-                        <label for="4_{{../_id}}">
-                          <svg class="star">
-                            <use xlink:href="#star" />
-                          </svg>
-                        </label>
-                        <input type="radio" name="star" id="3_{{ ../_id}}"
-                          onClick="addRatingAnswerAjax({{json ../_id}}, 3)">
-                        <label for="3_{{../_id}}">
-                          <svg class="star">
-                            <use xlink:href="#star" />
-                          </svg>
-                        </label>
-                        <input type="radio" name="star" id="2_{{../_id}}"
-                          onClick="addRatingAnswerAjax({{json ../_id}}, 2)">
-                        <label for="2_{{../_id}}">
-                          <svg class="star">
-                            <use xlink:href="#star" />
-                          </svg>
-                        </label>
-                        <input type="radio" name="star" id="1_{{../_id}}"
-                          onClick="addRatingAnswerAjax({{json ../_id}}, 1)">
-                        <label for="1_{{../_id}}">
-                          <svg class="star">
-                            <use xlink:href="#star" />
-                          </svg>
-                        </label>
-                      </div>
                       {{/RatingEnabled}}
                     </div>
                   </div>
                 </div>
                 <!-- rating breakdown -->
-                <div class="col-md-12 rating-breakdown">
+                <div class="col-md-8 rating-breakdown">
                   <h4>Rating breakdown</h4>
                   <div class="rating-bar-answer">
-                    <div class="" style="width:35px; line-height:1;">
-                      <div style="height:9px; margin:5px 0;">5
+                    <div class="" style="width:42px; margin-right: 4px; line-height:1;">
+                      <div class="number-detail-rating" style="">5
                         <i class="fontawesome-icons fa-star" aria-hidden="true"></i>
                       </div>
                     </div>
                     <div class="" style="width:180px;">
                       <div class="progress" style="height:9px; margin:8px 0;">
-                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="5" aria-valuemin="0"
-                          aria-valuemax="5" style="width: 1000%">
+                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="5" aria-valuemin="0"
+                          aria-valuemax="5" style="width: {{percentageAvg
+                          answerRating.star1
+                          answerRating.star2
+                          answerRating.star3
+                          answerRating.star4
+                          answerRating.star5
+                          answerRating.star5}}%">
                           <span class="sr-only">80% Complete (danger)</span>
                         </div>
                       </div>
                     </div>
-                    <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star5}}
+                    <div class="float-right number-detail-rating-2" >{{#ifExist answerRating.star5}}
                       {{answerRating.star5}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
-                    <div class="" style="width:35px; line-height:1;">
-                      <div style="height:9px; margin:5px 0;">4
+                    <div class="" style="width:42px; margin-right: 4px; line-height:1;">
+                      <div class="number-detail-rating" style="">4
                         <i class="fontawesome-icons fa-star" aria-hidden="true"></i>
                       </div>
                     </div>
                     <div class="" style="width:180px;">
                       <div class="progress" style="height:9px; margin:8px 0;">
-                        <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="4" aria-valuemin="0"
-                          aria-valuemax="5" style="width: 80%">
+                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="4" aria-valuemin="0"
+                          aria-valuemax="5" style="width: {{percentageAvg
+                          answerRating.star1
+                          answerRating.star2
+                          answerRating.star3
+                          answerRating.star4
+                          answerRating.star5
+                          answerRating.star4}}%">
                           <span class="sr-only">80% Complete (danger)</span>
                         </div>
                       </div>
                     </div>
-                    <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star4}}
+                    <div class="float-right number-detail-rating-2" >{{#ifExist answerRating.star4}}
                       {{answerRating.star4}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
-                    <div class="" style="width:35px; line-height:1;">
-                      <div style="height:9px; margin:5px 0;">3
+                    <div class="" style="width:42px; margin-right: 4px; line-height:1;">
+                      <div class="number-detail-rating" style="">3
                         <i class="fontawesome-icons fa-star" aria-hidden="true"></i>
                       </div>
                     </div>
                     <div class="" style="width:180px;">
                       <div class="progress" style="height:9px; margin:8px 0;">
                         <div class="progress-bar bg-info" role="progressbar" aria-valuenow="3" aria-valuemin="0"
-                          aria-valuemax="5" style="width: 60%">
+                          aria-valuemax="5" style="width: {{percentageAvg
+                          answerRating.star1
+                          answerRating.star2
+                          answerRating.star3
+                          answerRating.star4
+                          answerRating.star5
+                          answerRating.star3}}%">
                           <span class="sr-only">80% Complete (danger)</span>
                         </div>
                       </div>
                     </div>
-                    <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star3}}
+                    <div class="float-right number-detail-rating-2" >{{#ifExist answerRating.star3}}
                       {{answerRating.star3}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
-                    <div class="" style="width:35px; line-height:1;">
-                      <div style="height:9px; margin:5px 0;">2
+                    <div class="" style="width:42px; margin-right: 4px; line-height:1;">
+                      <div class="number-detail-rating" style="">2
                         <i class="fontawesome-icons fa-star" aria-hidden="true"></i>
                       </div>
                     </div>
                     <div class="" style="width:180px;">
                       <div class="progress" style="height:9px; margin:8px 0;">
-                        <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="2" aria-valuemin="0"
-                          aria-valuemax="5" style="width: 40%">
+                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="2" aria-valuemin="0"
+                          aria-valuemax="5" style="width:{{percentageAvg
+                          answerRating.star1
+                          answerRating.star2
+                          answerRating.star3
+                          answerRating.star4
+                          answerRating.star5
+                          answerRating.star2}}%">
                           <span class="sr-only">80% Complete (danger)</span>
                         </div>
                       </div>
                     </div>
-                    <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star2}}
+                    <div class="float-right number-detail-rating-2" style="">{{#ifExist answerRating.star2}}
                       {{answerRating.star2}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
-                    <div class="" style="width:35px; line-height:1;">
-                      <div style="height:9px; margin:5px 0;">1
+                    <div class="" style="width:42px; margin-right: 4px; line-height:1;">
+                      <div class="number-detail-rating" style="">1
                         <i class="fontawesome-icons fa-star" aria-hidden="true"></i>
                       </div>
                     </div>
                     <div class="" style="width:180px;">
                       <div class="progress" style="height:9px; margin:8px 0;">
-                        <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="1" aria-valuemin="0"
-                          aria-valuemax="5" style="width: 20%">
+                        <div class="progress-bar bg-info" role="progressbar" aria-valuenow="1" aria-valuemin="0"
+                          aria-valuemax="5" style="width: {{percentageAvg
+                          answerRating.star1
+                          answerRating.star2
+                          answerRating.star3
+                          answerRating.star4
+                          answerRating.star5
+                          answerRating.star1}}%">
                           <span class="sr-only">80% Complete (danger)</span>
                         </div>
                       </div>
                     </div>
-                    <div class="float-right" style="margin-left:10px;">{{#ifExist answerRating.star1}}
+                    <div class="float-right number-detail-rating-2" style="">{{#ifExist answerRating.star1}}
                       {{answerRating.star1}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                 </div>
+                <div class="col-md-4 rating-avg" >
+                  <div class="div">
+                    <h4> Rating Avg</h4>
+                  </div>
+                 
+                  <div class="number-rating-avg">
+                                   <h2 class="number-avg-parcial">   {{ratingUserAVG
+                    answerRating.star1
+                    answerRating.star2
+                    answerRating.star3
+                    answerRating.star4
+                    answerRating.star5
+                    }}<small class="number-avg-total"> /5</small></h2> 
+                  </div>
+                 
+
+                </div> 
               </div>
             </div>
 

@@ -27,9 +27,9 @@ const fs = require('fs')
 
 const paypal_controller = require('../controller/paypal_controller');
 
-const CLIENT = 'AY-Pud-9fb5-xD8hTzYsFqv0x_a0QTaQY9g5Th47pHqZrCAVIIzV259K5fQ4569xuuuVs2NffkgQJdEa';
-const SECRET = 'EAQvsaI0ROF9fjFYLPmjahWkB-qwC0AKDSe3dcs-PR_fecDEowd-e-REJXxRQFpMJ6Wr-JI-YHWEXzCG';
-const PAYPAL_API = 'https://api-m.sandbox.paypal.com'; // Live https://api-m.paypal.com  // test https://api-m.sandbox.paypal.com
+const CLIENT = 'AZBsZtS53_tReLSnEsRXz_JkY5RY5hkQvG8mdirbLaDzK5973_3MCO0fnFx-QcgrQOjU3B8UYnZ1Qu4D';
+const SECRET = 'EMN5jcBEeaK-it5gdX5gQTw8_dMDN_b23jxFy88Jdi7VZOTDvlPN5-y1c2XQCktc5fyzlXI-LU_LxVxs';
+const PAYPAL_API = 'https://api-m.paypal.com'; // Live https://api-m.paypal.com  // test https://api-m.sandbox.paypal.com
 
 const auth = { user: CLIENT, pass: SECRET }
 
@@ -48,7 +48,7 @@ router.get('/paypal/payanswer/:id_answer', async (req, res) => {
     try {
       const { data: { access_token, token_type } } = await axios({
 
-        url: 'https://api-m.sandbox.paypal.com/v1/oauth2/token',
+        url: 'https://api-m.paypal.com/v1/oauth2/token',
         method: 'post',
         Headers: {
           Accept: 'application/json',
@@ -336,7 +336,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     try {
       const { data: { token_type, refresh_token } } = await axios({
 
-        url: 'https://api-m.sandbox.paypal.com/v1/oauth2/token',
+        url: 'https://api-m.paypal.com/v1/oauth2/token',
         method: 'post',
         headers: {
           Accept: 'application/json',
@@ -373,7 +373,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     try {
       const { data: { access_token, token_type, refresh_token } } = await axios({
 
-        url: 'https://api-m.sandbox.paypal.com/v1/oauth2/token',
+        url: 'https://api-m.paypal.com/v1/oauth2/token',
         method: 'post',
         headers: {
           Accept: 'application/json',
@@ -412,7 +412,7 @@ router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (r
     try {
       const { data: { verified_account, emails } } = await axios({
 
-        url: 'https://api-m.sandbox.paypal.com/v1/identity/oauth2/userinfo?schema=paypalv1.1',
+        url: 'https://api-m.paypal.com/v1/identity/oauth2/userinfo?schema=paypalv1.1',
         method: 'GET',
         headers: {
           Accept: 'application/json',

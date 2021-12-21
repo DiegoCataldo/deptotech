@@ -6,10 +6,10 @@ $(function () {
   $('.trumbowyg-textarea').trumbowyg({
     btnsDef: {
 			// Customizables dropdowns
-			image: {
+		/*	image: {
 				dropdown: ['insertImage', 'upload'],
 				ico: 'insertImage'
-			}
+			} */
 		},
     btns: [
       ['highlight'],
@@ -24,7 +24,7 @@ $(function () {
         ['horizontalRule'],
         ['removeformat'],
         ['fullscreen'],
-        ['image','noembed'],
+       // ['image','noembed'],
       
   ]
   });
@@ -37,8 +37,8 @@ $(function () {
 
 paypal.use( ['login'], function (login) {
   login.render ({
-    "appid":"AY-Pud-9fb5-xD8hTzYsFqv0x_a0QTaQY9g5Th47pHqZrCAVIIzV259K5fQ4569xuuuVs2NffkgQJdEa",
-    "authend":"sandbox",
+    "appid":"AZBsZtS53_tReLSnEsRXz_JkY5RY5hkQvG8mdirbLaDzK5973_3MCO0fnFx-QcgrQOjU3B8UYnZ1Qu4D",
+   /* "authend":"sandbox", */
     "scopes":"openid email https://uri.paypal.com/services/paypalattributes ",
     "containerid":"lippButton",
     "responseType":"code",

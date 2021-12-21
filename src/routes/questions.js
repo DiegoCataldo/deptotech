@@ -37,14 +37,14 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
   if (!tagsArray) {
     errors.push({ text: 'Please Add tags (press Enter to add it)' })
   }
-  if ( typeof req.file !== 'undefined' && req.file != null ){
+  if (typeof req.file !== 'undefined' && req.file != null) {
     const extImage = path.extname(req.file.originalname);
     console.log(extImage);
     if (extImage !== '.png' && extImage !== '.jpg' && extImage !== '.jpeg') {
       errors.push({ text: 'Please Add image format png, jpg or jpeg' })
     }
   }
- 
+
   if (errors.length > 0) {
     res.render('questions/new-question', {
       errors,
@@ -70,7 +70,7 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
     var total_price_question = reward_float + paypal_fee + priceanswers_fee;
 
     // en caso que haya subido una imagen //
-    if (typeof req.file !== 'undefined' && req.file != null ) {
+    if (typeof req.file !== 'undefined' && req.file != null) {
       // proceso la imagen subida para intentar reducirla de tamaño
       await processImage(100, 5, req.file.path, req.file.filename, res);
 
@@ -104,8 +104,8 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
         })
 
       }
-    } 
-     else {  // en caso que no haya subido imagen
+    }
+    else {  // en caso que no haya subido imagen
       const newQuestion = new Question({
         title, description, tags: tagsArray, reward_offered: reward_float, total_price_question: total_price_question, answers_enabled: false, best_answer_chosen: false
       });
@@ -126,7 +126,7 @@ async function processImage(quality, drop, filePath, filename, res) {
 
   const done = await sharp(filePath).resize({
     fit: sharp.fit.contain,
-    width: 200
+    width: 260
   })
     .png({
       quality
@@ -134,12 +134,12 @@ async function processImage(quality, drop, filePath, filename, res) {
 
 
 
-  if (done.byteLength < 15000) {
+  if (done.byteLength < 30000) {
     console.log(done.byteLength);
     if (filePath) {
       await sharp(filePath).resize({
         fit: sharp.fit.contain,
-        width: 200
+        width: 300
       })
         .png({
           quality
@@ -548,11 +548,12 @@ router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
         reward_offered: data.reward_offered,
         tags: data.tags,
         user_question: data.user_question,
-        best_answer_chosen: data.best_answer_chosen
+        best_answer_chosen: data.best_answer_chosen,
+        img: data.img
       }
     })
 
-  /// obtengo la info del usuario que hico la pregunta ////
+  /// obtengo la info del usuario que hizo la pregunta ////
   const userQuestion = mongoose.Types.ObjectId(question.user_question);
   const queryMatch = { '_id': userQuestion };
 
@@ -598,14 +599,14 @@ router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
         as: "user_info"
       }
     }
-  ])
-
+  ]);
+    /// si es el mismo usuario que hizo la pregunta lo devuelvo
   if (question.user_question == req.user.id) {
     req.flash('error', 'You cannot answer your own question');
     res.redirect('/questions/allquestions');
   } else {
     res.render('questions/do-answer', {
-      question, userallInfo: userallInfo[0], answers: answers,
+      question, userallInfo: userallInfo[0], answers: answers, UserId: user._id,
       helpers: {
         formatDate: function (date) {
           return datefns.formatRelative(date, new Date());
@@ -626,10 +627,15 @@ router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
           return count;
         },
         ratingUserAVG: function (star1, star2, star3, star4, star5) {
+          if(star1 == null) star1=0;
+          if(star2 == null) star2=0;
+          if(star3 == null) star3=0;
+          if(star4 == null) star4=0;
+          if(star5 == null) star5=0;
           var totalRatings = star1 + star2 + star3 + star4 + star5;
           var percentageStar = (star1 * 1 + star2 * 2 + star3 * 3 + star4 * 4 + star5 * 5) / totalRatings;
           var percentageStarRounded = Math.round(percentageStar * 10) / 10;
-
+  
           return percentageStarRounded;
         },
         isGreater: function (a, b, options) {
@@ -642,19 +648,45 @@ router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
           return JSON.stringify(something);
         },
         RatingEnabled: function (rating_by, options) {
-          var FoundID = rating_by.find(function (doc, index) {
-
+          //primero veo si el usuario actual ya dio su rating a la respuesta
+          var FoundID = true;
+           rating_by.find(function (doc, index) {
             if (doc.idUser == req.user.id) {
-              return true;
-            } else {
-              return false;
+              FoundID = false;
             }
           });
+  
           if (FoundID) { return options.fn(this); } else { return options.inverse(this); }
         },
         ifExist: function (variable, options) {
           return (variable != null) ? options.fn(this) : options.inverse(this);
-        }
+        },
+        toString: function (something) {
+          if (something != null) {
+            return something.toString('base64');
+          } else {
+            return '';
+          }
+        },
+        ifEquals: function (variable1, variable2, options) {
+
+          return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
+        },
+        percentageAvg: function(star1, star2, star3, star4, star5, currentStar){
+          if(star1 == null) star1=0;
+          if(star2 == null) star2=0;
+          if(star3 == null) star3=0;
+          if(star4 == null) star4=0;
+          if(star5 == null) star5=0;
+          if(currentStar == null) currentStar = 0;
+  
+          var totalRatings = star1 + star2 + star3 + star4 + star5;
+          var percentageAvg = (currentStar*100)/totalRatings;
+          var percentageStarRounded = Math.round(percentageAvg * 10) / 10;
+
+          return percentageStarRounded;
+  
+        },
       }
     })
   }
@@ -733,6 +765,11 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
     question, answers, userallInfo: userallInfo[0],
     helpers: {
       ratingUserAVG: function (star1, star2, star3, star4, star5) {
+        if(star1 == null) star1=0;
+        if(star2 == null) star2=0;
+        if(star3 == null) star3=0;
+        if(star4 == null) star4=0;
+        if(star5 == null) star5=0;
         var totalRatings = star1 + star2 + star3 + star4 + star5;
         var percentageStar = (star1 * 1 + star2 * 2 + star3 * 3 + star4 * 4 + star5 * 5) / totalRatings;
         var percentageStarRounded = Math.round(percentageStar * 10) / 10;
@@ -753,14 +790,14 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
 
       },
       RatingEnabled: function (rating_by, options) {
-        var FoundID = rating_by.find(function (doc, index) {
-
+        //primero veo si el usuario actual ya dio su rating a la respuesta
+        var FoundID = true;
+         rating_by.find(function (doc, index) {
           if (doc.idUser == req.user.id) {
-            return true;
-          } else {
-            return false;
+            FoundID = false;
           }
         });
+
         if (FoundID) { return options.fn(this); } else { return options.inverse(this); }
       },
       ifExist: function (variable, options) {
@@ -783,13 +820,32 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
         return count;
       },
       toString: function (something) {
-        if(something != null){
+        if (something != null) {
           return something.toString('base64');
-        }else{
+        } else {
           return '';
         }
 
-      }
+      },
+      percentageAvg: function(star1, star2, star3, star4, star5, currentStar){
+        if(star1 == null) star1=0;
+        if(star2 == null) star2=0;
+        if(star3 == null) star3=0;
+        if(star4 == null) star4=0;
+        if(star5 == null) star5=0;
+        if(currentStar == null) currentStar = 0;
+
+        var totalRatings = star1 + star2 + star3 + star4 + star5;
+        var percentageAvg = (currentStar*100)/totalRatings;
+        var percentageStarRounded = Math.round(percentageAvg * 10) / 10;
+
+        return percentageStarRounded;
+
+      },
+      ifEquals: function (variable1, variable2, options) {
+
+        return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
+      }, 
     }
   })
 });
@@ -1018,7 +1074,7 @@ router.get('/questions/myanswers', isAuthenticated, async (req, res) => {
 })
 
 
-router.get('/questions/delete/:id',  isAuthenticated, async (req, res) => {
+router.get('/questions/delete/:id', isAuthenticated, async (req, res) => {
 
   await Question.findByIdAndDelete(req.params.id)
   req.flash('success_msg', 'Question Deleted Successfully');
