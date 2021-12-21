@@ -37,8 +37,8 @@ $(function () {
 
 paypal.use( ['login'], function (login) {
   login.render ({
-    "appid":"AZBsZtS53_tReLSnEsRXz_JkY5RY5hkQvG8mdirbLaDzK5973_3MCO0fnFx-QcgrQOjU3B8UYnZ1Qu4D",
-   /* "authend":"sandbox", */
+    "appid":"AVgjJNnvtewFLXh1TPa0kMmuRlk1bTuT_w6uYvdVh_aMUqzk8YF-APrJICJxPyJegWszd83SHo8CLwGd",
+    "authend":"sandbox", 
     "scopes":"openid email https://uri.paypal.com/services/paypalattributes ",
     "containerid":"lippButton",
     "responseType":"code",

@@ -19,6 +19,10 @@ const nodemailer = require('nodemailer');
 const fs = require('fs')
 
 
+
+
+
+
 /// importar controlador paypal ///
 
 const paypal_controller = require('../controller/paypal_controller');
@@ -29,8 +33,6 @@ const PAYPAL_API = 'https://api-m.sandbox.paypal.com'; // Live https://api-m.pay
 
 const auth = { user: CLIENT, pass: SECRET }
 
-
-////////////////// [1] ELECCION DE BEST ANSWER  PARA UNA PREGUNTA ////////////////
 
 router.get('/paypal/payanswer/:id_answer', async (req, res) => { 
 
@@ -82,7 +84,7 @@ router.get('/paypal/payanswer/:id_answer', async (req, res) => {
     /// obtengo los datos dela pregunta ///
     questionID = answerVar.id_question;
     filterQuestion = { _id: questionID };
-    updateAnswerChosen = { best_answer_chosen: true, pay_to: paypal_email, status: 'best_answer_chosen' };
+    updateAnswerChosen = { best_answer_chosen: true, paid_to: paypal_email, status: 'best_answer_chosen' };
   });
   //// modifico la pregunta  como la mejor respuesta ///
   await Question.findOneAndUpdate(filterQuestion, updateAnswerChosen);
@@ -488,5 +490,208 @@ router.get('/paypal/payanswer/:id_answer', async (req, res) => {
     }
   });
 
+/*
 
+//////////////////////// TODO ESTO QUEDO DESHABILITADO //////////////////////
+  /////////////////// [1] GENERAR PAGO BUSINESS ---> PERSONA ////////////////////
+
+//// solicitud para realizar pago
+router.get('/paypal/payanswer/:id_answer', async (req, res) => {
+
+  // paso 1 generar access token
+  //clientid = username, secret = password
+
+  const id_answer = req.params.id_answer;
+
+  (async () => {
+    try {
+      const { data: { access_token, token_type } } = await axios({
+
+        url: 'https://api-m.sandbox.paypal.com/v1/oauth2/token',
+        method: 'post',
+        Headers: {
+          Accept: 'application/json',
+          'Accept-Language': 'en_US',
+          'content-type': 'application/x-www-form-urlencoded',
+        },
+        auth: {
+          username: CLIENT,
+          password: SECRET,
+        },
+        params: {
+          grant_type: 'client_credentials',
+        },
+
+      });
+
+      /// devoler respuiesta de exito
+      return res.redirect('/paypal-new-checkout/' + access_token + '&' + token_type + '&' + id_answer);
+
+    } catch (error) {
+      console.log('error: ', error);
+      return res.status(400).send({
+        status: 'error',
+        message: 'Error de paypal revisar logs'
+      });
+    }
+  })();
+
+});
+
+/// este genera el pago desde la empresa a una persona /////
+router.get('/paypal-new-checkout/:access_token&:token_type&:id_answer', async (req, res) => {
+
+  const idanswer = mongoose.Types.ObjectId(req.params.id_answer);
+
+  ///// obtengo el id del usuario y el id de la pregutna de la respuesta elegida como la mejor //////
+  const answer = await Answer.findById(req.params.id_answer).lean()
+    .then(data => {
+      return {
+        _id: data._id,
+        user_question: data.user_question,
+        user_answer: data.user_answer,
+        id_question: data.id_question
+      }
+    });
+
+  const id_question = answer.id_question;
+  /////// obtengo los datos de la pregunta ///////
+  const question = await Question.findById(id_question).lean()
+    .then(data => {
+      return {
+        _id: data._id,
+        reward_offered: data.reward_offered
+      }
+    });
+  const reward_offered = question.reward_offered;
+
+
+  /////// obtengo los datos del usuario elegido como la mejor respuesta (paypal_email)  ///////
+  const user_answer = await User.findById(answer.user_answer).lean()
+    .then(data => {
+      return {
+        _id: data._id,
+        paypal_email: data.paypal_email,
+        email: data.email
+      }
+    });
+    const email_user_priceanswers = user_answer.email;
+  const paypal_email = user_answer.paypal_email;
+
+  const update = { best_answer: true }
+  const filter = { _id: idanswer };
+  /// modifico la respuesta como la mejor //
+  var questionID, filterQuestion, updateAnswerChosen;
+
+  await Answer.findOneAndUpdate(filter, update, { new: true }).lean().then(answerVar => {
+
+    /// obtengo los datos dela pregunta ///
+    questionID = answerVar.id_question;
+    filterQuestion = { _id: questionID };
+    updateAnswerChosen = { best_answer_chosen: true, paid_to: paypal_email };
+  });
+  //// modifico la pregunta  como la mejor respuesta ///
+  await Question.findOneAndUpdate(filterQuestion, updateAnswerChosen);
+
+  ////// comienzo  con la transferencia /////
+
+  const datenow = datefns.formatRelative(Date.now(), new Date());
+
+
+  var total_paid = reward_offered;
+  total_paid = Number.parseFloat(total_paid).toFixed(2);
+
+  let access_token = req.params.access_token;
+  let token_type = req.params.token_type;
+
+  let modo = "EMAIL";
+  let batch_code = uniqid(); // numero de factura unico
+
+  let email = paypal_email;
+  let monto_a_cobrar = total_paid;
+
+  const authorization = 'Bearer ' + access_token;
+
+  const body = {
+    sender_batch_header:
+    {
+      email_subject: 'Payment made',
+      sender_batch_id: 'batch-' + batch_code
+    },
+    items: [
+      {
+        recipient_type: 'EMAIL',
+        amount: { value: monto_a_cobrar, currency: 'USD' },
+        receiver: email,
+        note: 'Priceanswers.com payment for being chosen the best answer.'
+      }
+    ]
+  }
+
+  return new Promise(function (resolve, reject) { 
+    request.post(`${PAYPAL_API}/v1/payments/payouts`, {
+      auth,
+      body,
+      json: true
+    }, async (err, res, body) => {
+
+      /// envío correo de invoice al user_answer ///
+      ///// POR AHORA ESTARÁ APAGADO YA QUE PAYPAL ENVIA INVOICE
+
+      const firstPartEmailUser = email_user_priceanswers.split('@')[0];
+
+      // Generate test SMTP service account from ethereal.email
+      // create reusable transporter object using the default SMTP transport
+      let transporter = nodemailer.createTransport({
+        host: process.env.SMTP_NODEMAILER_HOST,
+        port: process.env.SMTP_NODEMAILER_PORT,
+        secure: true, // true for 465, false for other ports
+        auth: {
+          user: process.env.SMTP_NODEMAILER_USER, // generated ethereal user
+          pass: process.env.SMTP_NODEMAILER_PASS, // generated ethereal password
+        },
+        tls: {
+          rejectUnauthorized: false
+        }
+      });
+
+      var options = {
+        viewEngine: {
+          extname: '.hbs', // handlebars extension
+          layoutsDir: path.join(__dirname, '../views/emailtemplates/invoicepaidanswer'), // location of handlebars templates
+          defaultLayout: 'html', // name of main template
+          partialsDir: path.join(__dirname, '../views/emailtemplates/invoicepaidanswer'), // location of your subtemplates aka. header, footer etc
+        },
+        viewPath: path.join(__dirname, '../views/emailtemplates/invoicepaidanswer'),
+        extName: '.hbs'
+      };
+
+      transporter.use('compile', hbs(options));
+
+      // send mail with defined transport object
+      let info = await transporter.sendMail({
+        from: 'contact@priceanswers.com', // sender address
+        to: email_user_priceanswers, // list of receivers
+        subject: "Invoice Priceanswers", // Subject line
+        template: 'html',
+        context: {
+          name: firstPartEmailUser,
+          datenow: datenow,
+          idQuestion: questionID.toString(),
+          reward_offered : reward_offered
+
+        }
+      }).catch(console.error);
+
+      if (err) { reject(err); } else { resolve(body); }
+    });
+
+    req.flash('success_msg', 'Thank you for choosing the best answer.');
+    res.redirect('/questions/seeownquestion/' + questionID);
+  })
+
+})
+
+//////////////////////// TERMINA LO DESHABILITADO //////////////////////
+*/
   module.exports = router;

@@ -8,7 +8,7 @@ const flash = require('connect-flash'); // para enviar mensajes por pantalla
 const passport = require ('passport');
 const multer = require('multer');
 const bodyParser = require('body-parser');
-const stripeacccount = require('./routes/stripeaccount');
+
 if(process.env.NODE_ENV !== 'production'){
   require('dotenv').config();
 }
@@ -76,9 +76,8 @@ app.use(require('./routes/index'));
 app.use(require('./routes/notes'));
 app.use(require('./routes/users'));
 app.use(require('./routes/questions'));
-app.use(require('./routes/stripeaccount'));
 app.use(require('./routes/paypal'));
-app.use(require('./routes/transfer'));
+app.use(require('./routes/admin'));
 
 
 

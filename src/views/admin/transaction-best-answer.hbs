@@ -1,0 +1,52 @@
+<div class="row card border-card">
+  <div class="card card-question border-card">
+    <div class="banner-question u-section-2">
+      <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">ADMIN</h3>
+      <h2 class="u-heading-font u-text u-text-2">DASHBOARD TRANSFER</h2>
+      <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+    </div>
+    <br>
+  </div>
+</div>
+
+<div class="tm-main row justify-content-md-center margin-x-0 mt-5">
+  <div class="col-md-7">
+    <div class="row ">
+      <table id="example" class="table table-answers table-striped table-bordered" style="width:100%">
+        <thead>
+          <tr>
+            <th>ID Question </th>
+            <th>Reward</th>
+            <th>paypal email to transfer</th>
+            <th> ID Transaction PayPal</th>
+            <th>Update</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each questions}}
+          <tr>
+
+            <td>{{_id}} </td>
+            <td>{{reward_offered}} </td>
+            {{#each answer_info}}
+            {{#each user_info}}
+            <td>{{paypal_email}} </td>
+            {{/each}}
+
+             <td> <input type="text" id="id_transaction_paypal" name="id_transaction_paypal" class="form-control" placeholder="id transaction paypal"
+            maxlength="100" value="" required="required"> </td>
+            <td>  <a href="/admin/update_best_answer/{{_id}}"><button type="button" id="" class="button-main-2">Update</button></a></td>
+            {{/each}}
+            
+           
+           
+          </tr>
+        
+          {{/each}}
+
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>

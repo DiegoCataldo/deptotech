@@ -15,6 +15,7 @@ const  QuestionSchema = new Schema({
   answers_enabled: {type: Boolean, required: true},
   best_answer_chosen: { type: Boolean, required: true},
   best_answer_id: { type: mongoose.Schema.Types.ObjectId, required: false},
+  status: { type: String, required: true},
   paid_to: { type: String, required: false},
   img:
   {

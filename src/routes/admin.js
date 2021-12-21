@@ -17,7 +17,7 @@ var hbs = require('nodemailer-express-handlebars');
 const datefns = require('date-fns');
 
 
-
+/// dashboard para  mantener el orden al sacar dinero de paypal
 router.get('/admin/dashboard-transfer', isAuthenticated, async (req, res) => {
 
   const id_user = mongoose.Types.ObjectId(req.user.id);
@@ -91,11 +91,11 @@ router.get('/admin/dashboard-transfer', isAuthenticated, async (req, res) => {
       current_utility = parseFloat(total_utility) - parseFloat(total_taken_utility);
       current_taken_utility = parseFloat(all_transfers[0].current_taken_utility);
     }
-    console.log(JSON.stringify(all_transfers, null, 2));
+    //console.log(JSON.stringify(all_transfers, null, 2));
 
 
 
-    res.render('users/dashboard-transfer', {
+    res.render('admin/dashboard-transfer', {
       all_transfers: all_transfers, fee_paypal_import_last: fee_paypal_import, fee_paypal_export_last: fee_paypal_export, total_utility_last: total_utility, reward_fee_debt_last: reward_fee_debt, current_utility_last: current_utility, total_taken_utility_last: total_taken_utility, current_taken_utility_last: current_taken_utility,
       helpers: {
         formatDate: function (date) {
@@ -200,6 +200,110 @@ router.put('/admin/dashboard-transfer', isAuthenticated, async (req, res) => {
 
   req.flash('success_msg', 'Profile Updated Successfully');
   res.redirect('/admin/dashboard-transfer');
+
+})
+
+// dashboard para transferir dinero a los mejores respuestas
+router.get('/admin/best_answers', isAuthenticated, async (req, res) => { 
+
+  const id_user = mongoose.Types.ObjectId(req.user.id);
+
+  const user_data = await User.findById(id_user).lean()
+  .then(data => {
+    return {
+      _id: data._id,
+      transaction_manager: data.transaction_manager
+    }
+  });
+if (user_data.transaction_manager) {
+
+  const queryMatchPendingPaid = { 'status': 'best_answer_chosen' };
+  const queryMatchBestAnswer = { 'best_answer': true };
+
+  const questions = await Question.aggregate([
+    { $match: queryMatchPendingPaid },
+    {
+      $lookup: {
+        from: "answers",
+        let: { "questionid": "$_id" },
+        pipeline: [
+          { $match: { $expr: { $eq: ["$id_question", "$$questionid"] } } },
+          {$match:  queryMatchBestAnswer},
+          { $project: { "answer": 0, "createdAt": 0, "rating_by": 0, "answerRating": 0  } },
+          {
+            $lookup: {
+              from: "users",
+              let: { "user_id": "$user_answer" },
+              pipeline: [
+                { $match: { $expr: { $eq: ["$_id", "$$user_id"] } } },
+                { $project: { "password": 0, "createdAt": 0 , "answerRating": 0} }
+              ],
+              as: "user_info"
+            }
+          }
+        ],
+        as: "answer_info"
+      }
+    },
+    { $project: { "title": 0, "description": 0, "rating_by": 0, "img": 0, "tags": 0, "user_question": 0   } },
+    { $sort: { createdAt: -1 } },
+   /* { $skip: skip * limit },
+    { $limit: limit } */
+
+  ]);
+
+  console.log(JSON.stringify(questions, null, 2));
+
+  res.render('admin/transaction-best-answer', { questions,
+    helpers: {
+      formatDate: function (date) {
+        return datefns.formatRelative(date, new Date());
+      },
+      parsefloat2: function (number) {
+        return parseFloat(number).toFixed(2);
+      }
+    }
+  }
+  );
+
+}  else {
+  res.redirect('/');
+}
+})
+
+router.get('/admin/best_answers', isAuthenticated, async (req, res) => { 
+
+  const id_user = mongoose.Types.ObjectId(req.user.id);
+  const idanswer = mongoose.Types.ObjectId(req.params.id_answer);
+
+  const user_data = await User.findById(id_user).lean()
+    .then(data => {
+      return {
+        _id: data._id,
+        transaction_manager: data.transaction_manager
+      }
+    });
+  if (user_data.transaction_manager) {
+
+    const filterAnswer = { _id: idanswer };
+    const updateAnswer = { get_paid: true  };
+
+    let filterQuestion, updateQuestion;
+
+    await Answer.findOneAndUpdate(filterAnswer, updateAnswer, { new: true }).lean().then(answerVar => {
+
+      filterQuestion = { _id: answerVar.id_question };
+      updateQuestion = { status: 'answer_paid'};
+    });
+
+    await Question.findOneAndUpdate(filterQuestion, updateQuestion);
+
+    res.redirect('/admin/best_answers');
+
+  }else {
+    res.redirect('/');
+  }
+
 
 })
 

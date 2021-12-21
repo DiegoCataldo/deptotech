@@ -82,7 +82,7 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
       if (fs.existsSync(fileoutput)) {
 
         const newQuestion = new Question({
-          title, description, tags: tagsArray, reward_offered: reward_float, total_price_question: total_price_question, answers_enabled: false, best_answer_chosen: false, img: {
+          title, description, tags: tagsArray, reward_offered: reward_float, total_price_question: total_price_question, answers_enabled: false, best_answer_chosen: false, status: 'question_not_paid', img: {
             data: fs.readFileSync(path.join(__dirname + '/../public/uploads/output_' + req.file.filename)),
             contentType: 'image/png'
           }

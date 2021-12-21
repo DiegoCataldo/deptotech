@@ -88,7 +88,7 @@ router.get('/users/logout', (req, res) => {
   res.redirect('/');
 })
 
-router.get('/users/myprofile', async (req, res) => {
+router.get('/users/myprofile',  isAuthenticated, async (req, res) => {
 
   const user = await User.findById(req.user.id).lean()
     .then(data => {
