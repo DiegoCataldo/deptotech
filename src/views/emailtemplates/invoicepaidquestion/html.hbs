@@ -1,9 +1,15 @@
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
-<div class="container" style="margin-top: 5rem; align-content: center;
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<div class="container" style="margin-top: 5rem; align-content: center; max-with: 1140px;
     margin-left: auto;
-    margin-right: auto;"> 
+    margin-right: auto;">
   <div class="col-md-12">
     <div class="invoice" style="background: #fff; padding: 20px">
+
+      <div class="invoice-company text-inverse f-w-600" style="font-size: 25px; text-align: center;">
+        We have successfully received your payment
+      </div>
       <!-- begin invoice-company -->
       <div class="invoice-company text-inverse f-w-600" style="font-size: 20px">
         <span class="pull-right hidden-print">
@@ -19,8 +25,8 @@
           <small>from</small>
           <address class="m-t-5 m-b-5" style="color:#1b1b1c !important">
             <strong class="text-inverse" style="font-size: 16px;
-    font-weight: 600;">Priceanswers.com</strong><br>
-           
+    font-weight: 600;">{{name}}</strong><br>
+
           </address>
         </div>
         <div class="invoice-to" style="    display: table-cell;
@@ -28,7 +34,7 @@
           <small>to</small>
           <address class="m-t-5 m-b-5" style="color:#1b1b1c !important">
             <strong class="text-inverse" style="    font-size: 16px;
-    font-weight: 600;">{{name}}</strong><br>
+    font-weight: 600;">Priceanswers.com</strong><br>
         </div>
         <div class="invoice-date" style="    display: table-cell;
     width: 1%;     font-size: 16px;     text-align: right;
@@ -96,7 +102,7 @@
               <div class="sub-price" style="    display: table-cell;
     vertical-align: middle;
     padding: 0 20px">
-               +
+                +
               </div>
               <div class="sub-price" style="    display: table-cell;
     vertical-align: middle;
@@ -109,7 +115,7 @@
               <div class="sub-price" style="    display: table-cell;
     vertical-align: middle;
     padding: 0 20px"> + </div>
-     <div class="sub-price" style="    display: table-cell;
+              <div class="sub-price" style="    display: table-cell;
     vertical-align: middle;
     padding: 0 20px">
                 <small style="    font-size: 12px;
@@ -117,7 +123,7 @@
     display: block">PRICEANSWERS FEE ({{priceanswers_fee}}%)</small>
                 <span class="text-inverse">{{total_priceanswers_fee}} USD</span>
               </div>
-                            <div class="sub-price" style="    display: table-cell;
+              <div class="sub-price" style="    display: table-cell;
     vertical-align: middle;
     padding: 0 20px"> = </div>
             </div>
@@ -173,4 +179,3 @@
     </div>
   </div>
 </div>
-

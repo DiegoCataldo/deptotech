@@ -5,12 +5,12 @@ $(function () {
 
   $('.trumbowyg-textarea').trumbowyg({
     btnsDef: {
-			// Customizables dropdowns
-		/*	image: {
-				dropdown: ['insertImage', 'upload'],
-				ico: 'insertImage'
-			} */
-		},
+      // Customizables dropdowns
+      /*	image: {
+          dropdown: ['insertImage', 'upload'],
+          ico: 'insertImage'
+        } */
+    },
     btns: [
       ['highlight'],
       ['viewHTML'],
@@ -18,70 +18,88 @@ $(function () {
       ['strong', 'em', 'del'],
       ['justifyLeft', 'justifyCenter'],
       ['superscript', 'subscript'],
-        ['link'],
-        ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
-        ['unorderedList', 'orderedList'],
-        ['horizontalRule'],
-        ['removeformat'],
-        ['fullscreen'],
-       // ['image','noembed'],
-      
-  ]
+      ['link'],
+      ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+      ['unorderedList', 'orderedList'],
+      ['horizontalRule'],
+      ['removeformat'],
+      ['fullscreen'],
+      // ['image','noembed'],
+
+    ]
   });
 
   $('#myModal').modal('show');
 
-  
+  /*
+    $(".button-modal-transaction").click(function (e) {
+      var myBookId = $(this).data('id');
+      $(".modal-body #bookId").val( myBookId );
+    });
+  }); */
+
+  $('#modal-transaction').on('shown.bs.modal', function () {
+    $('#button-modal-transaction').trigger('focus')
+  })
+
+  $('#modal-transaction').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var id_question = button.data('idquestion');
+    var id_answer = button.data('idanswer');
+    var modal = $(this);
+    //modal.find('.modal-title').text('New message to ' + recipient)
+    modal.find('#id_question').val(id_question);
+    modal.find('#id_answer').val(id_answer);
+  })
 
 
-
-paypal.use( ['login'], function (login) {
-  login.render ({
-    "appid":"AVgjJNnvtewFLXh1TPa0kMmuRlk1bTuT_w6uYvdVh_aMUqzk8YF-APrJICJxPyJegWszd83SHo8CLwGd",
-    "authend":"sandbox", 
-    "scopes":"openid email https://uri.paypal.com/services/paypalattributes ",
-    "containerid":"lippButton",
-    "responseType":"code",
-    "locale":"en-us",
-    "buttonType":"LWP",
-    "buttonShape":"pill",
-    "buttonSize":"lg",
-    "fullPage":"true",
-    "returnurl":"https://www.priceanswers.com/paypal/return"
+  paypal.use(['login'], function (login) {
+    login.render({
+      "appid": "AVgjJNnvtewFLXh1TPa0kMmuRlk1bTuT_w6uYvdVh_aMUqzk8YF-APrJICJxPyJegWszd83SHo8CLwGd",
+      "authend": "sandbox",
+      "scopes": "openid email https://uri.paypal.com/services/paypalattributes ",
+      "containerid": "lippButton",
+      "responseType": "code",
+      "locale": "en-us",
+      "buttonType": "LWP",
+      "buttonShape": "pill",
+      "buttonSize": "lg",
+      "fullPage": "true",
+      "returnurl": "https://www.priceanswers.com/paypal/return"
+    });
   });
-});
-/*
-  let elmButton = document.querySelector("#addcustomerbutton");
-  // botón para agregar un nuevo costumer en connect de stripe y que pueda recibir plata al responder
-if (elmButton) {
-  elmButton.addEventListener(
-    "click",
-    e => {
-      elmButton.setAttribute("disabled", "disabled");
-      elmButton.textContent = "Opening...";
-
-      fetch("/stripeaccount/addcustomerbutton", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.url) {
-            window.location = data.url;
-          } else {
-            elmButton.removeAttribute("disabled");
-            elmButton.textContent = "<Something went wrong>";
-            console.log("data", data);
+  /*
+    let elmButton = document.querySelector("#addcustomerbutton");
+    // botón para agregar un nuevo costumer en connect de stripe y que pueda recibir plata al responder
+  if (elmButton) {
+    elmButton.addEventListener(
+      "click",
+      e => {
+        elmButton.setAttribute("disabled", "disabled");
+        elmButton.textContent = "Opening...";
+  
+        fetch("/stripeaccount/addcustomerbutton", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
           }
-        });
-    },
-    false
-  );
-}*/
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.url) {
+              window.location = data.url;
+            } else {
+              elmButton.removeAttribute("disabled");
+              elmButton.textContent = "<Something went wrong>";
+              console.log("data", data);
+            }
+          });
+      },
+      false
+    );
+  }*/
 
-  $('#Modal').modal('show');
+
 
   $(".navbar-toggler").on("click", function (e) {
     $(".tm-header").toggleClass("show");
@@ -90,7 +108,7 @@ if (elmButton) {
 
   $("html").click(function (e) {
     var header = document.getElementById("tm-header");
-    if(typeof header != "undefined" && header != null){
+    if (typeof header != "undefined" && header != null) {
       if (!header.contains(e.target)) {
         $(".tm-header").removeClass("show");
       }
@@ -123,35 +141,36 @@ if (elmButton) {
   });
 
   // para que no se vea toda la descripción de la pregunta y aparezca el botón more and less
-$('.body-question-description').each(function(e) {
+  $('.body-question-description').each(function (e) {
 
     var $pTag = $(this).find('p');
     console.log($pTag.text());
-    if($pTag.text().length > 100){
-        var shortText = $pTag.text();
-        shortText = shortText.substring(0, 100);
-        $pTag.addClass('fullArticle').hide();
-        shortText += '<a href="#" class="read-more-link">Read More</a>';
-        $pTag.append('<a href="#" class="read-less-link">Show less</a>');
-        $(this).append('<p class="preview">'+shortText+'</p>');
+    if ($pTag.text().length > 100) {
+      var shortText = $pTag.text();
+      shortText = shortText.substring(0, 100);
+      $pTag.addClass('fullArticle').hide();
+      shortText += '<a href="#" class="read-more-link">Read More</a>';
+      $pTag.append('<a href="#" class="read-less-link">Show less</a>');
+      $(this).append('<p class="preview">' + shortText + '</p>');
     }
 
-});
+  });
 
-$(document).on('click', '.read-more-link', function () {
-  $(this).parent().hide().prev().show();
-});
+  $(document).on('click', '.read-more-link', function () {
+    $(this).parent().hide().prev().show();
+  });
 
-$(document).on('click', '.read-less-link', function () {
-  $(this).parent().hide().next().show();
-});
+  $(document).on('click', '.read-less-link', function () {
+    $(this).parent().hide().next().show();
+  });
 
-/// cerrar el dialogo de alerta //
+  /// cerrar el dialogo de alerta //
   $("#alertbutton").click(function (e) {
     console.log(e);
     $(".alert").fadeOut();
   });
 });
+
 
 // eliminar los tags que se están agregando al hacer click en la x //
 $('body').on('click', 'i.cross', function () {
@@ -162,7 +181,7 @@ $('body').on('click', 'i.cross', function () {
     return value != removedItem;
   });
 });
- /// agregar tags //
+/// agregar tags //
 $(".tag-input").keyup(function (e) {
   var code = e.key; // recommended to use e.key, it's normalized across devices and languages
   if (code === "Enter") e.preventDefault();
@@ -184,35 +203,35 @@ $(".tag-input").keyup(function (e) {
 
 //$('#priceanswers-reward').text($('#reward').val());
 
-$('#reward').on('blur', function() {
+$('#reward').on('blur', function () {
 
- 
+
   //paso 1 obtener pago total (lo saco de la formula --> reward = x - x*0.1 -5 -x*0.12)
-  var reward =  parseFloat($('#reward').val());
-  if(reward >30 || reward <3){
-     alert('Please Add a valid Reward (greater than 8 USD and less than 30 USD)');
-     $('#reward').val('');
-     return
+  var reward = parseFloat($('#reward').val());
+  if (reward > 30 || reward < 3) {
+    alert('Please Add a valid Reward (greater than 8 USD and less than 30 USD)');
+    $('#reward').val('');
+    return
   }
- // old var total_pay = (reward+0.3)/0.846;
- var total_pay = (reward+0.5)/0.78;
+  // old var total_pay = (reward+0.3)/0.846;
+  var total_pay = (reward + 0.5) / 0.78;
 
-var priceanswers_fee = total_pay*0.12;
-priceanswers_fee =parseFloat(priceanswers_fee).toFixed(2);
-var paypal_fee = total_pay*0.1 + 0.5;
-paypal_fee =parseFloat(paypal_fee).toFixed(2);
- reward = parseFloat( $('#reward').val()).toFixed(2);
+  var priceanswers_fee = total_pay * 0.12;
+  priceanswers_fee = parseFloat(priceanswers_fee).toFixed(2);
+  var paypal_fee = total_pay * 0.1 + 0.5;
+  paypal_fee = parseFloat(paypal_fee).toFixed(2);
+  reward = parseFloat($('#reward').val()).toFixed(2);
 
-priceanswers_fee =parseFloat(priceanswers_fee);
-paypal_fee =parseFloat(paypal_fee);
-reward = parseFloat( reward);
+  priceanswers_fee = parseFloat(priceanswers_fee);
+  paypal_fee = parseFloat(paypal_fee);
+  reward = parseFloat(reward);
 
-var total = reward +  paypal_fee + priceanswers_fee;
+  var total = reward + paypal_fee + priceanswers_fee;
 
-total =parseFloat(total).toFixed(2);
-total = total+ ' USD';
-priceanswers_fee = priceanswers_fee+ ' USD';
-paypal_fee = paypal_fee+ ' USD';
+  total = parseFloat(total).toFixed(2);
+  total = total + ' USD';
+  priceanswers_fee = priceanswers_fee + ' USD';
+  paypal_fee = paypal_fee + ' USD';
 
 
 
@@ -228,7 +247,7 @@ var tags = [];
 $(document).ready(function () {
 
   $('#example').DataTable();
-  
+
   // subir imagenes //
   const fileSelector = document.getElementById('inputGroupFile01');
   fileSelector.addEventListener('change', (event) => {
@@ -242,10 +261,10 @@ $(document).ready(function () {
 
 
 
-  $('#reward').on('input', function() {
+  $('#reward').on('input', function () {
     console.log('tes');
-   });
- 
+  });
+
 
   $('body').on('click', 'i.cross', function () {
     console.log("entro");
@@ -273,9 +292,9 @@ $(document).ready(function () {
 $(document).on("keydown", ":input:not(textbox)", function (event) {
 
 
-  var classe =  $(event.target).attr('class');
+  var classe = $(event.target).attr('class');
 
-  if(classe == "tag-input" || classe.indexOf("tag-input") !== -1){
+  if (classe == "tag-input" || classe.indexOf("tag-input") !== -1) {
     return event.key != "Enter";
   }
 
@@ -316,7 +335,7 @@ fileSelector.addEventListener('change', (event) => {
   console.log(fileList);
   $("#label-inputGroupFile01").val(fileList);
 
-}); 
+});
 
 
 

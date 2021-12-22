@@ -79,6 +79,8 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
       //elimino la imagen original
       fs.unlinkSync(path.join(__dirname + '/../public/uploads/' + req.file.filename));
       // si no existe la  nueva imagen significa que hubo un problmea reduciendola y se debe reenviar el error al frontend
+
+      
       if (fs.existsSync(fileoutput)) {
 
         const newQuestion = new Question({
@@ -107,7 +109,7 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
     }
     else {  // en caso que no haya subido imagen
       const newQuestion = new Question({
-        title, description, tags: tagsArray, reward_offered: reward_float, total_price_question: total_price_question, answers_enabled: false, best_answer_chosen: false
+        title, description, tags: tagsArray, reward_offered: reward_float, total_price_question: total_price_question, answers_enabled: false, best_answer_chosen: false, status: 'question_not_paid'
       });
       newQuestion.user_question = mongoose.Types.ObjectId(req.user.id);
       await newQuestion.save()
