@@ -77,10 +77,7 @@ router.get('/admin/dashboard-transfer', isAuthenticated, async (req, res) => {
     var current_taken_utility = 0;
 
     //console.log(JSON.stringify(questions, null, 2));
-    console.log("fee_paypal_import: " + fee_paypal_import);
-    console.log("fee_paypal_export: " + fee_paypal_export);
-    console.log("utility: " + total_utility);
-    console.log("reward_fee_debt: " + reward_fee_debt);
+
 
     const all_transfers = await Transfer.find({}).sort({ 'createdAt': -1 }).lean();
 
@@ -278,11 +275,6 @@ router.put('/admin/update_best_answer', isAuthenticated, async (req, res) => {
   const { paypal_transaction_id } = req.body;
   const id_answer = mongoose.Types.ObjectId(req.body.id_answer);
   const id_question = mongoose.Types.ObjectId(req.body.id_question);
-  console.log('id_answer1: '+ req.body.id_answer );
-  console.log('id_question1: '+ req.body.id_question);
-  console.log('id_answer2: '+ id_answer );
-  console.log('id_question2: '+ id_question);
-
   const user_data = await User.findById(id_user).lean()
     .then(data => {
       return {
@@ -297,8 +289,6 @@ router.put('/admin/update_best_answer', isAuthenticated, async (req, res) => {
 
     const  filterQuestion = { _id: id_question };
     const updateQuestion = { status: 'answer_paid'};
-    console.log(filterAnswer);
-
     const answer = await Answer.findOneAndUpdate(filterAnswer, updateAnswer, { new: true });
 
     const question = await Question.findOneAndUpdate(filterQuestion, updateQuestion, { new: true });

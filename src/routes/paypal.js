@@ -140,7 +140,7 @@ router.get('/paypal/create-payment/:idQuestion', isAuthenticated, async (req, re
     JSON.stringify(response, null, 2);
     JSON.stringify(err, null, 2);
 
-
+    console.log(JSON.stringify(data, null, 2));
 
     const links = data.links;
     const linkToPay = links.find(x => x.rel === 'approve').href;
@@ -223,7 +223,7 @@ router.get('/paypal/return/', async (req, res) => {
 //paypal me reenvía el refresh token
 router.get('/paypal/refreshtoken/:refresh_token&:token_type', async (req, res) => {
 
-  console.log(req.params);
+  
   let clientSecret = CLIENT + ':' + SECRET;
   basicAuth = `${CLIENT}:${SECRET}`;
 
@@ -436,7 +436,7 @@ const updatePaidQuestion = async session => {
     subject: "Invoice Priceanswers", // Subject line
     template: 'html',
     context: {
-      name: firstPartEmailUser,
+      name: emailUser,
       datenow: datenow,
       idQuestion: idquestionString,
       paypal_fee_1: '10',

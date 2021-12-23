@@ -99,6 +99,8 @@
 
       {{#each answers}}
 
+      {{#ifEquals user_answer ../UserId }}
+
       <div class="answer-own-question col-md-12">
         <div class="answer-own-question-header">
           {{#each user_info}}
@@ -163,8 +165,8 @@
 
 
                     {{#RatingEnabled ../rating_by }}
-                     <!-- en el caso que no le haya puesto la nota -->
-                    <div class="star-container ">                    
+                    <!-- en el caso que no le haya puesto la nota -->
+                    <div class="star-container ">
                       <input type="radio" name="star" id="5_{{../_id}}"
                         onClick="addRatingAnswerAjax({{json ../_id}}, 5)">
                       <label for="5_{{../_id}}">
@@ -202,9 +204,9 @@
                       </label>
                     </div>
                     {{else}}
-                      <!-- en el caso que ya le haya puesto nota -->
+                    <!-- en el caso que ya le haya puesto nota -->
                     <div class="stars-content ">
-                     
+
                       <div class="stars-content">
 
                         <div class="">
@@ -323,7 +325,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="float-right number-detail-rating-2" >{{#ifExist answerRating.star5}}
+                    <div class="float-right number-detail-rating-2">{{#ifExist answerRating.star5}}
                       {{answerRating.star5}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
@@ -346,7 +348,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="float-right number-detail-rating-2" >{{#ifExist answerRating.star4}}
+                    <div class="float-right number-detail-rating-2">{{#ifExist answerRating.star4}}
                       {{answerRating.star4}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
@@ -369,7 +371,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="float-right number-detail-rating-2" >{{#ifExist answerRating.star3}}
+                    <div class="float-right number-detail-rating-2">{{#ifExist answerRating.star3}}
                       {{answerRating.star3}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
@@ -419,23 +421,23 @@
                       {{answerRating.star1}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                 </div>
-                <div class="col-md-4 rating-avg" >
+                <div class="col-md-4 rating-avg">
                   <div class="div">
                     <h4> Rating Avg</h4>
                   </div>
-                 
-                  <div class="number-rating-avg">
-                                   <h2 class="number-avg-parcial">   {{ratingUserAVG
-                    answerRating.star1
-                    answerRating.star2
-                    answerRating.star3
-                    answerRating.star4
-                    answerRating.star5
-                    }}<small class="number-avg-total"> /5</small></h2> 
-                  </div>
-                 
 
-                </div> 
+                  <div class="number-rating-avg">
+                    <h2 class="number-avg-parcial"> {{ratingUserAVG
+                      answerRating.star1
+                      answerRating.star2
+                      answerRating.star3
+                      answerRating.star4
+                      answerRating.star5
+                      }}<small class="number-avg-total"> /5</small></h2>
+                  </div>
+
+
+                </div>
               </div>
             </div>
 
@@ -444,7 +446,7 @@
           {{/each}}
         </div>
       </div>
-
+{{/ifEquals}}
       {{/each}}
     </div>
   </div>

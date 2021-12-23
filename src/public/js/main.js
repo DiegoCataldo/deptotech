@@ -141,11 +141,16 @@ $(function () {
   });
 
   // para que no se vea toda la descripción de la pregunta y aparezca el botón more and less
+  /*
   $('.body-question-description').each(function (e) {
 
     var $pTag = $(this).find('p');
+    var $preTag = $(this).find('pre');
     console.log($pTag.text());
-    if ($pTag.text().length > 100) {
+    console.log($preTag.text());
+    var addtagtext = $pTag.text().length + $preTag.text().length;
+
+    if (addtagtext > 100) {
       var shortText = $pTag.text();
       shortText = shortText.substring(0, 100);
       $pTag.addClass('fullArticle').hide();
@@ -155,7 +160,7 @@ $(function () {
     }
 
   });
-
+*/
   $(document).on('click', '.read-more-link', function () {
     $(this).parent().hide().prev().show();
   });
