@@ -118,10 +118,11 @@
                 <div class="col-md-12">
                   <div class="rating-block">
                     {{#RatingEnabled ../rating_by }}
-                    
-                    <h4>Thanks for rating!</h4>
-                    {{else}}
                     <h4>Give It a Rating!</h4>
+
+                    {{else}}
+
+                    <h4>Thanks for rating!</h4>
                     {{/RatingEnabled}}
                     <div class="stars-content ">
                       <div class="star-source">
@@ -298,7 +299,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="float-right number-detail-rating-2" >{{#ifExist answerRating.star5}}
+                    <div class="float-right number-detail-rating-2">{{#ifExist answerRating.star5}}
                       {{answerRating.star5}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
@@ -321,7 +322,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="float-right number-detail-rating-2" >{{#ifExist answerRating.star4}}
+                    <div class="float-right number-detail-rating-2">{{#ifExist answerRating.star4}}
                       {{answerRating.star4}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
@@ -344,7 +345,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="float-right number-detail-rating-2" >{{#ifExist answerRating.star3}}
+                    <div class="float-right number-detail-rating-2">{{#ifExist answerRating.star3}}
                       {{answerRating.star3}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
@@ -394,23 +395,23 @@
                       {{answerRating.star1}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                 </div>
-                <div class="col-md-4 rating-avg" >
+                <div class="col-md-4 rating-avg">
                   <div class="div">
                     <h4> Rating Avg</h4>
                   </div>
-                 
-                  <div class="number-rating-avg">
-                                   <h2 class="number-avg-parcial">   {{ratingUserAVG
-                    answerRating.star1
-                    answerRating.star2
-                    answerRating.star3
-                    answerRating.star4
-                    answerRating.star5
-                    }}<small class="number-avg-total"> /5</small></h2> 
-                  </div>
-                 
 
-                </div> 
+                  <div class="number-rating-avg">
+                    <h2 class="number-avg-parcial"> {{ratingUserAVG
+                      answerRating.star1
+                      answerRating.star2
+                      answerRating.star3
+                      answerRating.star4
+                      answerRating.star5
+                      }}<small class="number-avg-total"> /5</small></h2>
+                  </div>
+
+
+                </div>
               </div>
             </div>
 
@@ -421,9 +422,40 @@
         {{#if ../question.best_answer_chosen }}
         {{else}}
         <div class="button-see-answer2 ">
-          <a href="/paypal/payanswer/{{_id}}"> <button class="button-see-answer2 button-best-answer"> This is the best
-              Answer!
-            </button></a>
+          <button type="button" data-toggle="modal" data-target="#modal-best-answer" data-idanswer="{{_id}}"
+             class="button-see-answer2 button-best-answer "> This is the best
+            Answer!
+          </button>
+               <!---- MODAL DE CONFIRMACIÓN ---->
+          <div class="modal fade" id="modal-best-answer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel"> IMPORTANT!</h5>
+                  <button id="close-best-answer"  type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <h5>
+                  Are you sure this is the best answer? this user will be the only one who will receive the reward of the question
+                  </h5>
+                  <div class="modal-footer">
+                    <button type="button" id="close-best-answer1" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <a href="/paypal/payanswer/{{_id}}"> <button  class="button-see-answer2 button-best-answer button-best-answer-alert"> This is
+                        the best
+                        Answer!
+                      </button>
+                    </a>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <!---- TERMINA MODAL DE CONFIRMACIÓN ---->
+
         </div>
         {{/if}}
 

@@ -2,6 +2,14 @@
 
 $(function () {
 
+  MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [
+            ['$', '$'],
+            ['\\(', '\\)']
+        ]
+    }
+});
 
   $('.trumbowyg-textarea').trumbowyg({
     btnsDef: {
@@ -13,10 +21,12 @@ $(function () {
     },
     btns: [
       ['highlight'],
+      ['fontsize'],
       ['viewHTML'],
+      ['foreColor', 'backColor'],
+      ['mathml']
       ['formatting'],
       ['strong', 'em', 'del'],
-      ['justifyLeft', 'justifyCenter'],
       ['superscript', 'subscript'],
       ['link'],
       ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
@@ -26,7 +36,23 @@ $(function () {
       ['fullscreen'],
       // ['image','noembed'],
 
-    ]
+    ],
+    plugins: {
+        fontsize: {
+            sizeList: [
+                '12px',
+                '14px',
+                '16px',
+                '20px',
+                '25px'
+            ],
+            allowCustomSize: false
+        },
+        highlight:{
+            enableLineHighlight: false
+
+        }
+    }
   });
 
   $('#myModal').modal('show');
@@ -38,9 +64,7 @@ $(function () {
     });
   }); */
 
-  $('#modal-transaction').on('shown.bs.modal', function () {
-    $('#button-modal-transaction').trigger('focus')
-  })
+
 
   $('#modal-transaction').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
@@ -50,13 +74,21 @@ $(function () {
     //modal.find('.modal-title').text('New message to ' + recipient)
     modal.find('#id_question').val(id_question);
     modal.find('#id_answer').val(id_answer);
-  })
+  });
+
+  $('#modal-best-answer').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var id_answer = button.data('idanswer');
+    var modal = $(this);
+    //modal.find('.modal-title').text('New message to ' + recipient)
+
+  });
 
 
   paypal.use(['login'], function (login) {
     login.render({
-      "appid": "AVgjJNnvtewFLXh1TPa0kMmuRlk1bTuT_w6uYvdVh_aMUqzk8YF-APrJICJxPyJegWszd83SHo8CLwGd",
-      "authend": "sandbox",
+      "appid": "AZBsZtS53_tReLSnEsRXz_JkY5RY5hkQvG8mdirbLaDzK5973_3MCO0fnFx-QcgrQOjU3B8UYnZ1Qu4D",
+      /*"authend": "sandbox", */
       "scopes": "openid email https://uri.paypal.com/services/paypalattributes ",
       "containerid": "lippButton",
       "responseType": "code",
@@ -119,8 +151,8 @@ $(function () {
   $("#tm-nav .nav-link").click(function (e) {
     $(".tm-header").removeClass("show");
   });
-
-  $(".button-best-answer").on("click", function (e) {
+/*
+  $(".button-best-answer-alert").on("click", function (e) {
 
     var answer = confirm("Are you sure this is the best answer? this user will be the only one who will receive the reward of the question");
     if (answer) {
@@ -129,7 +161,7 @@ $(function () {
       e.preventDefault();
     }
   });
-
+*/
   $(".button-delete-question").on("click", function (e) {
 
     var answer = confirm("Are you sure you want to eliminate this question? It will be permanently deleted along with the responses associated with it.");
@@ -174,12 +206,28 @@ $(function () {
     console.log(e);
     $(".alert").fadeOut();
   });
+
+  $("#bestanswercheckbox").on("click", function (e) {
+
+    //var test = document.getElementById('bestanswercheckbox:checked').val();
+    var checkboxoriginal=$("#bestanswercheckbox").is(":checked");
+    if(checkboxoriginal){
+      $('#bestanswercheckbox1').prop('checked', true);
+      $('#bestanswercheckbox2').prop('checked', true);
+    }else{
+      $('#bestanswercheckbox1').prop('checked', false);
+      $('#bestanswercheckbox2').prop('checked', false);
+    }
+
+
+    console.log(checkboxoriginal);
+
+  });
 });
 
 
 // eliminar los tags que se están agregando al hacer click en la x //
 $('body').on('click', 'i.cross', function () {
-  console.log("entro");
   var removedItem = $(this).parent().contents(':not(i)').text();
   $(this).parent().remove();
   tags = $.grep(tags, function (value) {
@@ -272,7 +320,6 @@ $(document).ready(function () {
 
 
   $('body').on('click', 'i.cross', function () {
-    console.log("entro");
     var removedItem = $(this).parent().contents(':not(i)').text();
     $(this).parent().remove();
     tags = $.grep(tags, function (value) {
@@ -290,6 +337,8 @@ $(document).ready(function () {
       e.preventDefault();
     }
   });
+
+
 
 
 });
@@ -335,7 +384,6 @@ calendars.forEach(calendar => {
 
 const fileSelector = document.getElementById('inputGroupFile01');
 fileSelector.addEventListener('change', (event) => {
-  console.log("entro");
   const fileList = event.target.files;
   console.log(fileList);
   $("#label-inputGroupFile01").val(fileList);

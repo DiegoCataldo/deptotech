@@ -39,7 +39,6 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
   }
   if (typeof req.file !== 'undefined' && req.file != null) {
     const extImage = path.extname(req.file.originalname);
-    console.log(extImage);
     if (extImage !== '.png' && extImage !== '.jpg' && extImage !== '.jpeg') {
       errors.push({ text: 'Please Add image format png, jpg or jpeg' })
     }
@@ -68,6 +67,9 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
     priceanswers_fee = parseFloat(priceanswers_fee);
     paypal_fee = parseFloat(paypal_fee);
     var total_price_question = reward_float + paypal_fee + priceanswers_fee;
+    total_price_question = parseFloat(total_price_question).toFixed(2);
+    total_price_question = parseFloat(total_price_question);
+
 
     // en caso que haya subido una imagen //
     if (typeof req.file !== 'undefined' && req.file != null) {
@@ -137,7 +139,7 @@ async function processImage(quality, drop, filePath, filename, res) {
 
 
   if (done.byteLength < 30000) {
-    console.log(done.byteLength);
+    //console.log(done.byteLength);
     if (filePath) {
       await sharp(filePath).resize({
         fit: sharp.fit.contain,
@@ -147,7 +149,7 @@ async function processImage(quality, drop, filePath, filename, res) {
           quality
         })
         .toFile(outputFilePath).then((data) => {
-          console.log('listo');
+          //console.log('listo');
           return true;
         })
     };
@@ -155,7 +157,7 @@ async function processImage(quality, drop, filePath, filename, res) {
 
 
   } else {
-    console.log('byte: ' + done.byteLength + 'quality: ' + quality);
+    //console.log('byte: ' + done.byteLength + 'quality: ' + quality);
     if (quality - drop <= 0) {
 
       return 'fal';
@@ -322,9 +324,13 @@ router.get('/questions/allquestions/:skip?', isAuthenticated, async (req, res) =
   } else {
     skip = parseInt(req.params.skip);
   }
-  const limit = 15;
+  const limit = 15;  
+ const  bestanswerchosen = 'off'
+
+  var  queryMatch_bestanswer = { 'status': { '$in': ["question_not_paid", "question_paid"] } };
 
   const questions = await Question.aggregate([
+    { $match: queryMatch_bestanswer },
     {
       $lookup: {
         from: "answers",
@@ -358,7 +364,7 @@ router.get('/questions/allquestions/:skip?', isAuthenticated, async (req, res) =
   res.render('questions/all-questions', {
     questions: questions, skipObject: skipObject,
     userInfo: { name: req.user.name },
-    user_data: user_data,
+    user_data: user_data, UserId: id_user,  bestanswerchosen: bestanswerchosen,
     helpers: {
       formatDate: function (date) {
         return datefns.formatRelative(date, new Date());
@@ -378,7 +384,11 @@ router.get('/questions/allquestions/:skip?', isAuthenticated, async (req, res) =
           }
         }
         return (instanciar) ? options.fn(this) : options.inverse(this);
-      }
+      },
+        ifEquals: function (variable1, variable2, options) {
+
+          return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
+        }
     }
   })
 
@@ -387,6 +397,17 @@ router.get('/questions/allquestions/:skip?', isAuthenticated, async (req, res) =
 router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req, res) => {
 
   var tagsArray = req.body.tagsArray;
+  var bestanswerchosen = req.body.bestanswercheckbox;
+  var besanswermatch;
+  // en el caso que se haya seleccionado o no el checkbox que incluye las preguntas con las respuestas ya elegidas le creo una query filter y seteo la variable bestanswerchosen = 'off' ya que solo viene con on si es correo sino viene como null
+  if(bestanswerchosen == null){
+    bestanswerchosen = 'off';
+    var  queryMatch_bestanswer = { 'status': { '$in': ["question_not_paid", "question_paid"] } };
+
+  }else{
+    var  queryMatch_bestanswer = { 'status': { '$in': ["question_not_paid", "question_paid", "best_answer_chosen", "answer_paid"] } };
+  }
+
   var skip;
   if (typeof req.body.skip === 'undefined' || parseInt(req.body.skip) < 0) {
     skip = 0
@@ -398,9 +419,12 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
     tagsArray = [tagsArray];
   }
 
+
+
   if (tagsArray == null) {
 
     const questions = await Question.aggregate([
+      { $match: queryMatch_bestanswer },
       {
         $lookup: {
           from: "answers",
@@ -435,7 +459,7 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
       questions: questions, skipObject: skipObject,
       userInfo: { name: req.user.name },
       user_data: user_data,
-      filters: tagsArray,
+      filters: tagsArray, UserId: id_user, bestanswerchosen: bestanswerchosen,
       helpers: {
         formatDate: function (date) {
           return datefns.formatRelative(date, new Date());
@@ -455,6 +479,9 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
             }
           }
           return (instanciar) ? options.fn(this) : options.inverse(this);
+        },
+        ifEquals: function (variable1, variable2, options) {
+          return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
         }
       }
     })
@@ -464,7 +491,9 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
 
     const questions = await Question.aggregate([
 
+     
       { $match: queryMatch },
+      { $match: queryMatch_bestanswer },
       {
         $lookup: {
           from: "answers",
@@ -500,6 +529,7 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
       userInfo: { name: req.user.name },
       filters: tagsArray,
       user_data: user_data,
+      UserId: id_user, bestanswerchosen: bestanswerchosen,
       helpers: {
         formatDate: function (date) {
           return datefns.formatRelative(date, new Date());
@@ -519,7 +549,12 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
             }
           }
           return (instanciar) ? options.fn(this) : options.inverse(this);
+        },
+        ifEquals: function (variable1, variable2, options) {
+
+          return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
         }
+        
       }
     })
 
@@ -913,7 +948,6 @@ router.get('/questions/get_enable_answers/:id', isAuthenticated, async (req, res
 
 ///// Agregar una nueva puntuación (rating) a una respuesta ////////////
 router.get('/questions/add_rating/:idanswer&:rating', isAuthenticated, async (req, res) => {
-  console.log('entro aca 1');
 
   const idanswer = mongoose.Types.ObjectId(req.params.idanswer);
   const rating = req.params.rating;

@@ -99,6 +99,17 @@
           {{#each user_info}}
           <div class="header-title row">
             <div class="col-lg-12">
+              {{#if ../best_answer}}
+              <div class="best-answer-title">
+                <div class="medal-div">
+                  <img src="/img/goldmedal.png" alt="" class="gold-medal-congrats">
+                </div>
+                <div class="first-place-title">
+                  Best answer!
+                </div>
+                  
+              </div>
+              {{/if}}
               <div class="header-name">
                 {{name}}
               </div>

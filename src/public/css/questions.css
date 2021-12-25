@@ -117,6 +117,15 @@
   outline: none;
   border: 0;
 }
+.container-checkbox input {
+  flex: 0;
+
+}
+.container-checkbox  {
+
+  justify-content: left !important;
+  margin-left: 0.3rem;
+}
 
 .cross {
   padding: 2px;
@@ -458,8 +467,8 @@ h2:not(.u-subtitle) {
   background: #fffffb;
   position: relative;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
-
   padding: 1.5rem !important;
+  margin-bottom: 2rem;
 }
 
 .answer-own-question-header .header-title {
@@ -603,22 +612,22 @@ h2:not(.u-subtitle) {
   margin: 4px;
 }
 
-.button-see-answer2 button:active {
+.button-see-answer2 button:active:not([id=close-best-answer]):not([id=close-best-answer1]) {
   box-shadow: 3px 3px 3px rgb(0 0 0 / 50%);
   transform: translateY(4px);
 }
-.button-see-answer2 button:hover {
+.button-see-answer2 button:hover:not([id=close-best-answer]):not([id=close-best-answer1])  {
   box-shadow: 5px 5px 5px rgb(0 0 0 / 50%);
   transform: translateY(2px);
   -webkit-animation: gradientBG 1.5s ease-in-out forwards;
   animation: gradientBG 1.5s ease-in-out forwards;
   cursor: pointer;
 }
-.button-see-answer2{
+.button-see-answer2:not([id=close-best-answer]):not([id=close-best-answer1]) {
   margin-top:5rem;
   text-align: center;
 }
-.button-see-answer2 button {
+.button-see-answer2 button:not([id=close-best-answer]):not([id=close-best-answer1])  {
   width: 130px;
   height: 40px;
   font-size: 1rem;
@@ -881,4 +890,21 @@ font-family: 'Font Awesome 5 Free' !important
     height: 25px;
    
 
+}
+#close-best-answer{
+  color: black;
+}
+
+.button-best-answer-alert{
+  margin: 0  !important;
+}
+.gold-medal-congrats{
+  width: 80px;
+}
+.best-answer-title{
+  text-align: center;
+  background-color: #e9ab0296;
+  font-family: "Montserrat", sans-serif;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
 }

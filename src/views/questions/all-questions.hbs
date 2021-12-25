@@ -10,36 +10,60 @@
 
 
   <div class="tm-main row justify-content-md-center margin-x-0">
-    <div class="col-md-7 search">
+    <div class="col-md-7 row search">
+
       <form method="POST" action="/questions/allquestionsfilter" class="form-inline mb-4 tm-search-form">
-        <div class="container-tag2">
-          <div class="container-search-tags">
-            <input class="form-control tm-search-input tag-input" name="query" id="tags-id" type="text"
-              placeholder="Search by tags..." aria-label="Search">
-            <input type="hidden" name="skip" value="{{skipObject.currentSkip}}">
+        <div class="container-tag2 row">
+          <div class="col-9 search">
+            <div class="width100">
+              <div class="container-search-tags">
+                <input class="form-control tm-search-input tag-input" name="query" id="tags-id" type="text"
+                  placeholder="Search by tags..." aria-label="Search">
+                <input type="hidden" name="skip" value="{{skipObject.currentSkip}}">
+
+              </div>
+              <div class="row col-md-12 note-filter">
+                Press "Enter" to add tag(s)
+              </div>
+              <div class="tags-added-container" contenteditable="false">
+                {{#each filters}}
+                <span href='#' class='tag-added'>{{this}} <i class="fas fa-times cross"></i> <input type='text'
+                    value="{{this}}" class='tag-hidden' name='tagsArray' /> </span>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+          <div class="col-3 search search-button">
             <button class="tm-search-button" type="submit">
               <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
             </button>
           </div>
+          <div class="col-md-7   search">
+            <div class="width100 row">
+              <div class="col-12">
+                <div class="form-check container-checkbox">
+                  <input class="form-check-input" type="checkbox"  name="bestanswercheckbox" id="bestanswercheckbox" {{#ifEquals bestanswerchosen "on" }} checked {{/ifEquals}}>
+                  <label class="form-check-label" for="flexCheckDefault">
+                    include questions with "best answer" already chosen
+                  </label>
+                </div>
+              </div>
 
-
-          <div class="tags-added-container" contenteditable="false">
-            {{#each filters}}
-            <span href='#' class='tag-added'>{{this}} <i class="fas fa-times cross"></i> <input type='text'
-                value="{{this}}" class='tag-hidden' name='tagsArray' /> </span>
-            {{/each}}
+            </div>
           </div>
-
         </div>
       </form>
     </div>
     {{#accountVerified user_data }}
-      {{> verification-account-modal}}
+    {{> verification-account-modal}}
     {{/accountVerified}}
 
     <div class="col-md-7">
       <div class="row ">
         {{#each questions}}
+        {{#ifEquals user_question ../UserId }}
+
+        {{else}}
         <div class="col-md-12 col-lg-12 container-question ">
           <div class="login-container">
             <div class="body-question row">
@@ -81,6 +105,7 @@
             </div>
           </div>
         </div>
+        {{/ifEquals}}
         {{/each}}
 
         <!-- Pagination -->
@@ -88,41 +113,33 @@
           <nav class="pagination-nav" aria-label="Page navigation example ">
             <ul class="pagination">
               <!-- si existen filtros entonces los paginations serán form -->
-              {{#if filters}}
-              <form method="POST" id="formprev" action="/questions/allquestionsfilter"
-                class="">
+           
+              <form method="POST" id="formprev" action="/questions/allquestionsfilter" class="">
                 <li class="page-item">
                   <a class="page-link" href="javascript:;"
-                    onclick="document.getElementById('formprev').submit();">Previous</a>
+                    onclick="document.getElementById('formprev').submit();">Previous
+                  </a>
                 </li>
                 <input type="hidden" name="skip" value="{{skipObject.prevSkip}}">
+                <input type="checkbox" class="form-check-input checkbestanswer" style="display:none" type="checkbox"  name="bestanswercheckbox" id="bestanswercheckbox1" {{#ifEquals bestanswerchosen "on" }} checked {{/ifEquals}}>
                 {{#each filters}}
                 <input type='hidden' value="{{this}}" name='tagsArray' />
                 {{/each}}
               </form>
-               <li class="page-item"> <a class="page-link">Page {{skipObject.nextSkip}}</a>
+              <li class="page-item"> <a class="page-link">Page {{skipObject.nextSkip}}</a>
               </li>
-              <form method="POST" id="formnext" action="/questions/allquestionsfilter"
-                class="">
+              <form method="POST" id="formnext" action="/questions/allquestionsfilter" class="">
                 <li class="page-item">
                   <a class="page-link" href="javascript:;"
                     onclick="document.getElementById('formnext').submit();">Next</a>
                 </li>
                 <input type="hidden" name="skip" value="{{skipObject.nextSkip}}">
+                <input type="checkbox" style="display:none" class="form-check-input checkbestanswer"  name="bestanswercheckbox" id="bestanswercheckbox2" {{#ifEquals bestanswerchosen "on" }} checked {{/ifEquals}}>
                 {{#each filters}}
                 <input type='hidden' value="{{this}}" name='tagsArray' />
                 {{/each}}
               </form>
-              {{else}}
-              <!-- si no hay filters entonces se envie un get normal -->
-              <li class="page-item"><a class="page-link" href="/questions/allquestions/{{skipObject.prevSkip}}">
-                  Previous </a> 
-              </li>
-              <li class="page-item"> <a class="page-link">Page {{skipObject.nextSkip}}</a>
-              </li>
-              <li class="page-item"><a class="page-link" href="/questions/allquestions/{{skipObject.nextSkip}}">Next</a>
-              </li>
-              {{/if}}
+
 
             </ul>
           </nav>
