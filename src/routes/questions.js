@@ -82,7 +82,7 @@ router.post('/questions/new-question', isAuthenticated, async (req, res) => {
       fs.unlinkSync(path.join(__dirname + '/../public/uploads/' + req.file.filename));
       // si no existe la  nueva imagen significa que hubo un problmea reduciendola y se debe reenviar el error al frontend
 
-      
+
       if (fs.existsSync(fileoutput)) {
 
         const newQuestion = new Question({
@@ -324,10 +324,10 @@ router.get('/questions/allquestions/:skip?', isAuthenticated, async (req, res) =
   } else {
     skip = parseInt(req.params.skip);
   }
-  const limit = 15;  
- const  bestanswerchosen = 'off'
+  const limit = 15;
+  const bestanswerchosen = 'off'
 
-  var  queryMatch_bestanswer = { 'status': { '$in': ["question_not_paid", "question_paid"] } };
+  var queryMatch_bestanswer = { 'status': { '$in': ["question_not_paid", "question_paid"] } };
 
   const questions = await Question.aggregate([
     { $match: queryMatch_bestanswer },
@@ -355,7 +355,8 @@ router.get('/questions/allquestions/:skip?', isAuthenticated, async (req, res) =
         _id: data._id,
         paypal_account_verified: data.paypal_account_verified,
         paypal_email: data.paypal_email,
-        paypal_date_verified: data.paypal_date_verified
+        paypal_date_verified: data.paypal_date_verified,
+        answer_or_question: data.answer_or_question
       }
     });
 
@@ -364,7 +365,7 @@ router.get('/questions/allquestions/:skip?', isAuthenticated, async (req, res) =
   res.render('questions/all-questions', {
     questions: questions, skipObject: skipObject,
     userInfo: { name: req.user.name },
-    user_data: user_data, UserId: id_user,  bestanswerchosen: bestanswerchosen,
+    user_data: user_data, UserId: id_user, bestanswerchosen: bestanswerchosen,
     helpers: {
       formatDate: function (date) {
         return datefns.formatRelative(date, new Date());
@@ -385,10 +386,13 @@ router.get('/questions/allquestions/:skip?', isAuthenticated, async (req, res) =
         }
         return (instanciar) ? options.fn(this) : options.inverse(this);
       },
-        ifEquals: function (variable1, variable2, options) {
+      ifEquals: function (variable1, variable2, options) {
 
-          return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
-        }
+        return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
+      },
+      ifNotExist: function (variable, options) {
+        return (variable == null) ? options.fn(this) : options.inverse(this);
+      },
     }
   })
 
@@ -400,12 +404,12 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
   var bestanswerchosen = req.body.bestanswercheckbox;
   var besanswermatch;
   // en el caso que se haya seleccionado o no el checkbox que incluye las preguntas con las respuestas ya elegidas le creo una query filter y seteo la variable bestanswerchosen = 'off' ya que solo viene con on si es correo sino viene como null
-  if(bestanswerchosen == null){
+  if (bestanswerchosen == null) {
     bestanswerchosen = 'off';
-    var  queryMatch_bestanswer = { 'status': { '$in': ["question_not_paid", "question_paid"] } };
+    var queryMatch_bestanswer = { 'status': { '$in': ["question_not_paid", "question_paid"] } };
 
-  }else{
-    var  queryMatch_bestanswer = { 'status': { '$in': ["question_not_paid", "question_paid", "best_answer_chosen", "answer_paid"] } };
+  } else {
+    var queryMatch_bestanswer = { 'status': { '$in': ["question_not_paid", "question_paid", "best_answer_chosen", "answer_paid"] } };
   }
 
   var skip;
@@ -491,7 +495,7 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
 
     const questions = await Question.aggregate([
 
-     
+
       { $match: queryMatch },
       { $match: queryMatch_bestanswer },
       {
@@ -554,7 +558,7 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
 
           return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
         }
-        
+
       }
     })
 
@@ -637,7 +641,7 @@ router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
       }
     }
   ]);
-    /// si es el mismo usuario que hizo la pregunta lo devuelvo
+  /// si es el mismo usuario que hizo la pregunta lo devuelvo
   if (question.user_question == req.user.id) {
     req.flash('error', 'You cannot answer your own question');
     res.redirect('/questions/allquestions');
@@ -664,15 +668,15 @@ router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
           return count;
         },
         ratingUserAVG: function (star1, star2, star3, star4, star5) {
-          if(star1 == null) star1=0;
-          if(star2 == null) star2=0;
-          if(star3 == null) star3=0;
-          if(star4 == null) star4=0;
-          if(star5 == null) star5=0;
+          if (star1 == null) star1 = 0;
+          if (star2 == null) star2 = 0;
+          if (star3 == null) star3 = 0;
+          if (star4 == null) star4 = 0;
+          if (star5 == null) star5 = 0;
           var totalRatings = star1 + star2 + star3 + star4 + star5;
           var percentageStar = (star1 * 1 + star2 * 2 + star3 * 3 + star4 * 4 + star5 * 5) / totalRatings;
           var percentageStarRounded = Math.round(percentageStar * 10) / 10;
-  
+
           return percentageStarRounded;
         },
         isGreater: function (a, b, options) {
@@ -687,12 +691,12 @@ router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
         RatingEnabled: function (rating_by, options) {
           //primero veo si el usuario actual ya dio su rating a la respuesta
           var FoundID = true;
-           rating_by.find(function (doc, index) {
+          rating_by.find(function (doc, index) {
             if (doc.idUser == req.user.id) {
               FoundID = false;
             }
           });
-  
+
           if (FoundID) { return options.fn(this); } else { return options.inverse(this); }
         },
         ifExist: function (variable, options) {
@@ -709,20 +713,20 @@ router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
 
           return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
         },
-        percentageAvg: function(star1, star2, star3, star4, star5, currentStar){
-          if(star1 == null) star1=0;
-          if(star2 == null) star2=0;
-          if(star3 == null) star3=0;
-          if(star4 == null) star4=0;
-          if(star5 == null) star5=0;
-          if(currentStar == null) currentStar = 0;
-  
+        percentageAvg: function (star1, star2, star3, star4, star5, currentStar) {
+          if (star1 == null) star1 = 0;
+          if (star2 == null) star2 = 0;
+          if (star3 == null) star3 = 0;
+          if (star4 == null) star4 = 0;
+          if (star5 == null) star5 = 0;
+          if (currentStar == null) currentStar = 0;
+
           var totalRatings = star1 + star2 + star3 + star4 + star5;
-          var percentageAvg = (currentStar*100)/totalRatings;
+          var percentageAvg = (currentStar * 100) / totalRatings;
           var percentageStarRounded = Math.round(percentageAvg * 10) / 10;
 
           return percentageStarRounded;
-  
+
         },
       }
     })
@@ -802,11 +806,11 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
     question, answers, userallInfo: userallInfo[0],
     helpers: {
       ratingUserAVG: function (star1, star2, star3, star4, star5) {
-        if(star1 == null) star1=0;
-        if(star2 == null) star2=0;
-        if(star3 == null) star3=0;
-        if(star4 == null) star4=0;
-        if(star5 == null) star5=0;
+        if (star1 == null) star1 = 0;
+        if (star2 == null) star2 = 0;
+        if (star3 == null) star3 = 0;
+        if (star4 == null) star4 = 0;
+        if (star5 == null) star5 = 0;
         var totalRatings = star1 + star2 + star3 + star4 + star5;
         var percentageStar = (star1 * 1 + star2 * 2 + star3 * 3 + star4 * 4 + star5 * 5) / totalRatings;
         var percentageStarRounded = Math.round(percentageStar * 10) / 10;
@@ -829,7 +833,7 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
       RatingEnabled: function (rating_by, options) {
         //primero veo si el usuario actual ya dio su rating a la respuesta
         var FoundID = true;
-         rating_by.find(function (doc, index) {
+        rating_by.find(function (doc, index) {
           if (doc.idUser == req.user.id) {
             FoundID = false;
           }
@@ -864,16 +868,16 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
         }
 
       },
-      percentageAvg: function(star1, star2, star3, star4, star5, currentStar){
-        if(star1 == null) star1=0;
-        if(star2 == null) star2=0;
-        if(star3 == null) star3=0;
-        if(star4 == null) star4=0;
-        if(star5 == null) star5=0;
-        if(currentStar == null) currentStar = 0;
+      percentageAvg: function (star1, star2, star3, star4, star5, currentStar) {
+        if (star1 == null) star1 = 0;
+        if (star2 == null) star2 = 0;
+        if (star3 == null) star3 = 0;
+        if (star4 == null) star4 = 0;
+        if (star5 == null) star5 = 0;
+        if (currentStar == null) currentStar = 0;
 
         var totalRatings = star1 + star2 + star3 + star4 + star5;
-        var percentageAvg = (currentStar*100)/totalRatings;
+        var percentageAvg = (currentStar * 100) / totalRatings;
         var percentageStarRounded = Math.round(percentageAvg * 10) / 10;
 
         return percentageStarRounded;
@@ -882,7 +886,7 @@ router.get('/questions/seeownquestion/:id', isAuthenticated, async (req, res) =>
       ifEquals: function (variable1, variable2, options) {
 
         return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
-      }, 
+      },
     }
   })
 });

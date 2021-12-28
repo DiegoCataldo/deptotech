@@ -88,7 +88,7 @@ router.get('/users/logout', (req, res) => {
   res.redirect('/');
 })
 
-router.get('/users/myprofile',  isAuthenticated, async (req, res) => {
+router.get('/users/myprofile', isAuthenticated, async (req, res) => {
 
   const user = await User.findById(req.user.id).lean()
     .then(data => {
@@ -101,14 +101,26 @@ router.get('/users/myprofile',  isAuthenticated, async (req, res) => {
         short_describe: data.short_describe,
         experience_describe: data.experience_describe,
         country_birth: data.country_birth,
-        admin: data.admin
+        admin: data.admin,
+        transaction_manager: data.transaction_manager,
+        tags_to_answer: data.tags_to_answer
       }
-    })
-  res.render('users/myprofile', { user, countriesList: countriesList.countries });
+    });
+
+
+  res.render('users/myprofile', {
+    user, countriesList: countriesList.countries,
+    helpers: {
+      ifNotExist: function (variable, options) {
+        return (variable == null) ? options.fn(this) : options.inverse(this);
+      }
+    }
+  }
+  );
 });
 
 router.put('/users/myprofile', isAuthenticated, async (req, res) => {
-  const { name, short_describe, experience_describe } = req.body;
+  const { name, short_describe, experience_describe, tagsArray } = req.body;
   const country_birth = req.body.country_birth;
 
   if (typeof req.file !== 'undefined' && typeof req.file.path !== 'undefined' && req.file.path) {
@@ -117,12 +129,12 @@ router.put('/users/myprofile', isAuthenticated, async (req, res) => {
     const public_ImageId = result.public_id;
     const idparamsObjectTypeID = mongoose.Types.ObjectId(req.user.id);
     const query = { _id: idparamsObjectTypeID };
-    await User.findOneAndUpdate(query, { name: name, imageProfileUrl: imageProfileUrl, public_ImageId: public_ImageId, short_describe: short_describe, experience_describe: experience_describe, country_birth: country_birth });
+    await User.findOneAndUpdate(query, { name: name, imageProfileUrl: imageProfileUrl, public_ImageId: public_ImageId, short_describe: short_describe, experience_describe: experience_describe, country_birth: country_birth, tags_to_answer: tagsArray });
     await fs.unlink(req.file.path);
   } else {
     const idparamsObjectTypeID = mongoose.Types.ObjectId(req.user.id);
     const query = { _id: idparamsObjectTypeID };
-    await User.findOneAndUpdate(query, { name: name, short_describe: short_describe, experience_describe: experience_describe, country_birth: country_birth });
+    await User.findOneAndUpdate(query, { name: name, short_describe: short_describe, experience_describe: experience_describe, country_birth: country_birth, tags_to_answer: tagsArray });
   }
 
   req.flash('success_msg', 'Profile Updated Successfully');
@@ -268,6 +280,17 @@ router.put('/users/recoverypassnew', async (req, res) => {
   }
 })
 
+router.get('/users/answerorquestion/:choose', isAuthenticated, async (req, res) => {
+  const choose = req.params.choose;
+  const idparamsObjectTypeID = mongoose.Types.ObjectId(req.user.id);
+  const query = { _id: idparamsObjectTypeID };
+  await User.findOneAndUpdate(query, { answer_or_question: choose });
 
+  if (choose == 'answer') {
+    res.redirect('/users/myprofile');
+  } else if (choose == 'question') {
+    res.redirect('/questions/add');
+  }
+});
 
 module.exports = router;

@@ -19,7 +19,10 @@ const UserSchema  = new Schema({
   paypal_account_verified: {type: Boolean, required: false},
   paypal_email: {type: String, required: false},
   paypal_date_verified: {type: Date, required: false},
-  admin: {type: Boolean, required: false}
+  admin: {type: Boolean, required: false},
+  tags_to_answer: {type: [String], required: false},
+  answer_or_question: {type: String, required: false}
+
   
 
 

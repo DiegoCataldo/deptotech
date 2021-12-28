@@ -20,7 +20,6 @@
                 <input class="form-control tm-search-input tag-input" name="query" id="tags-id" type="text"
                   placeholder="Search by tags..." aria-label="Search">
                 <input type="hidden" name="skip" value="{{skipObject.currentSkip}}">
-
               </div>
               <div class="row col-md-12 note-filter">
                 Press "Enter" to add tag(s)
@@ -57,6 +56,10 @@
     {{#accountVerified user_data }}
     {{> verification-account-modal}}
     {{/accountVerified}}
+
+    {{#ifNotExist user_data.answer_or_question}}
+     {{> answer-or-question-modal}}
+    {{/ifNotExist}}
 
     <div class="col-md-7">
       <div class="row ">

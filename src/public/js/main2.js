@@ -10,6 +10,11 @@ $(function () {
         $(this).remove();
       });
     }
+
+    $('#answer-or-question-modal').modal('show');
+    $('#add-tags-modal').modal('show');
+
+
   });
 
   // Back to top button
