@@ -15,6 +15,7 @@ $(function () {
     $('#add-tags-modal').modal('show');
 
 
+
   });
 
   // Back to top button

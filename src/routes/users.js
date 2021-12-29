@@ -112,7 +112,8 @@ router.get('/users/myprofile', isAuthenticated, async (req, res) => {
     user, countriesList: countriesList.countries,
     helpers: {
       ifNotExist: function (variable, options) {
-        return (variable == null) ? options.fn(this) : options.inverse(this);
+        console.log(variable);
+        return (variable.length == 0) ? options.fn(this) : options.inverse(this);
       }
     }
   }

@@ -299,6 +299,9 @@ $('#reward').on('blur', function () {
 var tags = [];
 $(document).ready(function () {
 
+  $('#answer-or-question-modal').modal('show');
+  $('#add-tags-modal').modal('show');
+
   $('#example').DataTable();
 
   // subir imagenes //

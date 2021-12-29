@@ -391,7 +391,7 @@ router.get('/questions/allquestions/:skip?', isAuthenticated, async (req, res) =
         return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
       },
       ifNotExist: function (variable, options) {
-        return (variable == null) ? options.fn(this) : options.inverse(this);
+        return (!variable) ? options.fn(this) : options.inverse(this);
       },
     }
   })
