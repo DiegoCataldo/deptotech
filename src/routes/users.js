@@ -103,7 +103,8 @@ router.get('/users/myprofile', isAuthenticated, async (req, res) => {
         country_birth: data.country_birth,
         admin: data.admin,
         transaction_manager: data.transaction_manager,
-        tags_to_answer: data.tags_to_answer
+        tags_to_answer: data.tags_to_answer,
+        answer_or_question: data.answer_or_question
       }
     });
 
@@ -111,12 +112,17 @@ router.get('/users/myprofile', isAuthenticated, async (req, res) => {
   res.render('users/myprofile', {
     user, countriesList: countriesList.countries,
     helpers: {
-      ifNotExist: function (variable, options) {
-        if(Array.isArray(variable)){
-          return (!variable.length) ? options.fn(this) : options.inverse(this);
+      ifNotExistandAnswer: function (tags, answer_or_question, options) {
+        
+        if(answer_or_question == 'answer'){
+        if(Array.isArray(tags)){
+          return (!tags.length ) ? options.fn(this) : options.inverse(this);
         }else{
-          return (variable == null || variable == '') ? options.fn(this) : options.inverse(this);
+          return (tags == null || tags == '') ? options.fn(this) : options.inverse(this);
         }
+      }else{
+        return (answer_or_question == 'answer' ) ? options.fn(this) : options.inverse(this);
+      }
         
       }
     }
