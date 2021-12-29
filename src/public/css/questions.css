@@ -908,3 +908,11 @@ font-family: 'Font Awesome 5 Free' !important
     font-weight: 600;
     margin-bottom: 0.5rem;
 }
+.button-add-tags{
+    /* text-align: center; */
+    margin-left: 4rem;
+    /* width: 30px; */
+    font-size: 20px;
+    padding-right: 1rem;
+    padding-left: 1rem;
+}

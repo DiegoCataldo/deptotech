@@ -171,6 +171,22 @@ $(function () {
       e.preventDefault();
     }
   });
+  
+  $(".button-add-tags").on("click", function (e) {
+    var tagsLenght = $('input[name="tagsArray"]').length;
+    var input = $('input[name="tags-id"]').val();
+    console.log(input);
+    if (tagsLenght <= 5) {
+      $(".tags-added-container").append("<span href='#' class='tag-added'>" + input + ' <i class="fas fa-times cross"></i>' + " <input type='text' value='" + input + "' class='tag-hidden' name='tagsArray'/> </span>");
+
+      tags.push(input);
+      input= "";
+      //console.log(tags)
+    } else {
+      alert('you can only add a maximum of 6 tags');
+    }
+    
+      });
 
   // para que no se vea toda la descripción de la pregunta y aparezca el botón more and less
   /*
@@ -235,6 +251,7 @@ $('body').on('click', 'i.cross', function () {
   });
 });
 /// agregar tags //
+/*
 $(".tag-input").keyup(function (e) {
   var code = e.key; // recommended to use e.key, it's normalized across devices and languages
   if (code === "Enter") e.preventDefault();
@@ -252,7 +269,7 @@ $(".tag-input").keyup(function (e) {
       alert('you can only add a maximum of 6 tags');
     }
   }
-});
+}); */
 
 //$('#priceanswers-reward').text($('#reward').val());
 
@@ -318,7 +335,7 @@ $(document).ready(function () {
 
 
   $('#reward').on('input', function () {
-    console.log('tes');
+  
   });
 
 
@@ -340,6 +357,7 @@ $(document).ready(function () {
       e.preventDefault();
     }
   });
+
 
 
 
