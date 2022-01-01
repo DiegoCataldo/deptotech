@@ -916,3 +916,11 @@ font-family: 'Font Awesome 5 Free' !important
     padding-right: 1rem;
     padding-left: 1rem;
 }
+.button-add-tags-allquestion{
+  /* text-align: center; */
+  margin-left: 0rem;
+  /* width: 30px; */
+  font-size: 20px;
+  padding-right: 1rem;
+  padding-left: 1rem;
+}

@@ -457,7 +457,8 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
           _id: data._id,
           paypal_account_verified: data.paypal_account_verified,
           paypal_email: data.paypal_email,
-          paypal_date_verified: data.paypal_date_verified
+          paypal_date_verified: data.paypal_date_verified,
+          answer_or_question: data.answer_or_question
         }
       });
 
@@ -490,7 +491,14 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
         },
         ifEquals: function (variable1, variable2, options) {
           return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
-        }
+        },
+        ifNotExist: function (variable, options) {
+          if(Array.isArray(variable)){
+            return (!variable.length) ? options.fn(this) : options.inverse(this);
+          }else{
+            return (variable == null || variable == '') ? options.fn(this) : options.inverse(this);
+          }
+        },
       }
     })
   } else {
@@ -526,7 +534,8 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
           _id: data._id,
           paypal_account_verified: data.paypal_account_verified,
           paypal_email: data.paypal_email,
-          paypal_date_verified: data.paypal_date_verified
+          paypal_date_verified: data.paypal_date_verified,
+          answer_or_question: data.answer_or_question
         }
       });
 
@@ -561,7 +570,14 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
         ifEquals: function (variable1, variable2, options) {
 
           return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
-        }
+        },
+        ifNotExist: function (variable, options) {
+          if(Array.isArray(variable)){
+            return (!variable.length) ? options.fn(this) : options.inverse(this);
+          }else{
+            return (variable == null || variable == '') ? options.fn(this) : options.inverse(this);
+          }
+        },
 
       }
     })

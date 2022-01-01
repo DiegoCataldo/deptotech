@@ -17,12 +17,12 @@
           <div class="col-9 search">
             <div class="width100">
               <div class="container-search-tags">
-                <input class="form-control tm-search-input tag-input" name="query" id="tags-id" type="text"
+                <input class="form-control tm-search-input tag-input " name="tags-id" id="tags-id" type="text"
                   placeholder="Search by tags..." aria-label="Search">
                 <input type="hidden" name="skip" value="{{skipObject.currentSkip}}">
               </div>
               <div class="row col-md-12 note-filter">
-                Press "Enter" to add tag(s)
+                <button type="button" id="" class="btn btn-info button-add-tags button-add-tags-allquestion "> Add tag</button>
               </div>
               <div class="tags-added-container" contenteditable="false">
                 {{#each filters}}
