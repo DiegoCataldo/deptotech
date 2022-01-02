@@ -31,7 +31,7 @@ const fs = require('fs-extra'); // permite borrar archivos
 
 router.get('/users/signin', (req, res) => {
   if (typeof req.user === 'undefined') {
-    res.render('users/signin');
+    res.render('users/signin', {layout: 'main-user'});
   } else {
     res.redirect('/');
   }
@@ -47,7 +47,7 @@ router.post('/users/signin', passport.authenticate('local', {
 router.get('/users/signup', (req, res) => {
 
   if (typeof req.user === 'undefined') {
-    res.render('users/signup');
+    res.render('users/signup', {layout: 'main-user'});
   } else {
     res.redirect('/');
   }
