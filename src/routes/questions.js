@@ -343,6 +343,7 @@ router.get('/questions/allquestions/:skip?', isAuthenticated, async (req, res) =
       }
     },
     { $skip: skip * limit },
+    { $sort: { "createdAt": -1 } },
     { $limit: limit }
   ]);
 
@@ -444,7 +445,7 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
           as: "answers_info"
         }
       },
-      { $sort: { createdAt: -1 } },
+      { $sort: { "createdAt": -1 } },
       { $skip: skip * limit },
       { $limit: limit }
 
@@ -521,7 +522,7 @@ router.post('/questions/allquestionsfilter/:skip?', isAuthenticated, async (req,
           as: "answers_info"
         }
       },
-      { $sort: { createdAt: -1 } },
+      { $sort: { "createdAt": -1 } },
       { $skip: skip * limit },
       { $limit: limit }
 
