@@ -279,7 +279,7 @@ $('#reward').on('blur', function () {
   //paso 1 obtener pago total (lo saco de la formula --> reward = x - x*0.1 -5 -x*0.12)
   var reward = parseFloat($('#reward').val());
   if (reward > 30 || reward < 3) {
-    alert('Please Add a valid Reward (greater than 8 USD and less than 30 USD)');
+    alert('Please Add a valid Reward (greater than 3 USD and less than 30 USD)');
     $('#reward').val('');
     return
   }
