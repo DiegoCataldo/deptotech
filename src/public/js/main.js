@@ -318,6 +318,7 @@ $(document).ready(function () {
 
   $('#answer-or-question-modal').modal('show');
   $('#add-tags-modal').modal('show');
+  $('#welcome-new-platform').modal('show');
 
   $('#example').DataTable();
 

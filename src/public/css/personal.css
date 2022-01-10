@@ -579,14 +579,19 @@ margin-left: 1rem;
 }
 
 .modal-1 {
-    background: linear-gradient(rgba(0, 142, 99, 0.1), rgba(0, 0, 0, 0.3)), url(../img/call-to-action-bg.jpg) fixed center center;
-    background-size: cover;
+
     padding: 60px 0;
     margin-right: 0px !important;
     margin-left: 0px !important;
     text-align: center;
   }
 
+
+  .background-modal-welcome{
+    background: linear-gradient(rgba(0, 142, 99, 0.1), rgba(0, 0, 0, 0.3)), url(../img/welcome-modal.png) fixed center center;
+    background-size: cover;
+
+  }
   .modal-1 img{
       width: 20rem;
  
