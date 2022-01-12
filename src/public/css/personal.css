@@ -592,6 +592,12 @@ margin-left: 1rem;
     background-size: cover;
 
   }
+
+  .background-answer-question{
+    background: linear-gradient(rgba(0, 142, 99, 0.1), rgba(0, 0, 0, 0.3)), url(../img/call-to-action-bg.jpg) fixed center center;
+    background-size: cover;
+
+  }
   .modal-1 img{
       width: 20rem;
  
