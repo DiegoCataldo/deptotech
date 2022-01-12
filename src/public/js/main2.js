@@ -160,14 +160,19 @@ $(function () {
     $(this).css("background-image", "url('" + $(this).children('.carousel-background').children('img').attr('src') +"')");
     $(this).children('.carousel-background').remove();
   });
+  var duration=10;
 
   $(".carousel").swipe({
     swipe: function(event, direction, distance, duration, fingerCount, fingerData) {
       if (direction == 'left') $(this).carousel('next');
       if (direction == 'right') $(this).carousel('prev');
+     
     },
     allowPageScroll:"vertical"
   });
+  $('.carousel').carousel({
+    interval: 5000
+  })
 
   // Skills section
   $('#skills').waypoint(function() {
@@ -178,7 +183,7 @@ $(function () {
 
   // jQuery counterUp (used in Facts section)
   $('[data-toggle="counter-up"]').counterUp({
-    delay: 10,
+    delay: 5,
     time: 200
   });
 
