@@ -322,17 +322,17 @@ $(document).ready(function () {
       const video1 = document.getElementById('video1');
       const videoSource1 = video1.getAttribute('data-src');
       video1.setAttribute('src', videoSource1);
-      video1.setAttribute('poster', 'img/back5.jpg');
+      video1.setAttribute('poster', 'img/video3.jpg');
       
       const video2 = document.getElementById('video2');
       const videoSource2 = video2.getAttribute('data-src');
       video2.setAttribute('src', videoSource2);
-      video1.setAttribute('poster', 'img/back1.jpg');
-
+      video2.setAttribute('poster', 'img/video4.jpg');
+  
       const video3 = document.getElementById('video3');
       const videoSource3 = video3.getAttribute('data-src');
       video3.setAttribute('src', videoSource3);
-      video1.setAttribute('poster', 'img/back2.jpg');
+      video2.setAttribute('poster', 'img/video5.jpg');
 
       //video.setAttribute('style', 'height: 100%; width: 100%; display:inline');
     } else {
@@ -353,17 +353,17 @@ $(document).ready(function () {
     const video1 = document.getElementById('video1');
     const videoSource1 = video1.getAttribute('data-src');
     video1.setAttribute('src', videoSource1);
-    video1.setAttribute('poster', 'img/back5.jpg');
+    video1.setAttribute('poster', 'img/video3.jpg');
     
     const video2 = document.getElementById('video2');
     const videoSource2 = video2.getAttribute('data-src');
     video2.setAttribute('src', videoSource2);
-    video1.setAttribute('poster', 'img/back1.jpg');
+    video2.setAttribute('poster', 'img/video4.jpg');
 
     const video3 = document.getElementById('video3');
     const videoSource3 = video3.getAttribute('data-src');
     video3.setAttribute('src', videoSource3);
-    video1.setAttribute('poster', 'img/back2.jpg');
+    video3.setAttribute('poster', 'img/video5.jpg');
   }
 
   $('#answer-or-question-modal').modal('show');
