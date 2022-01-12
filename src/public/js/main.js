@@ -347,17 +347,17 @@ $(document).ready(function () {
     }
   }
   else {
-    const image1 = document.getElementById('image1');
-    const imageSource1 = image1.getAttribute('data-src');
-    image1.setAttribute('src', 'img/video3-2.mp4');
+    const video1 = document.getElementById('video1');
+    const videoSource1 = video1.getAttribute('data-src');
+    video1.setAttribute('src', videoSource1);
 
-    const image2 = document.getElementById('image2');
-    const imageSource2 = image2.getAttribute('data-src');
-    image2.setAttribute('src', 'img/video4-2.mp4');
+    const video2 = document.getElementById('video2');
+    const videoSource2 = video2.getAttribute('data-src');
+    video2.setAttribute('src', videoSource2);
 
-    const image3 = document.getElementById('image3');
-    const imageSource3 = image3.getAttribute('data-src');
-    image3.setAttribute('src', 'img/video5-2.mp4');
+    const video3 = document.getElementById('video3');
+    const videoSource3 = video3.getAttribute('data-src');
+    video3.setAttribute('src', videoSource3);
   }
 
   $('#answer-or-question-modal').modal('show');
