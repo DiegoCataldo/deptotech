@@ -4,12 +4,12 @@ $(function () {
 
   MathJax.Hub.Config({
     tex2jax: {
-        inlineMath: [
-            ['$', '$'],
-            ['\\(', '\\)']
-        ]
+      inlineMath: [
+        ['$', '$'],
+        ['\\(', '\\)']
+      ]
     }
-});
+  });
 
   $('.trumbowyg-textarea').trumbowyg({
     btnsDef: {
@@ -38,20 +38,20 @@ $(function () {
 
     ],
     plugins: {
-        fontsize: {
-            sizeList: [
-                '12px',
-                '14px',
-                '16px',
-                '20px',
-                '25px'
-            ],
-            allowCustomSize: false
-        },
-        highlight:{
-            enableLineHighlight: false
+      fontsize: {
+        sizeList: [
+          '12px',
+          '14px',
+          '16px',
+          '20px',
+          '25px'
+        ],
+        allowCustomSize: false
+      },
+      highlight: {
+        enableLineHighlight: false
 
-        }
+      }
     }
   });
 
@@ -151,17 +151,17 @@ $(function () {
   $("#tm-nav .nav-link").click(function (e) {
     $(".tm-header").removeClass("show");
   });
-/*
-  $(".button-best-answer-alert").on("click", function (e) {
-
-    var answer = confirm("Are you sure this is the best answer? this user will be the only one who will receive the reward of the question");
-    if (answer) {
-      return true;
-    } else {
-      e.preventDefault();
-    }
-  });
-*/
+  /*
+    $(".button-best-answer-alert").on("click", function (e) {
+  
+      var answer = confirm("Are you sure this is the best answer? this user will be the only one who will receive the reward of the question");
+      if (answer) {
+        return true;
+      } else {
+        e.preventDefault();
+      }
+    });
+  */
   $(".button-delete-question").on("click", function (e) {
 
     var answer = confirm("Are you sure you want to eliminate this question? It will be permanently deleted along with the responses associated with it.");
@@ -171,7 +171,7 @@ $(function () {
       e.preventDefault();
     }
   });
-  
+
   $(".button-add-tags").on("click", function (e) {
     var tagsLenght = $('input[name="tagsArray"]').length;
     var input = $('input[name="tags-id"]').val();
@@ -180,13 +180,13 @@ $(function () {
       $(".tags-added-container").append("<span href='#' class='tag-added'>" + input + ' <i class="fas fa-times cross"></i>' + " <input type='text' value='" + input + "' class='tag-hidden' name='tagsArray'/> </span>");
 
       tags.push(input);
-      input= "";
+      input = "";
       //console.log(tags)
     } else {
       alert('you can only add a maximum of 6 tags');
     }
-    
-      });
+
+  });
 
   // para que no se vea toda la descripción de la pregunta y aparezca el botón more and less
   /*
@@ -226,11 +226,11 @@ $(function () {
   $("#bestanswercheckbox").on("click", function (e) {
 
     //var test = document.getElementById('bestanswercheckbox:checked').val();
-    var checkboxoriginal=$("#bestanswercheckbox").is(":checked");
-    if(checkboxoriginal){
+    var checkboxoriginal = $("#bestanswercheckbox").is(":checked");
+    if (checkboxoriginal) {
       $('#bestanswercheckbox1').prop('checked', true);
       $('#bestanswercheckbox2').prop('checked', true);
-    }else{
+    } else {
       $('#bestanswercheckbox1').prop('checked', false);
       $('#bestanswercheckbox2').prop('checked', false);
     }
@@ -316,6 +316,50 @@ $('#reward').on('blur', function () {
 var tags = [];
 $(document).ready(function () {
 
+  if (navigator.connection && !!navigator.connection.effectiveType) {
+    if (navigator.connection.effectiveType === '4g') {
+      console.log('entro');
+      const video1 = document.getElementById('video1');
+      const videoSource1 = video1.getAttribute('data-src');
+      video1.setAttribute('src', videoSource1);
+
+      const video2 = document.getElementById('video2');
+      const videoSource2 = video2.getAttribute('data-src');
+      video2.setAttribute('src', videoSource2);
+
+      const video3 = document.getElementById('video3');
+      const videoSource3 = video3.getAttribute('data-src');
+      video3.setAttribute('src', videoSource3);
+
+      //video.setAttribute('style', 'height: 100%; width: 100%; display:inline');
+    } else {
+      const image1 = document.getElementById('image1');
+      const imageSource1 = image1.getAttribute('data-src');
+      image1.setAttribute('src', imageSource1);
+
+      const image2 = document.getElementById('image2');
+      const imageSource2 = image2.getAttribute('data-src');
+      image2.setAttribute('src', imageSource2);
+
+      const image3 = document.getElementById('image3');
+      const imageSource3 = image3.getAttribute('data-src');
+      image3.setAttribute('src', imageSource3);
+    }
+  }
+  else {
+    const image1 = document.getElementById('image1');
+    const imageSource1 = image1.getAttribute('data-src');
+    image1.setAttribute('src', imageSource1);
+
+    const image2 = document.getElementById('image2');
+    const imageSource2 = image2.getAttribute('data-src');
+    image2.setAttribute('src', imageSource2);
+
+    const image3 = document.getElementById('image3');
+    const imageSource3 = image3.getAttribute('data-src');
+    image3.setAttribute('src', imageSource3);
+  }
+
   $('#answer-or-question-modal').modal('show');
   $('#add-tags-modal').modal('show');
   $('#welcome-new-platform').modal('show');
@@ -336,7 +380,7 @@ $(document).ready(function () {
 
 
   $('#reward').on('input', function () {
-  
+
   });
 
 
