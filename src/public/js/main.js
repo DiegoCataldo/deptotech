@@ -349,15 +349,15 @@ $(document).ready(function () {
   else {
     const image1 = document.getElementById('image1');
     const imageSource1 = image1.getAttribute('data-src');
-    image1.setAttribute('src', imageSource1);
+    image1.setAttribute('src', 'img/video3-2.mp4');
 
     const image2 = document.getElementById('image2');
     const imageSource2 = image2.getAttribute('data-src');
-    image2.setAttribute('src', imageSource2);
+    image2.setAttribute('src', 'img/video4-2.mp4');
 
     const image3 = document.getElementById('image3');
     const imageSource3 = image3.getAttribute('data-src');
-    image3.setAttribute('src', imageSource3);
+    image3.setAttribute('src', 'img/video5-2.mp4');
   }
 
   $('#answer-or-question-modal').modal('show');
