@@ -269,7 +269,7 @@ router.get('/paypal/getaccountinfo/:access_token', async (req, res) => {
   const access_token = req.params.access_token;
 
   try {
-    const { data: { verified_account, emails } } = await axios({
+    const { data: { verified_account, emails, address } } = await axios({
 
       url: 'https://api-m.paypal.com/v1/identity/oauth2/userinfo?schema=paypalv1.1',
       method: 'GET',
@@ -285,9 +285,12 @@ router.get('/paypal/getaccountinfo/:access_token', async (req, res) => {
     const emailPrimary = emails.find(x => x.primary === true).value;
     let verified_account_string;
     if (verified_account) { verified_account_string = "Y"; } else { verified_account_string = "N"; }
+    const country = address.country;
+    
+
 
     /// devoler respuiesta de exito
-    return res.redirect('/paypal/updateaccount/' + verified_account_string + '&' + emailPrimary);
+    return res.redirect('/paypal/updateaccount/' + verified_account_string + '&' + emailPrimary + '&' + country );
 
   } catch (error) {
     console.log('error: ', error);
@@ -301,18 +304,26 @@ router.get('/paypal/getaccountinfo/:access_token', async (req, res) => {
 
 ////// REVISAR LOS ISAUTHENTICATED!!!
 ///// actualizar la el estado del la verificación del usario ////////////
-router.get('/paypal/updateaccount/:verified_account&:email', isAuthenticated, async (req, res) => {
+router.get('/paypal/updateaccount/:verified_account&:email&:country', isAuthenticated, async (req, res) => {
 
   const verified_account = req.params.verified_account;
   const email = req.params.email;
   const idUser = mongoose.Types.ObjectId(req.user.id);
+  const country = req.params.country;
 
-  if (verified_account == "Y" || email == null) {
+  console.log('country is: '+ country);
 
-    const filter = { _id: idUser };
-    const update = { paypal_account_verified: true, paypal_email: email, paypal_date_verified: Date.now() };
-    const user = await User.findOneAndUpdate(filter, update, { new: true });
-    res.render('paypal/login-success-verified', { email_paypal: email });
+  if (verified_account == "Y" && email != null) {
+
+    if(country == 'IN' || country == 'CL'){
+      res.redirect('/paypal/login-india');
+    }else{
+
+      const filter = { _id: idUser };
+      const update = { paypal_account_verified: true, paypal_email: email, paypal_date_verified: Date.now() };
+      const user = await User.findOneAndUpdate(filter, update, { new: true });
+      res.render('paypal/login-success-verified', { email_paypal: email });
+    }
 
   } else {
     res.redirect('/paypal/login-not-verified');
@@ -322,6 +333,10 @@ router.get('/paypal/updateaccount/:verified_account&:email', isAuthenticated, as
 ////////////Si es que intenta logearse y su account en paypal no está verificado envía este mensaje /////////
 router.get('/paypal/login-not-verified', (req, res) => {
   res.render('paypal/login-not-verified');
+});
+
+router.get('/paypal/login-india', (req, res) => {
+  res.render('paypal/login-india');
 });
 
 
