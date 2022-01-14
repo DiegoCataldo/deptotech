@@ -89,7 +89,7 @@ $(function () {
     login.render({
       "appid": "AZBsZtS53_tReLSnEsRXz_JkY5RY5hkQvG8mdirbLaDzK5973_3MCO0fnFx-QcgrQOjU3B8UYnZ1Qu4D",
       /*"authend": "sandbox", */
-      "scopes": "openid email https://uri.paypal.com/services/paypalattributes ",
+      "scopes": "openid email address https://uri.paypal.com/services/paypalattributes ",
       "containerid": "lippButton",
       "responseType": "code",
       "locale": "en-us",
@@ -145,7 +145,6 @@ $(function () {
         $(".tm-header").removeClass("show");
       }
     }
-
   });
 
   $("#tm-nav .nav-link").click(function (e) {
