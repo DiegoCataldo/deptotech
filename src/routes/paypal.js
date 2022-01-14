@@ -280,7 +280,8 @@ router.get('/paypal/getaccountinfo/:access_token', async (req, res) => {
       }
     });
 
-
+console.log('address: '+ address );
+console.log('country1: '+ address );
 
     const emailPrimary = emails.find(x => x.primary === true).value;
     let verified_account_string;
