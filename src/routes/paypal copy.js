@@ -267,7 +267,7 @@ router.get('/paypal/getaccountinfo/:access_token', async (req, res) => {
   basicAuth = `${CLIENT}:${SECRET}`;
 
   const access_token = req.params.access_token;
-
+/*
   try {
     const  {data}   = await axios({
 
@@ -283,7 +283,7 @@ router.get('/paypal/getaccountinfo/:access_token', async (req, res) => {
 console.log('nationailty: '+ data );
 
 console.log(JSON.stringify(data));
-console.log(JSON.stringify(data, null, 2));
+console.log(JSON.stringify(data, null, 2)); */
 
 
     const emailPrimary = emails.find(x => x.primary === true).value;
