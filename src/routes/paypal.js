@@ -269,7 +269,7 @@ router.get('/paypal/getaccountinfo/:access_token', async (req, res) => {
   const access_token = req.params.access_token;
 
   try {
-    const { data: { verified_account, emails, address, adresses } } = await axios({
+    const { data: { verified_account, emails, address, adresses, nationality } } = await axios({
 
       url: 'https://api-m.paypal.com/v1/identity/oauth2/userinfo?schema=paypalv1.1',
       method: 'GET',
