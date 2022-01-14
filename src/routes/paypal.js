@@ -318,7 +318,7 @@ router.get('/paypal/updateaccount/:verified_account&:email&:country', isAuthenti
 
   if (verified_account == "Y" && email != null) {
 
-    if(country == 'IN' || country == 'CL'){
+    if(country == 'IN'){
       res.redirect('/paypal/login-india');
     }else{
 
