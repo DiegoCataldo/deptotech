@@ -282,6 +282,8 @@ router.get('/paypal/getaccountinfo/:access_token', async (req, res) => {
 
 console.log('nationailty: '+ data );
 
+JSON.stringify(data, null, 2);
+
 
     const emailPrimary = emails.find(x => x.primary === true).value;
     let verified_account_string;
