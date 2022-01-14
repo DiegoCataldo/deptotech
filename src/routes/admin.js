@@ -201,74 +201,75 @@ router.put('/admin/dashboard-transfer', isAuthenticated, async (req, res) => {
 })
 
 // dashboard para transferir dinero a los mejores respuestas
-router.get('/admin/best_answers', isAuthenticated, async (req, res) => { 
+router.get('/admin/best_answers', isAuthenticated, async (req, res) => {
 
   const id_user = mongoose.Types.ObjectId(req.user.id);
 
   const user_data = await User.findById(id_user).lean()
-  .then(data => {
-    return {
-      _id: data._id,
-      transaction_manager: data.transaction_manager
-    }
-  });
-if (user_data.transaction_manager) {
+    .then(data => {
+      return {
+        _id: data._id,
+        transaction_manager: data.transaction_manager
+      }
+    });
+  if (user_data.transaction_manager) {
 
-  const queryMatchPendingPaid = { 'status': 'best_answer_chosen' };
-  const queryMatchBestAnswer = { 'best_answer': true };
+    const queryMatchPendingPaid = { 'status': 'best_answer_chosen' };
+    const queryMatchBestAnswer = { 'best_answer': true };
 
-  const questions = await Question.aggregate([
-    { $match: queryMatchPendingPaid },
-    {
-      $lookup: {
-        from: "answers",
-        let: { "questionid": "$_id" },
-        pipeline: [
-          { $match: { $expr: { $eq: ["$id_question", "$$questionid"] } } },
-          {$match:  queryMatchBestAnswer},
-          { $project: { "answer": 0, "createdAt": 0, "rating_by": 0, "answerRating": 0  } },
-          {
-            $lookup: {
-              from: "users",
-              let: { "user_id": "$user_answer" },
-              pipeline: [
-                { $match: { $expr: { $eq: ["$_id", "$$user_id"] } } },
-                { $project: { "password": 0, "createdAt": 0 , "answerRating": 0} }
-              ],
-              as: "user_info"
+    const questions = await Question.aggregate([
+      { $match: queryMatchPendingPaid },
+      {
+        $lookup: {
+          from: "answers",
+          let: { "questionid": "$_id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$id_question", "$$questionid"] } } },
+            { $match: queryMatchBestAnswer },
+            { $project: { "answer": 0, "createdAt": 0, "rating_by": 0, "answerRating": 0 } },
+            {
+              $lookup: {
+                from: "users",
+                let: { "user_id": "$user_answer" },
+                pipeline: [
+                  { $match: { $expr: { $eq: ["$_id", "$$user_id"] } } },
+                  { $project: { "password": 0, "createdAt": 0, "answerRating": 0 } }
+                ],
+                as: "user_info"
+              }
             }
-          }
-        ],
-        as: "answer_info"
-      }
-    },
-    { $project: { "title": 0, "description": 0, "rating_by": 0, "img": 0, "tags": 0, "user_question": 0   } },
-    { $sort: { createdAt: -1 } },
-   /* { $skip: skip * limit },
-    { $limit: limit } */
-
-  ]);
-
-  //console.log(JSON.stringify(questions, null, 2));
-
-  res.render('admin/transaction-best-answer', { questions,
-    helpers: {
-      formatDate: function (date) {
-        return datefns.formatRelative(date, new Date());
+          ],
+          as: "answer_info"
+        }
       },
-      parsefloat2: function (number) {
-        return parseFloat(number).toFixed(2);
+      { $project: { "title": 0, "description": 0, "rating_by": 0, "img": 0, "tags": 0, "user_question": 0 } },
+      { $sort: { createdAt: -1 } },
+      /* { $skip: skip * limit },
+       { $limit: limit } */
+
+    ]);
+
+    //console.log(JSON.stringify(questions, null, 2));
+
+    res.render('admin/transaction-best-answer', {
+      questions,
+      helpers: {
+        formatDate: function (date) {
+          return datefns.formatRelative(date, new Date());
+        },
+        parsefloat2: function (number) {
+          return parseFloat(number).toFixed(2);
+        }
       }
     }
-  }
-  );
+    );
 
-}  else {
-  res.redirect('/');
-}
+  } else {
+    res.redirect('/');
+  }
 })
 
-router.put('/admin/update_best_answer', isAuthenticated, async (req, res) => { 
+router.put('/admin/update_best_answer', isAuthenticated, async (req, res) => {
 
   const id_user = mongoose.Types.ObjectId(req.user.id);
 
@@ -287,15 +288,86 @@ router.put('/admin/update_best_answer', isAuthenticated, async (req, res) => {
     const filterAnswer = { _id: id_answer };
     const updateAnswer = { get_paid: true, paypal_transaction_id: paypal_transaction_id };
 
-    const  filterQuestion = { _id: id_question };
-    const updateQuestion = { status: 'answer_paid'};
+    const filterQuestion = { _id: id_question };
+    const updateQuestion = { status: 'answer_paid' };
+    // modifico la respuesta
     const answer = await Answer.findOneAndUpdate(filterAnswer, updateAnswer, { new: true });
 
-    const question = await Question.findOneAndUpdate(filterQuestion, updateQuestion, { new: true });
+    //modifico la pregunta y obtengo el reward offered
+    var reward_offered;
+    const question = await Question.findOneAndUpdate(filterQuestion, updateQuestion, { new: true }).lean().then(answerVar => {
+      reward_offered = answerVar.reward_offered;
+    });
+
+  /////// obtengo los datos del usuario elegido como la mejor respuesta (paypal_email)  ///////
+  const user_answer = await User.findById(id_answer).lean()
+    .then(data => {
+      return {
+        _id: data._id,
+        paypal_email: data.paypal_email,
+        email: data.email
+      }
+    });
+
+    const email_user_priceanswers = user_answer.email;
+  const paypal_email = user_answer.paypal_email;
+
+    
+    /// envío correo de invoice al user_answer ///
+    ///// POR AHORA ESTARÁ APAGADO YA QUE PAYPAL ENVIA INVOICE
+
+    const datenow = datefns.formatRelative(Date.now(), new Date());
+
+    const firstPartEmailUser = email_user_priceanswers.split('@')[0];
+
+    // Generate test SMTP service account from ethereal.email
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      host: process.env.SMTP_NODEMAILER_HOST,
+      port: process.env.SMTP_NODEMAILER_PORT,
+      secure: true, // true for 465, false for other ports
+      auth: {
+        user: process.env.SMTP_NODEMAILER_USER, // generated ethereal user
+        pass: process.env.SMTP_NODEMAILER_PASS, // generated ethereal password
+      },
+      tls: {
+        rejectUnauthorized: false
+      }
+    });
+
+    var options = {
+      viewEngine: {
+        extname: '.hbs', // handlebars extension
+        layoutsDir: path.join(__dirname, '../views/emailtemplates/invoicepaidanswer'), // location of handlebars templates
+        defaultLayout: 'html', // name of main template
+        partialsDir: path.join(__dirname, '../views/emailtemplates/invoicepaidanswer'), // location of your subtemplates aka. header, footer etc
+      },
+      viewPath: path.join(__dirname, '../views/emailtemplates/invoicepaidanswer'),
+      extName: '.hbs'
+    };
+
+    transporter.use('compile', hbs(options));
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: 'contact@priceanswers.com', // sender address
+      to: email_user_priceanswers, // list of receivers
+      subject: "Invoice Priceanswers", // Subject line
+      template: 'html',
+      context: {
+        name: firstPartEmailUser,
+        datenow: datenow,
+        idQuestion: id_question.toString(),
+        reward_offered: reward_offered
+
+      }
+    }).catch(console.error);
+
+
 
     res.redirect('/admin/best_answers');
 
-  }else {
+  } else {
     res.redirect('/');
   }
 
