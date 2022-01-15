@@ -291,16 +291,21 @@ router.put('/admin/update_best_answer', isAuthenticated, async (req, res) => {
     const filterQuestion = { _id: id_question };
     const updateQuestion = { status: 'answer_paid' };
     // modifico la respuesta
-    const answer = await Answer.findOneAndUpdate(filterAnswer, updateAnswer, { new: true });
+    let id_user_best_answer;
+    const answer = await Answer.findOneAndUpdate(filterAnswer, updateAnswer, { new: true }).lean().then(answerVar => {
+      id_user_best_answer = answerVar.user_answer;
+    });;
+
+    id_user_best_answer = mongoose.Types.ObjectId(id_user_best_answer);
 
     //modifico la pregunta y obtengo el reward offered
     var reward_offered;
-    const question = await Question.findOneAndUpdate(filterQuestion, updateQuestion, { new: true }).lean().then(answerVar => {
-      reward_offered = answerVar.reward_offered;
+    const question = await Question.findOneAndUpdate(filterQuestion, updateQuestion, { new: true }).lean().then(questionVar => {
+      reward_offered = questionVar.reward_offered;
     });
 
   /////// obtengo los datos del usuario elegido como la mejor respuesta (paypal_email)  ///////
-  const user_answer = await User.findById(id_answer).lean()
+  const user_answer = await User.findById(id_user_best_answer).lean()
     .then(data => {
       return {
         _id: data._id,
@@ -358,7 +363,8 @@ router.put('/admin/update_best_answer', isAuthenticated, async (req, res) => {
         name: firstPartEmailUser,
         datenow: datenow,
         idQuestion: id_question.toString(),
-        reward_offered: reward_offered
+        reward_offered: reward_offered,
+        paypal_email: paypal_email
 
       }
     }).catch(console.error);
