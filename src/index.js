@@ -77,6 +77,7 @@ app.use(require('./routes/notes'));
 app.use(require('./routes/users'));
 app.use(require('./routes/questions'));
 app.use(require('./routes/paypal'));
+app.use(require('./routes/coinbase'));
 app.use(require('./routes/admin'));
 
 

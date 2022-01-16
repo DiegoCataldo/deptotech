@@ -1,12 +1,12 @@
-const express = require('express')
+/*const express = require('express')
 const router = express.Router(); //me permite crear rutas
 const mongoose = require('mongoose');
 
-const Question = require('../models/Question');
-const Answer = require('../models/Answer');
-const User = require('../models/Users');
-const { isAuthenticated } = require('../helpers/auth');
-const { updateMany } = require('../models/Question');
+const Question = require('../../models/Question');
+const Answer = require('../../models/Answer');
+const User = require('../../models/Users');
+const { isAuthenticated } = require('../../helpers/auth');
+const { updateMany } = require('../../models/Question');
 const datefns = require('date-fns');
 const axios = require('axios');
 const uniqid = require('uniqid');
@@ -21,7 +21,7 @@ const fs = require('fs')
 
 /// importar controlador paypal ///
 
-const paypal_controller = require('../controller/paypal_controller');
+const paypal_controller = require('../../controller/paypal_controller');
 
 const CLIENT = 'AZBsZtS53_tReLSnEsRXz_JkY5RY5hkQvG8mdirbLaDzK5973_3MCO0fnFx-QcgrQOjU3B8UYnZ1Qu4D';
 const SECRET = 'EMN5jcBEeaK-it5gdX5gQTw8_dMDN_b23jxFy88Jdi7VZOTDvlPN5-y1c2XQCktc5fyzlXI-LU_LxVxs';
@@ -285,7 +285,7 @@ console.log('nationailty: '+ data );
 console.log(JSON.stringify(data));
 console.log(JSON.stringify(data, null, 2)); */
 
-
+ /*
     const emailPrimary = emails.find(x => x.primary === true).value;
     let verified_account_string;
     if (verified_account) { verified_account_string = "Y"; } else { verified_account_string = "N"; }
@@ -506,6 +506,6 @@ router.get('/privacypolicy', (req, res) => {
     res.send('File not found')
   }
 });
-
+*/
 
 module.exports = router;
