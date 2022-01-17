@@ -86,11 +86,16 @@
       </div>
       <div class="row">
         <div class="answer-do-container col-md-8">
+          {{#if user}}
           <form action="/questions/doanswer/{{question.id}}?_method=PUT" method="POST">
             <input type="hidden" name="_method" value="PUT">
             <textarea name="new_answer" class="trumbowyg-textarea" required="required"></textarea>
             <button class="button-main-1 mt-5" type="submit"> Save </button>
           </form>
+          {{else}}
+          <h3 style="font-size: 1.1rem;"> Do you want to answer questions and earn the reward in Bitcoins?</h3>
+          <a href="/users/signin"><button class="cta-btn-main-2">Earn Bitcoins Answering</button></a>
+          {{/if}}
         </div>
       </div>
       {{#each answers}}
@@ -107,7 +112,7 @@
                 <div class="first-place-title">
                   Best answer!
                 </div>
-                  
+
               </div>
               {{/if}}
               <div class="header-name">
@@ -134,6 +139,7 @@
                 <div class="col-md-12">
 
                   <!-- si el usuario es el mismo que hizo la respuesta no muestra nada si no muestro dependiendo si ya habia calificado la respuesta -->
+                  {{#if user}}
                   {{#ifEquals ../user_answer ../../UserId }}
 
                   {{else}}
@@ -169,8 +175,8 @@
 
 
                     {{#RatingEnabled ../rating_by }}
-                     <!-- en el caso que no le haya puesto la nota -->
-                    <div class="star-container ">                    
+                    <!-- en el caso que no le haya puesto la nota -->
+                    <div class="star-container ">
                       <input type="radio" name="star" id="5_{{../_id}}"
                         onClick="addRatingAnswerAjax({{json ../_id}}, 5)">
                       <label for="5_{{../_id}}">
@@ -208,9 +214,9 @@
                       </label>
                     </div>
                     {{else}}
-                      <!-- en el caso que ya le haya puesto nota -->
+                    <!-- en el caso que ya le haya puesto nota -->
                     <div class="stars-content ">
-                     
+
                       <div class="stars-content">
 
                         <div class="">
@@ -303,6 +309,9 @@
                     {{/RatingEnabled}}
                   </div>
                   {{/ifEquals}}
+                  {{else}}
+                  
+                  {{/if}}
 
                 </div>
 
@@ -329,7 +338,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="float-right number-detail-rating-2" >{{#ifExist answerRating.star5}}
+                    <div class="float-right number-detail-rating-2">{{#ifExist answerRating.star5}}
                       {{answerRating.star5}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
@@ -352,7 +361,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="float-right number-detail-rating-2" >{{#ifExist answerRating.star4}}
+                    <div class="float-right number-detail-rating-2">{{#ifExist answerRating.star4}}
                       {{answerRating.star4}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
@@ -375,7 +384,7 @@
                         </div>
                       </div>
                     </div>
-                    <div class="float-right number-detail-rating-2" >{{#ifExist answerRating.star3}}
+                    <div class="float-right number-detail-rating-2">{{#ifExist answerRating.star3}}
                       {{answerRating.star3}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                   <div class="rating-bar-answer">
@@ -425,23 +434,23 @@
                       {{answerRating.star1}} {{else}} 0 {{/ifExist}} </div>
                   </div>
                 </div>
-                <div class="col-md-4 rating-avg" >
+                <div class="col-md-4 rating-avg">
                   <div class="div">
                     <h4> Rating Avg</h4>
                   </div>
-                 
-                  <div class="number-rating-avg">
-                                   <h2 class="number-avg-parcial">   {{ratingUserAVG
-                    answerRating.star1
-                    answerRating.star2
-                    answerRating.star3
-                    answerRating.star4
-                    answerRating.star5
-                    }}<small class="number-avg-total"> /5</small></h2> 
-                  </div>
-                 
 
-                </div> 
+                  <div class="number-rating-avg">
+                    <h2 class="number-avg-parcial"> {{ratingUserAVG
+                      answerRating.star1
+                      answerRating.star2
+                      answerRating.star3
+                      answerRating.star4
+                      answerRating.star5
+                      }}<small class="number-avg-total"> /5</small></h2>
+                  </div>
+
+
+                </div>
               </div>
             </div>
 

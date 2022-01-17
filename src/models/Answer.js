@@ -12,7 +12,8 @@ const  AnswerSchema = new Schema({
   get_paid: { type: Boolean, required: true},
   answerRating: {type: Object, required: true},
   rating_by: {type: Array,  default: []},
-  createdAt: {type: Date, default: Date.now}
+  createdAt: {type: Date, default: Date.now},
+  withdrawal_requested: { type: Boolean, required: false},
 },
 {minimize: false})
 

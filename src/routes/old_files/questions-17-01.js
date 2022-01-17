@@ -349,22 +349,22 @@ router.get('/questions/allquestions/:skip?', async (req, res) => {
   ]);
 
   /////// obtengo los datos del usuario ///////
-  if (req.user) {
-    const id_user = mongoose.Types.ObjectId(req.user.id);
+  if(req.user){
+  const id_user = mongoose.Types.ObjectId(req.user.id);
 
-    var user_data = await User.findById(id_user).lean()
-      .then(data => {
-        return {
-          _id: data._id,
-          paypal_account_verified: data.paypal_account_verified,
-          paypal_email: data.paypal_email,
-          paypal_date_verified: data.paypal_date_verified,
-          answer_or_question: data.answer_or_question
-        }
-      });
-
-  } else {
-    var user_data, id_user = '';
+  const user_data = await User.findById(id_user).lean()
+    .then(data => {
+      return {
+        _id: data._id,
+        paypal_account_verified: data.paypal_account_verified,
+        paypal_email: data.paypal_email,
+        paypal_date_verified: data.paypal_date_verified,
+        answer_or_question: data.answer_or_question
+      }
+    });
+    
+  }else{
+   var user_data, id_user = '';
   }
 
   const skipObject = { currentSkip: skip, nextSkip: skip + 1, prevSkip: skip - 1 };
@@ -456,21 +456,21 @@ router.post('/questions/allquestionsfilter/:skip?', async (req, res) => {
 
     ])
 
-    if (req.user) {
-      const id_user = mongoose.Types.ObjectId(req.user.id);
-      var user_data = await User.findById(id_user).lean()
-        .then(data => {
-          return {
-            _id: data._id,
-            paypal_account_verified: data.paypal_account_verified,
-            paypal_email: data.paypal_email,
-            paypal_date_verified: data.paypal_date_verified,
-            answer_or_question: data.answer_or_question
-          }
-        });
-    } else {
-      var user_data, id_user = '';
-    }
+    if(req.user){
+    const id_user = mongoose.Types.ObjectId(req.user.id);
+    const user_data = await User.findById(id_user).lean()
+      .then(data => {
+        return {
+          _id: data._id,
+          paypal_account_verified: data.paypal_account_verified,
+          paypal_email: data.paypal_email,
+          paypal_date_verified: data.paypal_date_verified,
+          answer_or_question: data.answer_or_question
+        }
+      });
+    }else{
+        var user_data, id_user = '';
+      }
 
     const skipObject = { currentSkip: skip, nextSkip: skip + 1, prevSkip: skip - 1 };
 
@@ -536,19 +536,19 @@ router.post('/questions/allquestionsfilter/:skip?', async (req, res) => {
 
     ]);
 
-    if (req.user) {
-      const id_user = mongoose.Types.ObjectId(req.user.id);
-      var user_data = await User.findById(id_user).lean()
-        .then(data => {
-          return {
-            _id: data._id,
-            paypal_account_verified: data.paypal_account_verified,
-            paypal_email: data.paypal_email,
-            paypal_date_verified: data.paypal_date_verified,
-            answer_or_question: data.answer_or_question
-          }
-        });
-    } else {
+    if(req.user){
+    const id_user = mongoose.Types.ObjectId(req.user.id);
+    const user_data = await User.findById(id_user).lean()
+      .then(data => {
+        return {
+          _id: data._id,
+          paypal_account_verified: data.paypal_account_verified,
+          paypal_email: data.paypal_email,
+          paypal_date_verified: data.paypal_date_verified,
+          answer_or_question: data.answer_or_question
+        }
+      });
+    }else{
       var user_data, id_user = '';
     }
 
@@ -600,17 +600,16 @@ router.post('/questions/allquestionsfilter/:skip?', async (req, res) => {
 
 })
 /////// Obtener info de la pregunta a responder /////////
-router.get('/questions/doanswer/:id', async (req, res) => {
+router.get('/questions/doanswer/:id', isAuthenticated, async (req, res) => {
 
-  var userlogin, req_userid;
-  if (req.user) {
-    userlogin = true; req_userid = req.user.id;
-  } else {
-    userlogin = false; req_userid = '';
+  // primero veo si en la bd está el account id de paypal para este usuario
+  const user = await User.findById(req.user.id).lean();
+  var paypal_account_verified = user.paypal_account_verified;
+
+  //en caso que el paypal account no esté verificado según la bd de priceanswers, lo reenvío para que se logee en paypal y para ver si está verificado
+  if (typeof paypal_account_verified === 'undefined' || paypal_account_verified == null || !paypal_account_verified) {
+    res.redirect('/paypal/addcustomer'); return;
   }
-
-
-
   /// obtengo la info de la pregunta ////
   const question = await Question.findById(req.params.id).lean()
     .then(data => {
@@ -675,13 +674,12 @@ router.get('/questions/doanswer/:id', async (req, res) => {
     }
   ]);
   /// si es el mismo usuario que hizo la pregunta lo devuelvo
-
-    if (question.user_question == req_userid) {
-     //req.flash('error', 'You cannot answer your own question');
-      res.redirect('/questions/ownquestions');
+  if (question.user_question == req.user.id) {
+    req.flash('error', 'You cannot answer your own question');
+    res.redirect('/questions/allquestions');
   } else {
     res.render('questions/do-answer', {
-      question, userallInfo: userallInfo[0], answers: answers, UserId: req_userid,
+      question, userallInfo: userallInfo[0], answers: answers, UserId: user._id,
       helpers: {
         formatDate: function (date) {
           return datefns.formatRelative(date, new Date());
@@ -744,12 +742,6 @@ router.get('/questions/doanswer/:id', async (req, res) => {
           }
         },
         ifEquals: function (variable1, variable2, options) {
-          if(variable1 == null){
-            variable1 = '';
-          }
-          if(variable2 == null){
-            variable2 = '';
-          }
 
           return (variable1.toString() == variable2.toString()) ? options.fn(this) : options.inverse(this);
         },
@@ -1150,7 +1142,7 @@ router.get('/questions/myanswers', isAuthenticated, async (req, res) => {
         return something.length;
       },
       ButtonWEnabled: function (best_answer, get_paid, withdrawal_requested, options) {
-        console.log('with:' + withdrawal_requested);
+        console.log('with:' + withdrawal_requested );
         var enabled = false;
         var withdrawal;
         if (withdrawal_requested == null) { withdrawal = false; } else { withdrawal = withdrawal_requested; }
@@ -1221,7 +1213,7 @@ router.put('/questions/withdraw_answer', isAuthenticated, async (req, res) => {
     /// modifico la respuesta  y obtengo el id_question
     const filterAnswer = { _id: id_answer };
     const updateAnswer = { withdrawal_requested: true };
-
+    
     var id_question, user_answer;
     const answer = await Answer.findOneAndUpdate(filterAnswer, updateAnswer, { new: true }).lean().then(answerVar => {
       id_question = answerVar.id_question;
@@ -1230,7 +1222,7 @@ router.put('/questions/withdraw_answer', isAuthenticated, async (req, res) => {
 
     id_question = mongoose.Types.ObjectId(id_question);
     user_answer = mongoose.Types.ObjectId(user_answer);
-
+    
     // busco la recompensa en usd
     const question = await Question.findById(id_question).lean()
       .then(data => {
@@ -1239,14 +1231,14 @@ router.put('/questions/withdraw_answer', isAuthenticated, async (req, res) => {
           reward_offered: data.reward_offered
         }
       });
-    const reward_usd = question.reward_offered;
+      const reward_usd = question.reward_offered;
 
-    //creo el withdrwal request
-    const newWithdrawRequest = new WithdrawRequest(
-      {
-        reward_usd, id_question: id_question, user_answer: user_answer, id_answer: id_answer, wallet_address: wallet_address
-      });
-    await newWithdrawRequest.save()
+      //creo el withdrwal request
+      const newWithdrawRequest = new WithdrawRequest(
+        {
+          reward_usd, id_question: id_question, user_answer: user_answer, id_answer: id_answer, wallet_address: wallet_address
+        });
+      await newWithdrawRequest.save()
 
 
     req.flash('success_msg', 'Withdrawal Requested!');

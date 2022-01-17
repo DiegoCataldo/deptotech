@@ -924,3 +924,15 @@ font-family: 'Font Awesome 5 Free' !important
   padding-right: 1rem;
   padding-left: 1rem;
 }
+
+
+.table-answers{
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.table-answers-qtitle{
+  max-width: 320px;
+  overflow-x: auto;
+}

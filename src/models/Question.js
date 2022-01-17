@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const {Schema} = mongoose;
 const aggregatePaginate  = require('mongoose-aggregate-paginate-v2');
 
-
 const  QuestionSchema = new Schema({
   title: { type: String, required: true},
   description: { type: String, required: true},
@@ -21,7 +20,8 @@ const  QuestionSchema = new Schema({
   {
       data: Buffer,
       contentType: String
-  }
+  },
+  reward_btc: {type: Number, required: false}
 })
 
 QuestionSchema.plugin(aggregatePaginate );

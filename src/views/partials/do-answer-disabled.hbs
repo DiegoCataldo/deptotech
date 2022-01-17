@@ -86,15 +86,21 @@
         </div>
 
       </div>
+
       <div class="row">
         <div class="answer-do-container col-md-8">
+          {{#if user}}
           <form action="/questions/doanswer/{{question.id}}?_method=PUT" method="POST">
             <input type="hidden" name="_method" value="PUT">
             <textarea class="trumbowyg-textarea" name="new_answer" required="required"></textarea>
             <button class="button-main-1 mt-5" type="submit"> Save </button>
           </form>
-        </div>
+          {{else}}
+          <h3 style="font-size: 1.1rem;"> Do you want to answer this question and earn the reward in Bitcoins?</h3>
+          <a href="/users/signin"><button class="cta-btn-main-2">Earn Bitcoins Answering</button></a>
+          {{/if}}
 
+        </div>
       </div>
 
       {{#each answers}}
@@ -128,20 +134,6 @@
               <div class="col-md-4  row rating-block2">
                 <!-- rating block --->
                 <div class="col-md-12">
-
-                  <!-- si el usuario es el mismo que hizo la respuesta no muestra nada si no muestro dependiendo si ya habia calificado la respuesta -->
-                  {{#ifEquals ../user_answer ../../UserId }}
-
-                  {{else}}
-                  <div class="rating-block">
-                    {{#RatingEnabled ../rating_by }}
-                    <h4>Give It a Rating!</h4>
-
-                    {{else}}
-                    <h4>Thanks for rating!</h4>
-                    {{/RatingEnabled}}
-
-                    {{/ifEquals}}
 
                     {{#ifEquals ../user_answer ../../UserId }}
 
@@ -299,9 +291,7 @@
                     {{/RatingEnabled}}
                   </div>
                   {{/ifEquals}}
-
                 </div>
-
                 <!-- rating breakdown -->
                 <div class="col-md-8 rating-breakdown">
                   <h4>Rating breakdown</h4>
@@ -425,7 +415,6 @@
                   <div class="div">
                     <h4> Rating Avg</h4>
                   </div>
-
                   <div class="number-rating-avg">
                     <h2 class="number-avg-parcial"> {{ratingUserAVG
                       answerRating.star1
@@ -435,8 +424,6 @@
                       answerRating.star5
                       }}<small class="number-avg-total"> /5</small></h2>
                   </div>
-
-
                 </div>
               </div>
             </div>
@@ -446,7 +433,7 @@
           {{/each}}
         </div>
       </div>
-{{/ifEquals}}
+      {{/ifEquals}}
       {{/each}}
     </div>
   </div>

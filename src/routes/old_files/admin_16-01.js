@@ -214,15 +214,46 @@ router.get('/admin/best_answers', isAuthenticated, async (req, res) => {
       }
     });
   if (user_data.transaction_manager) {
-    //busco los withdrawRequest que no esten pagados
-    const queryMatch = { 'paid': false };
-    const withdrawRequests = await WithdrawRequest.aggregate([
-      { $match: queryMatch }
-    ])
+
+    const queryMatchPendingPaid = { 'status': 'best_answer_chosen' };
+    const queryMatchBestAnswer = { 'best_answer': true };
+
+    const questions = await Question.aggregate([
+      { $match: queryMatchPendingPaid },
+      {
+        $lookup: {
+          from: "answers",
+          let: { "questionid": "$_id" },
+          pipeline: [
+            { $match: { $expr: { $eq: ["$id_question", "$$questionid"] } } },
+            { $match: queryMatchBestAnswer },
+            { $project: { "answer": 0, "createdAt": 0, "rating_by": 0, "answerRating": 0 } },
+            {
+              $lookup: {
+                from: "users",
+                let: { "user_id": "$user_answer" },
+                pipeline: [
+                  { $match: { $expr: { $eq: ["$_id", "$$user_id"] } } },
+                  { $project: { "password": 0, "createdAt": 0, "answerRating": 0 } }
+                ],
+                as: "user_info"
+              }
+            }
+          ],
+          as: "answer_info"
+        }
+      },
+      { $project: { "title": 0, "description": 0, "rating_by": 0, "img": 0, "tags": 0, "user_question": 0 } },
+      { $sort: { createdAt: -1 } },
+      /* { $skip: skip * limit },
+       { $limit: limit } */
+
+    ]);
+
     //console.log(JSON.stringify(questions, null, 2));
 
     res.render('admin/transaction-best-answer', {
-      withdrawRequests,
+      questions,
       helpers: {
         formatDate: function (date) {
           return datefns.formatRelative(date, new Date());
@@ -243,10 +274,9 @@ router.put('/admin/update_best_answer', isAuthenticated, async (req, res) => {
 
   const id_user = mongoose.Types.ObjectId(req.user.id);
 
-  const { transaction_id, reward_btc } = req.body;
+  const { paypal_transaction_id, reward_btc } = req.body;
   const id_answer = mongoose.Types.ObjectId(req.body.id_answer);
   const id_question = mongoose.Types.ObjectId(req.body.id_question);
-  const id_withdraw = mongoose.Types.ObjectId(req.body.id_withdraw);
   const user_data = await User.findById(id_user).lean()
     .then(data => {
       return {
@@ -258,7 +288,7 @@ router.put('/admin/update_best_answer', isAuthenticated, async (req, res) => {
 
     /// creo los filtros y updates ///
     const filterAnswer = { _id: id_answer };
-    const updateAnswer = { get_paid: true, transaction_id: transaction_id };
+    const updateAnswer = { get_paid: true, paypal_transaction_id: paypal_transaction_id };
     const filterQuestion = { _id: id_question };
     const updateQuestion = { status: 'answer_paid', reward_btc: reward_btc };
 
@@ -277,25 +307,27 @@ router.put('/admin/update_best_answer', isAuthenticated, async (req, res) => {
     });
 
     // creo los filtros del withdraw request
-    const filterWithdraw = { _id: id_withdraw };
-    const updateWithdraw = { paid: true, reward_btc: reward_btc, transaction_id: transaction_id };
+    const filterWithdraw = { _id: id_question };
+    const updateWithdraw = { status: 'answer_paid', reward_btc: reward_btc };
     //modifico el withdraw requested
-    var wallet_address;
-    const withdrawRequest = await WithdrawRequest.findOneAndUpdate(filterWithdraw, updateWithdraw, { new: true }).lean().then(
-      withdrawVar => {
-      wallet_address = withdrawVar.wallet_address;
-    });;
+    var id_question, user_answer;
+    const withdrawRequest = await WithdrawRequest.findOneAndUpdate(filterAnswer, updateAnswer, { new: true }).lean().then(answerVar => {
+      id_question = answerVar.id_question;
+      user_answer = answerVar.id_user;
+    });
 
   /////// obtengo los datos del usuario elegido como la mejor respuesta  ///////
   const user_answer = await User.findById(id_user_best_answer).lean()
     .then(data => {
       return {
         _id: data._id,
+        paypal_email: data.paypal_email,
         email: data.email
       }
     });
 
     const email_user_priceanswers = user_answer.email;
+  const paypal_email = user_answer.paypal_email;
 
     
     /// envío correo de invoice al user_answer ///
@@ -343,8 +375,8 @@ router.put('/admin/update_best_answer', isAuthenticated, async (req, res) => {
         name: firstPartEmailUser,
         datenow: datenow,
         idQuestion: id_question.toString(),
-        reward_btc: reward_btc,
-        wallet_address: wallet_address
+        reward_offered: reward_offered,
+        paypal_email: paypal_email
 
       }
     }).catch(console.error);

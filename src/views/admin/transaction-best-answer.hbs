@@ -11,72 +11,77 @@
 
 <div class="tm-main row justify-content-md-center margin-x-0 mt-5">
   <div class="col-md-7">
-    <div class="row ">
+    <div class="row table-responsive ">
       <table id="example" class="table table-answers table-striped table-bordered" style="width:100%">
         <thead>
           <tr>
-            <th>ID Question </th>
-            <th>Reward</th>
-            <th>paypal email to transfer</th>
+            <th>ID Question</th>
+            <th>Reward USD</th>
+            <th>wallet address to transfer</th>
             <th>Update</th>
           </tr>
         </thead>
         <tbody>
-          {{#each questions}}
+          {{#each withdrawRequests}}
           <tr>
-
-            <td>{{_id}} </td>
-            <td>{{reward_offered}} </td>
-            {{#each answer_info}}
-            {{#each user_info}}
-            <td>{{paypal_email}} </td>
-            {{/each}}
-
+            <td>{{id_question}} </td>
+            <td>{{reward_usd}} </td>
+            <td>{{wallet_address}} </td>
             <td>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-transaction" data-idanswer="{{_id}}"  data-idquestion="{{../_id}}" >Update</button>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-transaction"
+                data-idanswer="{{id_answer}}" data-idquestion="{{id_question}}"
+                data-idwithdraw="{{_id}}">Update</button>
             </td>
-            {{/each}}
-            
-           
-           
           </tr>
-        
+          <div class="modal fade" id="modal-transaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Update Transaction ID</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form action="/admin/update_best_answer?_method=PUT" id="form1" method="POST"
+                    enctype="multipart/form-data">
+                    <div class="form-group">
+                      <label for="transaction_id" class="col-form-label">ID Transaction:</label>
+                      <input type="text" class="form-control" id="transaction_id" name="transaction_id" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="reward_btc" class="col-form-label">BTC Amount:</label>
+                      <input type="number" min="0" step="0.00000001" class="form-control" id="reward_btc" name="reward_btc" required>
+                    </div>
+                    <div class="form-group">
+                      <input class="form-control" id="id_answer" name="id_answer" value="{{id_answer}}"
+                        type="hidden"></input>
+                    </div>
+                    <div class="form-group">
+                      <input class="form-control" id="id_question" name="id_question" value="{{id_question}}"
+                        type="hidden"></input>
+                    </div>
+                    <div class="form-group">
+                      <input class="form-control" id="id_withdraw" name="id_withdraw" value="{{_id}}"
+                        type="hidden"></input>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button value="Submit" form="form1" class="btn btn-primary" type="submit">Update
+                        Transaction</button>
+                    </div>
+                  </form>
+                </div>
+
+              </div>
+            </div>
+          </div>
           {{/each}}
 
         </tbody>
       </table>
-<div class="modal fade" id="modal-transaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Update Transaction ID</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-       <form action="/admin/update_best_answer?_method=PUT" id="form1" method="POST" enctype="multipart/form-data">
-          <div class="form-group">
-            <label for="paypal_transaction_id" class="col-form-label">ID Transaction:</label>
-            <input type="text" class="form-control" id="paypal_transaction_id" name="paypal_transaction_id">
-          </div>
-           <div class="form-group">
-            <input class="form-control" id="id_answer" name="id_answer" value="" type="hidden"></input>
-          </div>
-          <div class="form-group">
-            <input class="form-control" id="id_question" name="id_question" value="" type="hidden"></input>
-          </div>
-              <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button  value="Submit" form="form1" class="btn btn-primary" type="submit">Update Transaction </button>
-      </div>
-      </form>
-      </div>
 
     </div>
   </div>
 </div>
-    </div>
-  </div>
-</div>
-

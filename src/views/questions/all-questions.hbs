@@ -11,10 +11,14 @@
 
   <div class="tm-main row justify-content-md-center margin-x-0">
     <div class="col-md-7 row search">
-
+          <div class="col-12" style="text-align: center;">
+            <a {{#if user}} href="/questions/add" {{else}} href="/users/signin"{{/if}}><button
+                class="cta-btn-main-2">Ask Question</button></a>
+          </div>
       <form method="POST" action="/questions/allquestionsfilter" class="form-inline mb-4 tm-search-form">
         <div class="container-tag2 row">
-          <div class="col-9 search">
+
+          <div class="col-md-10 col-9 search" style="padding-right: 0;">
             <div class="width100">
               <div class="container-search-tags">
                 <input class="form-control tm-search-input tag-input " name="tags-id" id="tags-id" type="text"
@@ -22,7 +26,8 @@
                 <input type="hidden" name="skip" value="{{skipObject.currentSkip}}">
               </div>
               <div class="row col-md-12 note-filter">
-                <button type="button" id="" class="btn btn-info button-add-tags button-add-tags-allquestion "> Add tag</button>
+                <button type="button" id="" class="btn btn-info button-add-tags button-add-tags-allquestion "> Add
+                  tag</button>
               </div>
               <div class="tags-added-container" contenteditable="false">
                 {{#each filters}}
@@ -32,7 +37,7 @@
               </div>
             </div>
           </div>
-          <div class="col-3 search search-button">
+          <div class="col-md-2 col-3 search search-button">
             <button class="tm-search-button" type="submit">
               <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
             </button>
@@ -41,7 +46,8 @@
             <div class="width100 row">
               <div class="col-12">
                 <div class="form-check container-checkbox">
-                  <input class="form-check-input" type="checkbox"  name="bestanswercheckbox" id="bestanswercheckbox" {{#ifEquals bestanswerchosen "on" }} checked {{/ifEquals}}>
+                  <input class="form-check-input" type="checkbox" name="bestanswercheckbox" id="bestanswercheckbox"
+                    {{#ifEquals bestanswerchosen "on" }} checked {{/ifEquals}}>
                   <label class="form-check-label" for="flexCheckDefault">
                     include questions with "best answer" already chosen
                   </label>
@@ -53,20 +59,20 @@
         </div>
       </form>
     </div>
-    {{#accountVerified user_data }}
-    {{> verification-account-modal}}
-    {{/accountVerified}}
+    {{#if user}}
+
 
     {{#ifNotExist user_data.answer_or_question}}
-     {{> answer-or-question-modal}}
+    {{> answer-or-question-modal}}
     {{/ifNotExist}}
+
+    {{/if}}
 
     <div class="col-md-7">
       <div class="row ">
         {{#each questions}}
-        {{#ifEquals user_question ../UserId }}
-
-        {{else}}
+       
+ 
         <div class="col-md-12 col-lg-12 container-question ">
           <div class="login-container">
             <div class="body-question row">
@@ -101,14 +107,13 @@
                       createdAt}} </span>
                   </div>
                   <div>
-                    <a href="/questions/doanswer/{{_id}}"><button class="button-main-1">Answer</button></a>
+                    <a  {{#if user}}  {{#ifEquals user_question ../UserId }}   href="/questions/ownquestions" {{else}} href="/questions/doanswer/{{_id}}" {{/ifEquals}} {{else}} href="/questions/doanswer/{{_id}}" {{/if}} ><button class="button-main-1">More Info</button></a>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {{/ifEquals}}
         {{/each}}
 
         <!-- Pagination -->
@@ -116,7 +121,7 @@
           <nav class="pagination-nav" aria-label="Page navigation example ">
             <ul class="pagination">
               <!-- si existen filtros entonces los paginations serán form -->
-           
+
               <form method="POST" id="formprev" action="/questions/allquestionsfilter" class="">
                 <li class="page-item">
                   <a class="page-link" href="javascript:;"
@@ -124,7 +129,9 @@
                   </a>
                 </li>
                 <input type="hidden" name="skip" value="{{skipObject.prevSkip}}">
-                <input type="checkbox" class="form-check-input checkbestanswer" style="display:none" type="checkbox"  name="bestanswercheckbox" id="bestanswercheckbox1" {{#ifEquals bestanswerchosen "on" }} checked {{/ifEquals}}>
+                <input type="checkbox" class="form-check-input checkbestanswer" style="display:none" type="checkbox"
+                  name="bestanswercheckbox" id="bestanswercheckbox1" {{#ifEquals bestanswerchosen "on" }} checked
+                  {{/ifEquals}}>
                 {{#each filters}}
                 <input type='hidden' value="{{this}}" name='tagsArray' />
                 {{/each}}
@@ -137,7 +144,9 @@
                     onclick="document.getElementById('formnext').submit();">Next</a>
                 </li>
                 <input type="hidden" name="skip" value="{{skipObject.nextSkip}}">
-                <input type="checkbox" style="display:none" class="form-check-input checkbestanswer"  name="bestanswercheckbox" id="bestanswercheckbox2" {{#ifEquals bestanswerchosen "on" }} checked {{/ifEquals}}>
+                <input type="checkbox" style="display:none" class="form-check-input checkbestanswer"
+                  name="bestanswercheckbox" id="bestanswercheckbox2" {{#ifEquals bestanswerchosen "on" }} checked
+                  {{/ifEquals}}>
                 {{#each filters}}
                 <input type='hidden' value="{{this}}" name='tagsArray' />
                 {{/each}}

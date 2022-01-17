@@ -208,6 +208,8 @@ $(function () {
 
   });
 */
+
+
   $(document).on('click', '.read-more-link', function () {
     $(this).parent().hide().prev().show();
   });

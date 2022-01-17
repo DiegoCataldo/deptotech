@@ -8,44 +8,103 @@
   </div>
   <!-- /HEADER -->
 
-  <div class="tm-main row justify-content-md-center margin-x-0 mt-5">
+  <div class="tm-main row justify-content-md-center margin-x-0 mt-5 ">
 
     <div class="col-md-7">
-      <div class="row ">
-        <table id="example" class="table table-answers table-striped table-bordered" style="width:100%">
+      <div class="row  table-responsive">
+        <table id="example" class="table table-answers table-striped table-bordered table-answers" style="width:100%">
           <thead>
             <tr>
               <th>Question Title</th>
-              <th>Answers Enabled</th>
+              <th>Paid Question</th>
               <th>Best Answer Chosen</th>
               <th>Your Answer Was The Best</th>
-              <th>Question Created At</th>
               <th>Link Question</th>
-
+              <th>Withdraw</th>
             </tr>
           </thead>
           <tbody>
             {{#each answers}}
             <tr>
               {{#each question_info}}
-              <td>{{title}} </td>
+              <td class="table-answers-qtitle">{{title}} </td>
               <td class=""> <div class="cont-truefalse"> <div class="{{answers_enabled}}-table">{{answers_enabled}}</div> </div> </td>
               <td> <div class="cont-truefalse"> <div class="{{best_answer_chosen}}-table">{{best_answer_chosen}} </div></div> </td>
               <td> <div class="cont-truefalse"><div class="{{../best_answer}}-table">{{../best_answer}} </div> </div> </td>
-              <td>{{formatDate ../createdAt}}</td>
               <td><a href="/questions/doanswer/{{_id}}"><button class="button-question-table">Link</button></a></td>
 
-
+              {{#ButtonWEnabled ../best_answer ../get_paid ../withdrawal_requested }}
+                <td><button class="button-question-table" data-toggle="modal" data-target="#modal-transaction"
+                data-idanswer="{{../_id}}" data-idquestion="{{_id}}">Withdraw</button></td>
+              {{/ButtonWEnabled }}
+              {{#SuccesfullyWithdrawn ../best_answer ../get_paid ../withdrawal_requested}}
+                <td>Successfully Withdrawn</td>
+              {{/SuccesfullyWithdrawn}}
+              {{#WithdrawalRequested ../best_answer ../get_paid ../withdrawal_requested}}
+                <td>Withdrawal requested, it can take up to 10 business days</td>
+              {{/WithdrawalRequested}}
+              {{#NotBestAnswer ../best_answer}}
+                <td>Disabled</td>
+              {{/NotBestAnswer}}
               {{/each}}
-
             </tr>
             {{/each}}
-
           </tbody>
-
-
         </table>
+      </div>
+    </div>
+  </div>
+</div>
 
+<div class="modal fade " id="modal-transaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered  modal-lg " role="dialog">
+    <div class="modal-content background-answer-question ">
+      <div class="modal-header ">
+        <h5 class="modal-title" id="exampleModalLabel" style="color: white;">IMPORTANT!</h5>
+        <button id="close-best-answer" type="button"  class="close" data-dismiss="modal" aria-label="Close">
+          <span style="color: white;" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-1 row">
+        <div class="col-md-12">
+          <div class="img">
+            <img src="../img/bitcoin.png" alt="" class="img-fluid">
+          </div>
+              <form action="/questions/withdraw_answer?_method=PUT" id="form1" method="POST"
+                enctype="multipart/form-data">
+                <h5  class="h5-modal-aq" style="font-weight: 400;">
+                  You are about to withdraw the reward, please paste your wallet address, it looks something like this:
+                </h5>
+                <h5 class="" style="margin-top: 1rem; background-color: #ededed;">
+                  3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy
+                </h5>
+                <h5 class="h5-modal-aq" style="margin-top: 1rem; font-weight: 400;">
+                  Make sure that the 'address' is correct, since if you make a mistake you will lose the reward!
+                </h5>
+
+                  <h5 class="h5-modal-aq" style="margin-top: 3rem;">
+                 NOTE
+                </h5>
+                <h5 class="h5-modal-aq" style="margin-top: 0.5rem; font-weight: 400;">
+                  The amount of Bitcoin transferred will be equivalent to the conversion of the reward in dollars to Bitcoin at the time the transaction is made (maximum 10 business days)
+                </h5>
+                <div class="form-group">
+                  <label for="wallet_address" class="col-form-label h5-modal-aq">Wallet Address:</label>
+                  <input type="text" class="form-control" id="wallet_address" name="wallet_address" required>
+                </div>
+                <div class="form-group">
+                  <input class="form-control" id="id_answer" name="id_answer" value="" type="hidden"></input>
+                </div>
+                <div class="form-group">
+                  <input class="form-control" id="id_question" name="id_question" value="" type="hidden"></input>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button value="Submit" form="form1" class="btn btn-primary" type="submit">Submit</button>
+                </div>
+              </form>
+        </div>
       </div>
     </div>
   </div>

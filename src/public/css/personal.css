@@ -1,6 +1,15 @@
+html{scroll-behavior:smooth}
+
 .logov3>img {
     width: 140px;
     height: 65px;
+    margin-top: 3px;
+    top: 0px;
+    margin-left: 0px;
+}
+.logov6>img {
+    width: 200px;
+    height: 60px;
     margin-top: 3px;
     top: 0px;
     margin-left: 0px;
@@ -66,6 +75,7 @@
         top: 0px;
         margin-left: 0px;
     }
+
     .logov2>img {
         width: 500px;
         height: 120px;
@@ -73,6 +83,7 @@
         top: 0px;
         margin-left: 0px;
     }
+
     .logov4>img {
         width: 500px;
         height: 230px;
@@ -80,6 +91,7 @@
         top: 0px;
         margin-left: 0px;
     }
+
     .logov3>img {
         width: 200px;
         height: 65px;
@@ -87,6 +99,7 @@
         top: 0px;
         margin-left: 0px;
     }
+
     .logov5>img {
         width: 200px;
         height: 65px;
@@ -94,12 +107,15 @@
         top: 0px;
         margin-left: 0px;
     }
+
     .padding-left-15 {
         padding-left: 15rem !important;
     }
+
     .padding-right-15 {
         padding-right: 15rem !important;
     }
+
     .padding-5 {
         padding: 5rem !important;
     }
@@ -170,9 +186,11 @@
     .banner-question {
         height: 100px !important;
     }
+
     .u-line.u-line-horizontal {
         display: none;
     }
+
     .u-section-2 .u-text-2 {
         margin: 15px auto 0 !important;
     }
@@ -188,9 +206,11 @@
     .tm-main {
         padding: 0px;
     }
+
     .tm-main-custom {
         padding: 0px;
     }
+
     .container-fluid {
         padding: 0px !important;
     }
@@ -230,7 +250,7 @@
     width: 300px;
     height: 92px;
     /* border-radius: 50%; */
-  /*  background-color: white; */
+    /*  background-color: white; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -288,7 +308,8 @@
     outline: none;
     transition: all 200ms ease-in-out;
 }
-.button-delete-question{
+
+.button-delete-question {
 
     margin-bottom: 1rem;
     width: 35px !important;
@@ -313,7 +334,7 @@
 }
 
 .button-main-2:hover {
-    background: linear-gradient( 45deg, #9fff00, #3fba00, #00a71c, #00ff43) !important;
+    background: linear-gradient(45deg, #9fff00, #3fba00, #00a71c, #00ff43) !important;
 }
 
 .button-main-3 {
@@ -412,6 +433,7 @@
     .tm-post-sidebar {
         max-width: 440px;
     }
+
     .form-inline .form-control.tm-search-input {
         width: 420px;
     }
@@ -430,6 +452,7 @@
         max-width: 375px;
         margin-right: 15px;
     }
+
     .tm-search-form {
         justify-content: flex-end;
     }
@@ -439,9 +462,18 @@
     display: flex;
     margin-top: 1.1rem;
 }
+
 .search-button {
     display: flex;
     margin-top: 1.5rem;
+}
+
+
+@media (max-width: 500px) {
+    .search {
+        display: flex;
+        margin-top: 0.5rem;
+    }
 }
 
 .margin-x-0 {
@@ -486,16 +518,18 @@
     .card-body-signup {
         padding: 3rem !important
     }
-    .answer-aq{
-      border-right: 1px solid white;
+
+    .answer-aq {
+        border-right: 1px solid white;
     }
 }
 
 @media (max-width: 767px) {
-    .answer-aq{
+    .answer-aq {
         border-bottom: 1px solid white;
         margin-bottom: 1rem;
-      }
+    }
+
     .button-main-3 {
         width: auto;
         height: 50px;
@@ -505,6 +539,7 @@
         padding-left: 1rem;
         padding-right: 1rem;
     }
+
     .button-main-4 {
         width: auto;
         height: 50px;
@@ -527,54 +562,59 @@
 .tm-main-custom {
     min-height: 90vh;
 }
-.alert-dismissible .close{
+
+.alert-dismissible .close {
     right: auto !important;
     left: auto !important;
 }
 
-.read-more-link{
-margin-left: 1rem;
+.read-more-link {
+    margin-left: 1rem;
 
 }
 
-.read-less-link{
+.read-less-link {
     margin-left: 1rem;
 
 }
 
 .container {
-	width: 1024px;
-	padding: 2em;
+    width: 1024px;
+    padding: 2em;
 }
 
 .bold-blue {
-	font-weight: bold;
-	color: #0277BD;
+    font-weight: bold;
+    color: #0277BD;
 }
-.pagination-nav{
-    float:  right !important;
+
+.pagination-nav {
+    float: right !important;
     margin-right: 2rem;
     margin-top: 0.5rem;
 }
 
-.trumbowyg-button-pane svg{
+.trumbowyg-button-pane svg {
 
     width: 22px !important;
 
 }
-.link-forgot-pass{
-    float:right;
+
+.link-forgot-pass {
+    float: right;
     margin-bottom: 1rem;
 }
-.close-x-span{
+
+.close-x-span {
     float: left;
 }
-.note-filter{
+
+.note-filter {
     color: #6f6f6f;
     padding-left: 25px !important;
 }
 
-.width100{
+.width100 {
     width: 100%;
 }
 
@@ -584,40 +624,162 @@ margin-left: 1rem;
     margin-right: 0px !important;
     margin-left: 0px !important;
     text-align: center;
-  }
+}
 
 
-  .background-modal-welcome{
+.background-modal-welcome {
     background: linear-gradient(rgba(0, 142, 99, 0.1), rgba(0, 0, 0, 0.3)), url(../img/welcome-modal.png) fixed center center;
     background-size: cover;
 
-  }
+}
 
-  .background-answer-question{
+.background-answer-question {
     background: linear-gradient(rgba(0, 142, 99, 0.1), rgba(0, 0, 0, 0.3)), url(../img/call-to-action-bg.jpg) fixed center center;
     background-size: cover;
 
-  }
-  .modal-1 img{
-      width: 20rem;
- 
-  }
+}
 
-  .footer-modal-aq{
-      border-top: unset !important;
-  }
-.margin-top-1{
+.modal-1 img {
+    width: 20rem;
+
+}
+
+.footer-modal-aq {
+    border-top: unset !important;
+}
+
+.margin-top-1 {
     margin-top: 1rem;
 }
 
-.h5-modal-aq{
+.h5-modal-aq {
     margin-top: 1rem;
     color: white;
     font-size: 1.1rem;
 }
-.button-modal-aq{
+
+.button-modal-aq {
     margin: 15px 0 20px 0 !important;
 }
-.padding-0{
+
+.padding-0 {
     padding: 0 !important;
+}
+
+.cta-btn-main {
+    margin: 1rem;
+    font-family: "Montserrat", sans-serif;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 8px 28px;
+    border-radius: 25px;
+    transition: 0.5s;
+    margin-top: 10px;
+    border: 2px solid #fff;
+    color: #fff;
+    background: linear-gradient(45deg, #9fff00, #3fba00, #003e21, #00ff43);
+    background-size: 300% 300%;
+    outline: none;
+    transition: all 200ms ease-in-out;
+}
+
+.cta-btn-main:hover {
+    background: linear-gradient(45deg, #99ff85, #59da18, #5cdf1a, #aeff85);
+    border: 2px solid #18d26e;
+}
+
+
+
+.cta-btn-main-2 {
+    margin: 1rem;
+    font-family: "Montserrat", sans-serif;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 8px 28px;
+    border-radius: 25px;
+    transition: 0.5s;
+    margin-top: 10px;
+    border: 2px solid #fff;
+    color: #fff;
+    transition: all 200ms ease-in-out;
+    background: linear-gradient(45deg, #00fff2, #0069ba, #003e21, #00ff43);
+    background-size: 300% 300%;
+}
+
+.cta-btn-main-2:hover {
+    background: linear-gradient(45deg, #00fff2, #29a1fd, #209eff, #00d9ff);
+    border: 2px solid #18d26e;
+}
+
+@media (max-width: 500px) {
+    .cta-btn-main-2 {
+        letter-spacing: 0px;
+        padding: 10px 25px;
+        font-size: 14px;
+    }
+    .cta-btn-main {
+        letter-spacing: 0px;
+    }
+}
+.button-expert{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-bottom:40px;
+}
+
+
+#expert-call-to {
+    background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.5)), url(../img/bitcoin.png) fixed center center;
+    background-size: cover;
+    padding: 60px 0; 
+  }
+  
+  #expert-call-to h3 {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+  }
+  
+  #expert-call-to p {
+    color: #fff;
+  }
+  
+   .cta-btn-expert {
+    margin: 1rem;
+    font-family: "Montserrat", sans-serif;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 8px 28px;
+    border-radius: 25px;
+    transition: 0.5s;
+    margin-top: 10px;
+    border: 2px solid #fff;
+    color: #fff;
+  }
+  
+  .cta-btn-expert:hover {
+    background: #18d26e;
+    border: 2px solid #18d26e;
+    color: white;
+  }
+  
+  /* Call To Action Section
+  --------------------------------*/
+  
+
+  @media (min-width: 760px) {
+    
+  .logo-price-menu{
+display: none;
+  }
 }

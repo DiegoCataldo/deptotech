@@ -603,11 +603,12 @@ body.mobile-nav-active #mobile-nav-toggle {
 --------------------------------*/
 
 #featured-services {
-  background: #000;
+  background: linear-gradient(rgba(0, 142, 99, 0.1), rgba(0, 0, 0, 0.1)), url(../img/call-to-action-bg.jpg) fixed center center;
+  background-size: cover;
 }
 
 #featured-services .box {
-  padding: 30px 20px;
+  padding: 30px 40px;
 }
 
 #featured-services .box-bg {
@@ -615,8 +616,8 @@ body.mobile-nav-active #mobile-nav-toggle {
 }
 
 #featured-services i {
-  color: #18d26e;
-  font-size: 48px;
+  color: #00ff76;
+  font-size: 50px;
   display: inline-block;
   line-height: 1;
 }
@@ -824,6 +825,7 @@ body.mobile-nav-active #mobile-nav-toggle {
 #call-to-action .cta-btn:hover {
   background: #18d26e;
   border: 2px solid #18d26e;
+
 }
 
 /* Call To Action Section

@@ -3,7 +3,7 @@
   <!--  HEADEER --->
   <div class="banner-question u-section-2">
     <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">QUESTIONS</h3>
-    <h2 class="u-heading-font u-text u-text-2">MY QUESTIONS</h2>
+    <h2 class="u-heading-font u-text u-text-2">ANSWER A QUESTION</h2>
     <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
   </div>
   <!-- /HEADER -->
@@ -11,8 +11,7 @@
   <div class="tm-main row justify-content-md-center margin-x-0">
 
     <div class="col-md-10">
-      <!-- pregunta -->
-      <div class="row mt-5">
+      <div class="row">
         <div class="answer-container col-md-8">
           <div class="answer-header row">
             <div class="answer-title col-md-8">
@@ -26,8 +25,7 @@
                   USD
                 </div>
                 <span class="answer-header-time">
-                  <i class="fas fa-hourglass-half"></i>
-                  Asked {{formatDate question.createdAt}}
+                  <i class="fas fa-hourglass-half"></i> Asked {{formatDate question.createdAt}}
                 </span>
               </div>
             </div>
@@ -68,43 +66,52 @@
           <div class="profile-answer-body">
             <div class="profile-question-info profile-country">
               <i class="fas fa-map-marker-alt"></i>
-              Chile
+
+              {{userallInfo.country_birth}}
             </div>
             <div class="profile-question-info profile-allquestions">
               <i class="fas fa-question-circle"></i>
-              5 Questions Asked
+
+              {{countLength userallInfo.user_questions}} Questions asked
             </div>
             <div class="profile-question-info profile-questions-paid">
-              <i class="fas fa-money-bill-alt"></i>
-              3 Questions answered
+              <i class="fas fa-comment-dollar"></i>
+              {{countQuestionEnabled userallInfo.user_questions}} Questions enabled
             </div>
             <div class="profile-question-info profile-allquestions-likes">
-              <i class="fas fa-thumbs-up"></i>
-              100 likes in all his questions
+              <i class="fas fa-comment-dots"></i>
+              {{countLength userallInfo.user_answers}} Questions answered
             </div>
           </div>
         </div>
 
       </div>
-      <!-- respuestas -->
+
+      <div class="row">
+        <div class="answer-do-container col-md-8">
+          {{#if user}}
+          <form action="/questions/doanswer/{{question.id}}?_method=PUT" method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            <textarea class="trumbowyg-textarea" name="new_answer" required="required"></textarea>
+            <button class="button-main-1 mt-5" type="submit"> Save </button>
+          </form>
+          {{else}}
+          <h3 style="font-size: 1.1rem;"> Do you want to answer this question and earn the reward in Bitcoins?</h3>
+          <a href="/users/signin"><button class="cta-btn-main-2">Earn Bitcoins Answering</button></a>
+          {{/if}}
+
+        </div>
+      </div>
+
       {{#each answers}}
+
+      {{#ifEquals user_answer ../UserId }}
+
       <div class="answer-own-question col-md-12">
         <div class="answer-own-question-header">
           {{#each user_info}}
           <div class="header-title row">
-
             <div class="col-lg-12">
-                            {{#if ../best_answer}}
-              <div class="best-answer-title">
-                <div class="medal-div">
-                  <img src="/img/goldmedal.png" alt="" class="gold-medal-congrats">
-                </div>
-                <div class="first-place-title">
-                  Best answer!
-                </div>
-
-              </div>
-              {{/if}}
               <div class="header-name">
                 {{name}}
               </div>
@@ -127,73 +134,84 @@
               <div class="col-md-4  row rating-block2">
                 <!-- rating block --->
                 <div class="col-md-12">
+
+                  <!-- si el usuario es el mismo que hizo la respuesta no muestra nada si no muestro dependiendo si ya habia calificado la respuesta -->
+                  {{#ifEquals ../user_answer ../../UserId }}
+
+                  {{else}}
                   <div class="rating-block">
                     {{#RatingEnabled ../rating_by }}
                     <h4>Give It a Rating!</h4>
 
                     {{else}}
-
                     <h4>Thanks for rating!</h4>
                     {{/RatingEnabled}}
-                    <div class="stars-content ">
-                      <div class="star-source">
-                        <svg>
-                          <linearGradient x1="50%" y1="5.41294643%" x2="87.5527344%" y2="65.4921875%" id="grad">
-                            <stop stop-color="#FFCC00" offset="0%"></stop>
-                            <stop stop-color="#FFCC00" offset="60%"></stop>
-                            <stop stop-color="#FFCC00" offset="100%"></stop>
-                          </linearGradient>
-                          <symbol id="star" viewBox="153 89 106 108">
-                            <polygon id="star-shape" stroke="url(#grad)" stroke-width="5" fill="currentColor"
-                              points="206 162.5 176.610737 185.45085 189.356511 150.407797 158.447174 129.54915 195.713758 130.842203 206 95 216.286242 130.842203 253.552826 129.54915 222.643489 150.407797 235.389263 185.45085">
-                            </polygon>
-                          </symbol>
+
+                    {{/ifEquals}}
+
+                    {{#ifEquals ../user_answer ../../UserId }}
+
+                    {{else}}
+                    <!-- esto es para formar las estrellas -->
+                    <div class="star-source">
+                      <svg>
+                        <linearGradient x1="50%" y1="5.41294643%" x2="87.5527344%" y2="65.4921875%" id="grad">
+                          <stop stop-color="#FFCC00" offset="0%"></stop>
+                          <stop stop-color="#FFCC00" offset="60%"></stop>
+                          <stop stop-color="#FFCC00" offset="100%"></stop>
+                        </linearGradient>
+                        <symbol id="star" viewBox="153 89 106 108">
+                          <polygon id="star-shape" stroke="url(#grad)" stroke-width="5" fill="currentColor"
+                            points="206 162.5 176.610737 185.45085 189.356511 150.407797 158.447174 129.54915 195.713758 130.842203 206 95 216.286242 130.842203 253.552826 129.54915 222.643489 150.407797 235.389263 185.45085">
+                          </polygon>
+                        </symbol>
+                      </svg>
+
+                    </div>
+
+
+                    {{#RatingEnabled ../rating_by }}
+                    <!-- en el caso que no le haya puesto la nota -->
+                    <div class="star-container ">
+                      <input type="radio" name="star" id="5_{{../_id}}"
+                        onClick="addRatingAnswerAjax({{json ../_id}}, 5)">
+                      <label for="5_{{../_id}}">
+                        <svg class="star">
+                          <use xlink:href="#star" />
                         </svg>
-
-                      </div>
-
-                      {{#RatingEnabled ../rating_by }}
-                      <!-- en el caso que aun no le haya puesto nota -->
-                      <div class="star-container ">
-                        <!-- en el caso que ya le haya puesto la nota -->
-                        <input type="radio" name="star" id="5_{{../_id}}"
-                          onClick="addRatingAnswerAjax({{json ../_id}}, 5)">
-                        <label for="5_{{../_id}}">
-                          <svg class="star">
-                            <use xlink:href="#star" />
-                          </svg>
-                        </label>
-                        <input type="radio" name="star" id="4_{{ ../_id}}"
-                          onClick="addRatingAnswerAjax({{json ../_id}}, 4)">
-                        <label for="4_{{../_id}}">
-                          <svg class="star">
-                            <use xlink:href="#star" />
-                          </svg>
-                        </label>
-                        <input type="radio" name="star" id="3_{{ ../_id}}"
-                          onClick="addRatingAnswerAjax({{json ../_id}}, 3)">
-                        <label for="3_{{../_id}}">
-                          <svg class="star">
-                            <use xlink:href="#star" />
-                          </svg>
-                        </label>
-                        <input type="radio" name="star" id="2_{{../_id}}"
-                          onClick="addRatingAnswerAjax({{json ../_id}}, 2)">
-                        <label for="2_{{../_id}}">
-                          <svg class="star">
-                            <use xlink:href="#star" />
-                          </svg>
-                        </label>
-                        <input type="radio" name="star" id="1_{{../_id}}"
-                          onClick="addRatingAnswerAjax({{json ../_id}}, 1)">
-                        <label for="1_{{../_id}}">
-                          <svg class="star">
-                            <use xlink:href="#star" />
-                          </svg>
-                        </label>
-                      </div>
-
-                      {{else}}
+                      </label>
+                      <input type="radio" name="star" id="4_{{ ../_id}}"
+                        onClick="addRatingAnswerAjax({{json ../_id}}, 4)">
+                      <label for="4_{{../_id}}">
+                        <svg class="star">
+                          <use xlink:href="#star" />
+                        </svg>
+                      </label>
+                      <input type="radio" name="star" id="3_{{ ../_id}}"
+                        onClick="addRatingAnswerAjax({{json ../_id}}, 3)">
+                      <label for="3_{{../_id}}">
+                        <svg class="star">
+                          <use xlink:href="#star" />
+                        </svg>
+                      </label>
+                      <input type="radio" name="star" id="2_{{../_id}}"
+                        onClick="addRatingAnswerAjax({{json ../_id}}, 2)">
+                      <label for="2_{{../_id}}">
+                        <svg class="star">
+                          <use xlink:href="#star" />
+                        </svg>
+                      </label>
+                      <input type="radio" name="star" id="1_{{../_id}}"
+                        onClick="addRatingAnswerAjax({{json ../_id}}, 1)">
+                      <label for="1_{{../_id}}">
+                        <svg class="star">
+                          <use xlink:href="#star" />
+                        </svg>
+                      </label>
+                    </div>
+                    {{else}}
+                    <!-- en el caso que ya le haya puesto nota -->
+                    <div class="stars-content ">
 
                       <div class="stars-content">
 
@@ -283,9 +301,10 @@
 
                         </div>
                       </div>
-                      {{/RatingEnabled}}
                     </div>
+                    {{/RatingEnabled}}
                   </div>
+                  {{/ifEquals}}
                 </div>
                 <!-- rating breakdown -->
                 <div class="col-md-8 rating-breakdown">
@@ -410,7 +429,6 @@
                   <div class="div">
                     <h4> Rating Avg</h4>
                   </div>
-
                   <div class="number-rating-avg">
                     <h2 class="number-avg-parcial"> {{ratingUserAVG
                       answerRating.star1
@@ -420,8 +438,6 @@
                       answerRating.star5
                       }}<small class="number-avg-total"> /5</small></h2>
                   </div>
-
-
                 </div>
               </div>
             </div>
@@ -430,47 +446,8 @@
           <!-- /container -->
           {{/each}}
         </div>
-        {{#if ../question.best_answer_chosen }}
-        {{else}}
-        <div class="button-see-answer2 ">
-          <button type="button" data-toggle="modal" data-target="#modal-best-answer-{{_id}}" data-idanswer="{{_id}}"
-             class="button-see-answer2 button-best-answer "> This is the best
-            Answer!
-          </button>
-               <!---- MODAL DE CONFIRMACIÓN ---->
-          <div class="modal fade" id="modal-best-answer-{{_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel"> IMPORTANT!</h5>
-                  <button id="close-best-answer"  type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <h5>
-                  Are you sure this is the best answer? this user will be the only one who will receive the reward of the question
-                  </h5>
-                  <div class="modal-footer">
-                    <button type="button" id="close-best-answer1" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <a href="/paypal/payanswer/{{_id}}"> <button  class="button-see-answer2 button-best-answer button-best-answer-alert"> This is
-                        the best
-                        Answer!
-                      </button>
-                    </a>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-          <!---- TERMINA MODAL DE CONFIRMACIÓN ---->
-
-        </div>
-        {{/if}}
-
       </div>
+      {{/ifEquals}}
       {{/each}}
     </div>
   </div>
