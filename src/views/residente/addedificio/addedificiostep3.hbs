@@ -1,0 +1,145 @@
+<!-- Search form -->
+<div class="row card border-card">
+  <!--  HEADEER --->
+  <div class="banner-question u-section-2">
+    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">HOME</h3>
+    <h2 class="u-heading-font u-text u-text-2">PRINCIPAL</h2>
+    <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+  </div>
+  <!-- /HEADER -->
+
+  <div class="tm-main row justify-content-md-center margin-x-0 mt-5">
+
+    <div class="col-md-12">
+      <button onclick="history.back()" class="btn btn-info button-atras">
+        <div class="icon"><i class="ion-ios-arrow-left" style="font-size: 25px;"></i></div>
+      </button>
+    </div>
+
+    <div class="container">
+      <header class="section-header wow fadeInUp" style="margin-top:1rem">
+        <h3>Bienvenido a {{edificio.nombre}} </h3>
+        <p style="padding-bottom: 10px; margin-top:10px;">Ha seleccionado la torre {{torre.nombre}}. Por favor ahora
+          seleccione cual es su departamento</p>
+      </header>
+
+
+      <!------------------ TABLA ------------------------>
+      <div class="col-md-12">
+        <div class="row  table-responsive">
+          <input type="text" id="searchfilter" onkeyup="myFunction()" placeholder="Busqueda" title="Busqueda">
+          <table id="myTable" class="table table-answers table-striped table-bordered table-answers" style="width:100%">
+            <thead>
+              <tr>
+                <th class="sort-th">Unidad <i class="fas fa-arrow-circle-down sort-icon" style="font-size: 22px;"></i>
+                </th>
+                <th class="sort-th">Piso <i class="fas fa-arrow-circle-down sort-icon" style="font-size: 22px;"></i>
+                </th>
+                <th>Seleccionar</th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each deptos}}
+              <tr>
+                <td class="table-answers-qtitle">{{depto}} </td>
+                <td class="table-answers-qtitle">{{piso}} </td>
+                <td>
+                  <button class="button-question-table" data-toggle="modal" data-target="#modal-add-{{_id}}">
+                    <div class="icon"><i class="fas fa-check-circle" style="font-size: 20px;"></i></div>
+                  </button>
+                  <!----------------------- MODAL DE CONFIRMACIÓN ---->
+                  <div class="modal fade" id="modal-add-{{_id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel"> IMPORTANTE!</h5>
+                          <button id="close-best-answer" type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <h5>
+                            ¿Esta seguro que esta es su unidad?
+                          </h5>
+                          <h5 style="margin-top: 1rem; font-size: 1.3rem; font-weight: 400;">
+                            Torre:  {{../torre.nombre}}
+                          </h5>
+                          <h5 style=" font-size: 1.3rem; font-weight: 400;">
+                            Unidad:  {{depto}}
+                          </h5>
+                          <h5 style=" font-size: 1.3rem; font-weight: 400;">
+                            Piso:  {{piso}}
+                          </h5>
+
+                          <div class="modal-footer">
+                            <button type="button" id="close-best-answer1" class="btn btn-secundary"
+                              data-dismiss="modal">Atrás</button>
+                            <a href="/residente/addedificiostep4/{{_id}}"> <button class="btn btn-primary">
+                                Confirmar
+                              </button>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!---------------------- END MODAL DE CONFIRMACIÓN ---->
+                </td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!------ funcion de busqueda ------>
+<script>
+  function myFunction() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("searchfilter");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
+<!------------ funcion de sort ---->
+<script>
+  var getCellValue = function (tr, idx) { return tr.children[idx].innerText || tr.children[idx].textContent; }
+
+  var comparer = function (idx, asc) {
+    return function (a, b) {
+      return function (v1, v2) {
+        return v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2);
+      }(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
+    }
+  };
+
+  // do the work...
+  Array.prototype.slice.call(document.querySelectorAll('th')).forEach(function (th) {
+    th.addEventListener('click', function () {
+      const table = th.closest('table');
+      const tbody = table.querySelector('tbody');
+      while (table.tagName.toUpperCase() != 'TABLE') table = table.parentNode;
+      Array.from(tbody.querySelectorAll('tr'))
+        .sort(comparer(Array.from(th.parentNode.children).indexOf(th), this.asc = !this.asc))
+        .forEach(tr => tbody.appendChild(tr));
+    })
+  });
+</script>

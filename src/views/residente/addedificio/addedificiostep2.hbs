@@ -1,0 +1,57 @@
+<!-- Search form -->
+<div class="row card border-card">
+  <!--  HEADEER --->
+  <div class="banner-question u-section-2">
+    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">HOME</h3>
+    <h2 class="u-heading-font u-text u-text-2">PRINCIPAL</h2>
+    <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+  </div>
+  <!-- /HEADER -->
+
+  <div class="tm-main row justify-content-md-center margin-x-0 mt-5">
+
+    <div class="col-md-12">
+      <button onclick="history.back()" class="btn btn-info button-atras">
+        <div class="icon"><i class="ion-ios-arrow-left" style="font-size: 25px;"></i></div>
+      </button>
+    </div>
+
+
+    <div class="container">
+      <header class="section-header wow fadeInUp" style="margin-top:1rem">
+        <h3>Bienvenido a {{edificio.nombre}} </h3>
+        <p style="padding-bottom: 10px; margin-top:10px;">Por favor seleccione cual es su torre, si no está seguro por favor contáctese con el administrador</p>
+      </header>
+
+
+          <!------------------ TABLA ------------------------>
+    <div class="col-md-12">
+      <div class="row  table-responsive">
+        <table id="example" class="table table-answers table-striped table-bordered table-answers" style="width:100%">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Seleccionar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each torres}}
+            <tr>
+              <td class="table-answers-qtitle">{{nombre}} </td>
+              <td><a href="/residente/addedificiostep3/{{_id}}"><button class="button-question-table-3">
+                   Esta es mi torre
+                  </button></a>
+              </td>
+             
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+      
+    </div>
+  </div>
+
+  </div>

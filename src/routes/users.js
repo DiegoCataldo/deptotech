@@ -16,18 +16,8 @@ const Promise = require('bluebird');
 var hbs = require('nodemailer-express-handlebars');
 
 
-//console.log(countriesList.countries);
 
-
-const cloudinary = require('cloudinary');
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_cloud_name,
-  api_key: process.env.CLOUDINARY_api_key,
-  api_secret: process.env.CLOUDINARY_api_secret
-});
-const fs = require('fs-extra'); // permite borrar archivos
-
-
+///////////////// Sign in ////////////////////////
 
 router.get('/users/signin', (req, res) => {
   if (typeof req.user === 'undefined') {
@@ -35,49 +25,43 @@ router.get('/users/signin', (req, res) => {
   } else {
     res.redirect('/');
   }
-})
+});
 
 router.post('/users/signin', passport.authenticate('local', {
-  successRedirect: '/questions/allquestions',
+  successRedirect: '/main/principal',
   failureRedirect: '/users/signin',
   failureFlash: true
 }));
 
-//por defecto passport tiene las variable local
-router.get('/users/signup', (req, res) => {
+///////////////// END Sign in ////////////////
 
-  if (typeof req.user === 'undefined') {
-    res.render('users/signup', {layout: 'main-user'});
-  } else {
-    res.redirect('/');
-  }
-});
+////////////////// Sign Up //////////////////
 
 router.post('/users/signup', async (req, res) => {
   const { name, email, password, confirmPassword } = req.body;
   const errors = [];
   if (name.length <= 0) {
-    errors.push({ text: 'Please Insert your Name' })
+    errors.push({ text: 'Por favor inserte un nombre' })
   }
   if (password != confirmPassword) {
-    errors.push({ text: 'Password do not match' });
+    errors.push({ text: 'Las contraseñas no coinciden' });
   }
-  if (password.length <= 4) {
-    errors.push({ text: 'Password must be at least 4 characters' })
+  if (password.length <= 6) {
+    errors.push({ text: 'La contraseña debe ser de al menos 6 caracteres' })
   }
   if (errors.length > 0) {
-    res.render('users/signup', { errors, name, email, password, confirmPassword })
+    res.render('users/signin', { errors, name, email, password, confirmPassword })
   } else {
 
     const emailUser = await User.findOne({ email: email });
     if (emailUser != null) {
-      errors.push({ text: 'Email is already used' });
+      errors.push({ text: 'El email está en uso por favor intentar con otro o intente ingresar' });
       res.render('users/signup', { errors, name, email, password, confirmPassword })
     } else {
-      const newUser = new User({ name, email, password, paypal_account_verified: false });
+      const newUser = new User({ name, email, password, residente: false, administrador: false, superadmin: false });
       newUser.password = await newUser.encryptPassword(password);
       await newUser.save();
-      req.flash('success_msg', 'You are registered');
+      req.flash('success_msg', 'Excelente! ya esta registrado, ahora puedes ingresar');
       res.redirect('/users/signin');
     }
   }
@@ -88,6 +72,10 @@ router.get('/users/logout', (req, res) => {
   res.redirect('/');
 })
 
+////////////////// END Sign Up ////////////////////////
+
+//////////////// Profile /////////////////////
+
 router.get('/users/myprofile', isAuthenticated, async (req, res) => {
 
   const user = await User.findById(req.user.id).lean()
@@ -95,63 +83,28 @@ router.get('/users/myprofile', isAuthenticated, async (req, res) => {
       return {
         name: data.name,
         email: data.email,
-        imageProfileUrl: data.imageProfileUrl,
-        public_ImageId: data.public_ImageId,
-        ranking: data.ranking,
-        short_describe: data.short_describe,
-        experience_describe: data.experience_describe,
-        country_birth: data.country_birth,
-        admin: data.admin,
-        transaction_manager: data.transaction_manager,
-        tags_to_answer: data.tags_to_answer,
-        answer_or_question: data.answer_or_question
+        residente: data.residente,
+        administrador: data.administrador,
+        superadmin: data.superadmin
       }
     });
-
-
   res.render('users/myprofile', {
-    user, countriesList: countriesList.countries,
-    helpers: {
-      ifNotExistandAnswer: function (tags, answer_or_question, options) {
-        
-        if(answer_or_question == 'answer'){
-        if(Array.isArray(tags)){
-          return (!tags.length ) ? options.fn(this) : options.inverse(this);
-        }else{
-          return (tags == null || tags == '') ? options.fn(this) : options.inverse(this);
-        }
-      }else{
-        return (answer_or_question == 'answer' ) ? options.fn(this) : options.inverse(this);
-      }
-        
-      }
-    }
+    user
   }
   );
 });
 
 router.put('/users/myprofile', isAuthenticated, async (req, res) => {
-  const { name, short_describe, experience_describe, tagsArray } = req.body;
-  const country_birth = req.body.country_birth;
-
-  if (typeof req.file !== 'undefined' && typeof req.file.path !== 'undefined' && req.file.path) {
-    const result = await cloudinary.v2.uploader.upload(res.path);
-    const imageProfileUrl = result.url;
-    const public_ImageId = result.public_id;
+    const { name } = req.body;
     const idparamsObjectTypeID = mongoose.Types.ObjectId(req.user.id);
     const query = { _id: idparamsObjectTypeID };
-    await User.findOneAndUpdate(query, { name: name, imageProfileUrl: imageProfileUrl, public_ImageId: public_ImageId, short_describe: short_describe, experience_describe: experience_describe, country_birth: country_birth, tags_to_answer: tagsArray });
-    await fs.unlink(req.file.path);
-  } else {
-    const idparamsObjectTypeID = mongoose.Types.ObjectId(req.user.id);
-    const query = { _id: idparamsObjectTypeID };
-    await User.findOneAndUpdate(query, { name: name, short_describe: short_describe, experience_describe: experience_describe, country_birth: country_birth, tags_to_answer: tagsArray });
-  }
-
-  req.flash('success_msg', 'Profile Updated Successfully');
+    await User.findOneAndUpdate(query, { name: name});
+  
+  req.flash('success_msg', 'Cambios guardados');
   res.redirect('/users/myprofile');
 
 })
+///////////////// END Profile //////////////////////
 
 router.get('/users/newpassword', isAuthenticated, (req, res) => {
   res.render('users/new-password');
@@ -199,7 +152,7 @@ router.put('/users/recoverypass', async (req, res) => {
   const user = await User.findOne({ email: emailUser });
 
   if (user == null) {
-    req.flash('error_msg', 'The email entered is not registered in Priceanswers.com');
+    req.flash('error_msg', 'The email entered is not registered in deptomin.com');
     res.redirect('/users/recoverypass');
   } else {
 
@@ -235,10 +188,10 @@ router.put('/users/recoverypass', async (req, res) => {
 
     transporter.use('compile', hbs(options));
 
-    const linkUrlNewPass = 'https://www.priceanswers.com/users/recoverypassnew/' + user._id;
+    const linkUrlNewPass = 'https://www.deptomin.com/users/recoverypassnew/' + user._id;
     // send mail with defined transport object
     let info = await transporter.sendMail({
-      from: 'contact@priceanswers.com', // sender address
+      from: 'contacto@deptomin.com', // sender address
       to: emailUser, // list of receivers
       subject: "Hello ✔", // Subject line
       template: 'html',
@@ -250,7 +203,7 @@ router.put('/users/recoverypass', async (req, res) => {
 
 
 
-    req.flash('success_msg', "An email has been sent to your email. If this email address is registered to Priceanswers.com, you'll receive instructions on how to set a new password.");
+    req.flash('success_msg', "An email has been sent to your email. If this email address is registered to Deptomin.com, you'll receive instructions on how to set a new password.");
     res.redirect('/users/recoverypass');
   }
 })
@@ -282,26 +235,12 @@ router.put('/users/recoverypassnew', async (req, res) => {
       req.flash('success_msg', 'Password Updated Successfully');
       res.redirect('/users/signin');
     } else {
-      req.flash('error_msg', 'No user found, please do the procedure again or re-register');
-      res.redirect('/users/signin');
+      req.flash('error_msg', 'Usuario no encontrado, por favor revise si escribio bien su correo o intente registrandose nuevamente');
+      res.redirect('/users/residente/signin');
 
     }
-
-
   }
 })
 
-router.get('/users/answerorquestion/:choose', isAuthenticated, async (req, res) => {
-  const choose = req.params.choose;
-  const idparamsObjectTypeID = mongoose.Types.ObjectId(req.user.id);
-  const query = { _id: idparamsObjectTypeID };
-  await User.findOneAndUpdate(query, { answer_or_question: choose });
-
-  if (choose == 'answer') {
-    res.redirect('/users/myprofile');
-  } else if (choose == 'question') {
-    res.redirect('/questions/add');
-  }
-});
 
 module.exports = router;

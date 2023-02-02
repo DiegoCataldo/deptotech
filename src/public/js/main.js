@@ -163,7 +163,17 @@ $(function () {
   */
   $(".button-delete-question").on("click", function (e) {
 
-    var answer = confirm("Are you sure you want to eliminate this question? It will be permanently deleted along with the responses associated with it.");
+    var answer = confirm("¿Estas seguro que deseas eliminar esa pregunta/solicitud?. Se borrará permanentemente junto a las respuestas. Solo hazlo si te equivocaste al escribirla, ya que el historial de solicitudes es necesaria para una gestión correcta hacia el administrador.");
+    if (answer) {
+      return true;
+    } else {
+      e.preventDefault();
+    }
+  });
+
+  $(".button-delete-encuesta").on("click", function (e) {
+
+    var answer = confirm("¿Estas seguro que deseas eliminar esta encuesta?. Se borrará permanentemente junto a las respuestas. Solo hazlo si te equivocaste al escribirla, ya que el historial de encuestas es necesaria para una gestión correcta del condominio.");
     if (answer) {
       return true;
     } else {
@@ -186,6 +196,38 @@ $(function () {
     }
 
   });
+
+  
+  $(".button-add-opcion").on("click", function (e) {
+    var tagsLenght = $('input[name="opcionesArray"]').length;
+    var input = $('input[name="tags-id"]').val();
+    console.log(input);
+    if (tagsLenght <= 5) {
+      $(".tags-added-container").append("<span href='#' class='tag-added'>" + input + ' <i class="fas fa-times cross"></i>' + " <input type='text' value='" + input + "' class='tag-hidden' name='tagsArray'/> </span>");
+
+      tags.push(input);
+      input = "";
+      //console.log(tags)
+    } else {
+      alert('you can only add a maximum of 6 tags');
+    }
+
+  });
+
+
+  $(".button-add-torres").on("click", function (e) {
+    var tagsLenght = $('input[name="torresArray"]').length;
+    var input = $('input[name="torres-id"]').val();
+    console.log(input);
+
+      $(".tags-added-container").append("<span href='#' class='tag-added'>" + input + ' <i class="fas fa-times cross"></i>' + " <input type='text' value='" + input + "' class='tag-hidden' name='torresArray'/> </span>");
+
+      tags.push(input);
+      input = "";
+      //console.log(tags)
+
+  });
+
 
   // para que no se vea toda la descripción de la pregunta y aparezca el botón more and less
   /*
@@ -415,7 +457,7 @@ $(document).ready(function () {
 
 
 });
-
+/*
 $(document).on("keydown", ":input:not(textbox)", function (event) {
 
 
@@ -427,7 +469,7 @@ $(document).on("keydown", ":input:not(textbox)", function (event) {
 
 });
 
-
+*/
 // agregar rating a las respuestas //
 function addRatingAnswerAjax(p_idanswer, p_rating) {
 

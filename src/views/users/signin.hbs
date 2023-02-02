@@ -1,7 +1,7 @@
 <div class="row card border-card">
   <div class="banner-question u-section-2">
-    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">USER</h3>
-    <h2 class="u-heading-font u-text u-text-2">SIGN UP</h2>
+    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">USUARIO</h3>
+    <h2 class="u-heading-font u-text u-text-2">INGRESAR | REGISTRARSE</h2>
     <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
   </div>
 
@@ -9,8 +9,8 @@
     <div class="login-html">
       <a href="/"><img src="/img/logoprice.png" class=" mx-auto display-block m-4 login-logo" alt=""> </a>
       <div class="card-body card-body-signup">
-        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
-        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Sign Up</label>
+        <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Ingresar</label>
+        <input id="tab-2" type="radio" name="tab" class="sign-up"><label for="tab-2" class="tab">Registrarse</label>
         <div class="login-form">
           <div class="sign-in-htm">
             <form action="/users/signin" method="POST">
@@ -19,22 +19,22 @@
                 <input type="email" class="input" name="email" placeholder="" autofocus>
               </div>
               <div class="group">
-                <label for="email" class="label">Password</label>
+                <label for="email" class="label">Contraseña</label>
                 <input type="password" class="input" name="password" placeholder="" autofocus>" />
               </div>
               <div class="group">
-                <input type="submit" class="button" value="Sign In">
+                <input type="submit" class="button" value="Ingresar">
               </div>
               <div class="hr"></div>
               <div class="foot-lnk">
-                <a href="/users/recoverypass"> Forgot Password?</a>
+                <a href="/users/recoverypass"> Olvidaste la contraseña?</a>
               </div>
             </form>
           </div>
           <div class="sign-up-htm">
             <form action="/users/signup" method="POST">
               <div class="group">
-                <label for="name" class="label">Name</label>
+                <label for="name" class="label">Nombre</label>
                 <input type="text" class="input" name="name" placeholder="" value="{{name}}" />
               </div>
               <div class="group">
@@ -42,19 +42,19 @@
                 <input type="email" class="input" name="email" placeholder="" value="{{email}}" />
               </div>
               <div class="group">
-                <label for="password" class="label">Password</label>
+                <label for="password" class="label">Contraseña</label>
                 <input type="password" class="input" name="password" placeholder="" value="{{password}}" />
               </div>
               <div class="group">
-                <label for="confirmPassword" class="label">Repeat Password</label>
+                <label for="confirmPassword" class="label">Repita Contraseña</label>
                 <input type="password" class="input" name="confirmPassword" placeholder="" value="{{confirmPassword}}" />
               </div>
               <div class="group">
-                <input type="submit" class="button" value="Sign Up">
+                <input type="submit" class="button" value="Registrarse">
               </div>
               <div class="hr"></div>
               <div class="foot-lnk">
-                <label for="tab-1" style="color: white;">Already Member?</a>
+                 <a href="/users/residente/signin"> Eres administrador?</a>
               </div>
             </form>
           </div>

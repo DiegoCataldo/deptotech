@@ -1,0 +1,128 @@
+<!-- Search form -->
+<div class="row card border-card">
+  <!--  HEADEER --->
+  <div class="banner-question u-section-2">
+    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1" PUBLICACIONES</h3>
+      <h2 class="u-heading-font u-text u-text-2">MURO ADMINISTRADOR</h2>
+      <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+  </div>
+  <!-- /HEADER -->
+
+  <div class="tm-main row justify-content-md-center margin-x-0">
+
+    <div class="col-md-10 ">
+      <div class="col-md-12">
+        <button onclick="history.back()" class="btn btn-info button-atras" style="margin-top: 5px;">
+          <div class="icon"><i class="ion-ios-arrow-left" style="font-size: 25px;"></i></div>
+        </button>
+      </div>
+      <div class="row">
+        <div class="answer-container col-md-8">
+          <div class="answer-header row">
+            <div class="answer-title col-md-8">
+              <h1 class=""> {{question.title}} </h1>
+            </div>
+          </div>
+          <div class="answer-body">
+            <div class="answer-body-description">
+              {{{question.description}}}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3 profile-answer">
+          <div class="profile-answer-header">
+            <h1>Sobre la publicación</h1>
+          </div>
+          <div class="profile-answer-body">
+            <div class="profile-question-info profile-country">
+              <i class="fas fa-map-marker-alt"></i>
+              <strong>Realizada por:</strong> {{question.user_nombre}}
+            </div>
+            <div class="profile-question-info profile-questions-paid">
+              <i class="fas fa-hourglass-half"></i>
+              <strong>Publicado:</strong> {{formatDate question.createdAt}}
+            </div>
+            {{#ifEquals question.tipo_publicacion "solicitud"}}
+            <div class="profile-question-info profile-allquestions">
+              <i class="fas fa-question-circle"></i>
+              <strong>¿Respondida por administrador?:</strong> {{question.respondida_por_admin}}
+            </div>
+            {{/ifEquals}}
+
+            <div class="profile-question-info profile-allquestions-likes">
+              <i class="fas fa-comment-dots"></i>
+              <strong>Total de respuestas:</strong> {{countLength answers}}
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="answer-do-container col-md-8">
+
+          <form action="/administrador/muro-admin/doanswer/{{question.id}}?_method=PUT" method="POST">
+            <input type="hidden" name="_method" value="PUT">
+            <textarea name="new_answer" class="trumbowyg-textarea" required="required"></textarea>
+            <button class="button-main-1 mt-5" type="submit"> Save </button>
+          </form>
+        </div>
+      </div>
+
+      {{#each answers}}
+      <div class="answer-own-question col-md-8">
+        <div class="answer-own-question-header">
+
+          <div class="header-title row">
+            <div class="col-md-12 row">
+              {{#if user_es_admin}}
+              <div class="best-answer-title col-md-12">
+                <div class="medal-div">
+                  <img src="/img/iconoadmin.png" alt="" class="gold-medal-congrats">
+                </div>
+                <div class="first-place-title">
+                  Administrador Condominio
+                </div>
+
+              </div>
+              {{/if}}
+              <div class="col-md-8">
+                <div class="header-name">
+                  {{user_answer_nombre}}
+                </div>
+                {{#if user_es_admin}}
+                {{else}}
+                <div class="header-short_describe">
+                  Torre: {{user_torre_nombre}} Unidad: {{user_depto_nombre}}
+                </div>
+                {{/if}}
+              </div>
+
+
+              <div class="answer-header-right col-md-4">
+                <div class="answer-header-reward">
+                  <span class="answer-header-time">
+                    <i class="fas fa-hourglass-half"></i> Publicado {{formatDate createdAt}}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="body-answer-not-check">
+            <div class="row">
+              <!-- descripción de la respuesta -->
+              <div class="col-md-12 answer-describe">
+                {{{answer}}}
+              </div>
+              <!-- ratings -->
+
+            </div>
+
+          </div>
+          <!-- /container -->
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>
+</div>

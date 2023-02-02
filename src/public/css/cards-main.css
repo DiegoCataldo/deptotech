@@ -1,0 +1,299 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700,800,900|Open Sans:400,600,800');
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+div,
+input,
+p,
+a {
+  font-family: "Open Sans";
+  margin: 0px;
+}
+
+a,
+a:hover,
+a:focus {
+  color: inherit;
+}
+
+
+
+
+.container {
+  max-width: 1200px;
+}
+
+.card-container {
+  padding: 100px 0px;
+  -webkit-perspective: 1000;
+  perspective: 1000;
+}
+
+.profile-card-2 {
+  max-width: 300px;
+  background-color: #FFF;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.1);
+  background-position: center;
+  overflow: hidden;
+  position: relative;
+  margin: 10px auto;
+  cursor: pointer;
+  border-radius: 10px;
+  text-align: center;
+  height: 492px;
+  box-shadow: 0 12px 15px 0 rgb(0 0 0 / 24%), 0 17px 50px 30px rgb(0 0 0 / 19%);
+  background-blend-mode: color;
+  transition: all linear 0.25s;
+}
+
+.residente-img {
+  background: url(../img/residente-card.png) no-repeat center;
+}
+
+.encuesta-img {
+  background: url(../img/encuesta.png) no-repeat center;
+}
+.agendar-img {
+  background: url(../img/agendar.png) no-repeat center;
+}
+
+.calendar-img {
+  background: url(../img/calendar.png) no-repeat center;
+}
+
+
+
+.profile-card-2 .profile-name {
+  position: absolute;
+  bottom: 150px;
+  font-size: 30px;
+  color: #FFF;
+  text-shadow: 0px 0px 20px rgb(0 0 0 / 50%);
+  font-weight: bold;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  transition: all linear 0.25s;
+}
+
+.profile-card-2 .profile-icons {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  color: #FFF;
+  transition: all linear 0.25s;
+  font-size: 30px;
+}
+
+.profile-card-2 .profile-username {
+  position: absolute;
+  bottom: 50px;
+  color: #FFF;
+  font-size: 15px;
+  transition: all linear 0.25s;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.profile-card-2 .profile-icons .fa {
+  margin: 5px;
+}
+
+.inner-div-encuesta {
+  background: rgba(178, 72, 2, 0.5);
+  width: 100%;
+  height: 100%;
+}
+
+.inner-div-agendar {
+  background: rgba(0, 4, 6, 0.6);
+  width: 100%;
+  height: 100%;
+}
+
+.inner-div-calendar {
+  background: rgba(0, 4, 6, 0);
+  width: 100%;
+  height: 100%;
+}
+
+.inner-div-residente {
+  background: rgb(44 84 2 / 50%);
+  width: 100%;
+  height: 100%;
+}
+
+.profile-card-2:hover {
+  filter: grayscale(40%);
+}
+
+.profile-card-2:hover .profile-name {
+  bottom: 130px;
+}
+
+.profile-card-2:hover .profile-username {
+  bottom: 60px;
+}
+
+.profile-card-2:hover .profile-icons {
+  right: 40px;
+}
+
+
+/*----------- card-dash-1 ----------- */
+
+.card-dash-1 {
+  max-width: 682px;
+  background-color: #FFF;
+  box-shadow: 0px 0px 25px rgb(0 0 0 / 10%);
+  background-position: center;
+  overflow: hidden;
+  position: relative;
+  margin: 10px auto;
+  cursor: pointer;
+  border-radius: 10px;
+  text-align: center;
+  height: 230px;
+  box-shadow: 0 12px 15px 0 rgb(0 0 0 / 24%), 0 17px 50px 30px rgb(0 0 0 / 19%);
+  background-blend-mode: color;
+  transition: all linear 0.25s;
+}
+
+.residente-img {
+  background: url(../img/residente-card.png) no-repeat center;
+}
+.admin-img {
+  background: url(../img/administrador-card.png) no-repeat center;
+}
+
+.encuesta-img {
+  background: url(../img/encuesta.png) no-repeat center;
+}
+.agendar-img {
+  background: url(../img/agendar.png) no-repeat center;
+}
+.calendar-img {
+  background: url(../img/calendar.png) no-repeat center;
+}
+
+
+.card-dash-1 .profile-name {
+  position: absolute;
+  bottom: 150px;
+  font-size: 30px;
+  color: #FFF;
+  text-shadow: 0px 0px 20px rgb(0 0 0 / 50%);
+  font-weight: bold;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  transition: all linear 0.25s;
+}
+
+.card-dash-1 .profile-icons {
+  position: absolute;
+  bottom: 76px;
+  right: 0;
+  left: 0;
+  color: #FFF;
+  transition: all linear 0.25s;
+  font-size: 50px;
+}
+
+.card-dash-1 .profile-username {
+  position: absolute;
+  bottom: 50px;
+  color: #FFF;
+  font-size: 15px;
+  transition: all linear 0.25s;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.card-dash-1 .profile-icons .fa {
+  margin: 5px;
+}
+
+.inner-div-residente {
+  background: rgb(44 84 2 / 50%);
+  width: 100%;
+  height: 100%;
+}
+.inner-div-admin {
+  background: rgb(0 62 106 / 50%);
+  width: 100%;
+  height: 100%;
+}
+
+.inner-div-mensajes {
+  background: rgb(44 84 2 / 50%);
+  width: 100%;
+  height: 100%;
+}
+
+.card-dash-1:hover {
+  filter: grayscale(40%);
+}
+
+.card-dash-1:hover .profile-name {
+  bottom: 130px;
+}
+
+.card-dash-1:hover .profile-username {
+  bottom: 60px;
+}
+
+.card-dash-1:hover .profile-icons {
+  right: 40px;
+}
+
+
+
+@media (max-width: 767px) {
+
+  .card-dash-1 .profile-name {
+    font-size: 12px;
+    bottom: 93px;
+  }
+
+  .card-dash-1 .profile-username {
+display: none;
+  }
+
+  
+.card-dash-1 .profile-icons {
+  position: absolute;
+  bottom: 30px;
+  left: 0;
+  right: 0;
+  color: #FFF;
+  transition: all linear 0.25s;
+  font-size: 45px;
+ }
+
+
+  .profile-card-2 {
+    height: 300px;
+  }
+
+  .card-dash-1{
+    height: 142px;
+  }
+
+}
+
+.size-1 {
+  max-width: 330px;
+  height: 320px;
+}
+

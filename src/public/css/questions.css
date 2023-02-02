@@ -396,6 +396,8 @@ h2:not(.u-subtitle) {
   }
 }
 
+
+
 .body-question {
   padding: 20px 20px 0px 20px;
   /*
@@ -503,8 +505,9 @@ h2:not(.u-subtitle) {
 }
 
 .rating-bar-answer{
-  display: flex;
+ /* display: flex;*/
   justify-content: center;
+  margin-top: 20px;
 }
 .btn-grey {
   background-color: #D8D8D8;
@@ -667,21 +670,24 @@ h2:not(.u-subtitle) {
   border-color: #d0d0d0;
 }
 .question-header-reward{
-  font-size: 20px;
+  font-size: 18px;
   text-align: right;
-  font-weight: 600;
+  font-weight: 400;
 }
 @media (max-width: 470px) { 
   .question-header-reward{
-    font-size: 20px;
+    font-size: 15px;
     text-align: center;
-    font-weight: 600;
+    font-weight: 400;
     margin-top: 10px;
 
   }
+  .reward-price-question{
+    margin-bottom: 8px;
+  }
 }
 .reward-price-question i {
-  color: #7de300;
+  color: #008ce3;
   font-size: 19px;
   margin-right: 0.1rem;
   margin-top: auto;
@@ -714,12 +720,13 @@ h2:not(.u-subtitle) {
 }
 .stats-question-container{
   text-align: left;
-  margin-top: 1rem;
+  margin-top: 0.7rem;
   margin-bottom: 1rem;
 }
 @media (max-width: 470px) { 
   .stats-question-container{
     text-align: center;
+    margin-bottom: 0rem;
   }
 }
 .date-form{
@@ -878,19 +885,19 @@ font-family: 'Font Awesome 5 Free' !important
     font-size: 1.1rem;
     height: 25px;
     margin: 2px 0;
-    background-color: #edb300;
-    border-color: #ffc107;
+   /* background-color: #edb300;
+    border-color: #ffc107;*/
     border-radius: 0.2rem;
-    color: #ffffff;
+    color: #030303;
     padding-top: 2px;
 }
 .number-detail-rating-2{
   margin-left:10px; font-weight: 700;
     font-size: 1.1rem;
     height: 25px;
-   
-
+    float: left;
 }
+
 #close-best-answer{
   color: black;
 }
@@ -928,11 +935,28 @@ font-family: 'Font Awesome 5 Free' !important
 
 .table-answers{
   width: 100%;
-  display: block;
+  display: table;
   overflow-x: auto;
   white-space: nowrap;
+  margin-left: 7px !important;
 }
 .table-answers-qtitle{
   max-width: 320px;
   overflow-x: auto;
+}
+
+.table-answers td{
+  text-align: center;
+}
+@media (max-width: 750px) {
+  .number-detail-rating-2{
+    margin-left:auto; 
+    margin-right:auto;
+    font-weight: 700;
+      font-size: 1.1rem;
+      height: 25px;
+      padding-left: auto;
+      padding-right: auto;
+      float: none;
+  }
 }

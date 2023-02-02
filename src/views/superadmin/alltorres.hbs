@@ -1,0 +1,173 @@
+<!-- Search form -->
+<div class="row card border-card">
+  <!--  HEADEER --->
+  <div class="banner-question u-section-2">
+    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">SUPERADMIN</h3>
+    <h2 class="u-heading-font u-text u-text-2">TORRES {{edificio.nombre}}</h2>
+    <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+  </div>
+  <!-- /HEADER -->
+
+  <div class="tm-main row justify-content-md-center margin-x-0 mt-5 ">
+    <div class="col-md-12">
+
+      <button onclick="history.back()" class="btn btn-info button-atras">
+        <div class="icon"><i class="ion-ios-arrow-left" style="font-size: 25px;"></i></div>
+      </button>
+
+    </div>
+    <!------------------ TABLA ------------------------>
+    <div class="col-md-7">
+      <div class="col-12" style="text-align: center;">
+        <button class="cta-btn-main-2 utton-question-table" data-toggle="modal"
+          data-target="#modal-add-edificio">AGREGAR TORRE</button>
+      </div>
+      <div class="row  table-responsive">
+        <table id="example" class="table table-answers table-striped table-bordered table-answers" style="width:100%">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Departamentos</th>
+              <th>Modificar</th>
+              <th>Eliminar</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each torres}}
+            <tr>
+              <td class="table-answers-qtitle">{{nombre}} </td>
+              <td><a href="/superadmin/alldeptos/{{_id}}"><button class="button-question-table">
+                    <div class="icon"><i class="ion-clipboard" style="font-size: 25px;"></i></div>
+                  </button></a>
+              </td>
+              <td>
+                <button class="button-question-table" data-toggle="modal" data-target="#modal-modificar-{{_id}}">
+                  <div class="icon"><i class="far fa-edit" style="font-size: 22px;"></i></div>
+                </button>
+                <!----------------------- MODAL MODIFICAR TORRE ------------->
+                <div class="modal fade " id="modal-modificar-{{_id}}" tabindex="-1" role="dialog"
+                  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered  modal-lg " role="dialog">
+                    <div class="modal-content ">
+                      <div class="modal-header ">
+                        <h5 class="modal-title" id="exampleModalLabel" style="">Modificar Torre</h5>
+                        <button id="close-best-answer" type="button" class="close" data-dismiss="modal"
+                          aria-label="Close">
+                          <span style="" aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body modal-1 row" style="padding: 0.5rem 0rem 0rem 0rem; ">
+                        <div class="col-md-12">
+                          <fieldset class="fieldset-question" style="width: 100%; margin-left:0px;">
+                            <legend class="legend-question">Modificar torre a {{../edificio.nombre}}</legend>
+                            <div class="card-body offset-1 col-md-10">
+                              <form action="/superadmin/torres/modificar/" method="POST" enctype="multipart/form-data">
+                                <div class="">
+                                  <div class="mt-3">
+                                    <label for="nombre">Nombre</label>
+                                    <input type="text" id="nombre" name="nombre" class="form-control"
+                                      placeholder="Nombre" maxlength="100" value="" required="required" autofocus>
+                                    <small id="emailHelp" class="form-text text-muted">Escribe el nombre nombre de la
+                                      torre.</small>
+                                  </div>
+                                </div>
+                                <input type="hidden" id="id_edificio" name="id_edificio" class="form-control"
+                                  placeholder="Nombre" maxlength="100" value="{{../edificio._id}}" required="required"
+                                  autofocus>
+                                <input type="hidden" id="id_torre" name="id_torre" class="form-control"
+                                  placeholder="Nombre" maxlength="100" value="{{_id}}" required="required" autofocus>
+                                <div class="mt-1 container-button">
+                                  <button class="button-main-1" type="submit"> Guardar </button>
+                                </div>
+                              </form>
+                            </div>
+                          </fieldset>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!----------------------- END MODAL MODIFICAR TORRE ------------->
+              </td>
+              <td>
+                <button class="button-question-table-2" data-toggle="modal" data-target="#modal-eliminar-{{_id}}">
+                  <div class="icon"><i class="fa fa-trash" style="font-size: 20px;"></i></div>
+                </button>
+                <!----------------------- MODAL DE CONFIRMACIÓN ELIMINACIÓN ---->
+                <div class="modal fade" id="modal-eliminar-{{_id}}" tabindex="-1" role="dialog"
+                  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"> IMPORTANTE!</h5>
+                        <button id="close-best-answer" type="button" class="close" data-dismiss="modal"
+                          aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <h5>
+                          ¿Esta seguro que desea eliminar esta torre?
+                        </h5>
+                        <div class="modal-footer">
+                          <button type="button" id="close-best-answer1" class="btn btn-secondary"
+                            data-dismiss="modal">Close</button>
+                          <a href="/superadmin/torres/delete/{{_id}}&{{../edificio._id}}"> <button
+                              class="btn btn-danger"> Eliminar
+                            </button>
+                          </a>
+                        </div>
+                      </div>
+
+                    </div>
+                  </div>
+                </div>
+                <!---------------------- END MODAL DE CONFIRMACIÓN  ELIMINACIÓN---->
+              </td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!----------------------- MODAL AGREGAR TORRE ------------->
+<div class="modal fade " id="modal-add-edificio" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered  modal-lg " role="dialog">
+    <div class="modal-content ">
+      <div class="modal-header ">
+        <h5 class="modal-title" id="exampleModalLabel" style="">Agregar Torre</h5>
+        <button id="close-best-answer" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span style="" aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-1 row" style="padding: 0.5rem 0rem 0rem 0rem; ">
+        <div class="col-md-12">
+          <fieldset class="fieldset-question" style="width: 100%; margin-left:0px;">
+            <legend class="legend-question">Nueva Torre a {{edificio.nombre}}</legend>
+            <div class="card-body offset-1 col-md-10">
+              <form action="/superadmin/addtorre" method="POST" enctype="multipart/form-data">
+                <div class="">
+                  <div class="mt-3">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre"
+                      maxlength="100" value="" required="required" autofocus>
+                    <small id="emailHelp" class="form-text text-muted">Escribe el nombre nombre de la torre.</small>
+                  </div>
+                </div>
+                <input type="hidden" id="id_edificio" name="id_edificio" class="form-control" placeholder="Nombre"
+                  maxlength="100" value="{{edificio._id}}" required="required" autofocus>
+                <div class="mt-1 container-button">
+                  <button class="button-main-1" type="submit"> Guardar </button>
+                </div>
+              </form>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

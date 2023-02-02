@@ -73,12 +73,16 @@ app.use((req, res, next ) => { // esto es para que los mensajes  por pantalla se
 
 /////////////////   Routes   ///////////////////////
 app.use(require('./routes/index'));
-app.use(require('./routes/notes'));
 app.use(require('./routes/users'));
 app.use(require('./routes/questions'));
-app.use(require('./routes/paypal'));
-app.use(require('./routes/coinbase'));
+
 app.use(require('./routes/admin'));
+
+// routes nuevas de deptomin
+app.use(require('./routes/main'));
+app.use(require('./routes/administrador'));
+app.use(require('./routes/residente'));
+app.use(require('./routes/superadmin'));
 
 
 

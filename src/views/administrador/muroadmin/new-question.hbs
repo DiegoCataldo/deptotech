@@ -1,0 +1,47 @@
+<div class="row backgroundwhite">
+  <div class="card card-question border-card">
+    <div class="banner-question u-section-2">
+      <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">ADMINISTRADOR</h3>
+      <h2 class="u-heading-font u-text u-text-2">MURO ADMINISTRADOR</h2>
+      <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+    </div>
+
+    <br>
+    <div class="tm-main row justify-content-md-center margin-x-0">
+      <fieldset class="fieldset-question col-md-7">
+        <legend class="legend-question">Realiza una nueva publicación</legend>
+        <div class="card-body padding-0">
+          <form action="/administrador/muro-admin/addquestion" method="POST" enctype="multipart/form-data">
+            <div class="mt-3">
+
+              <div>
+                <p style="font-size: 14px;"><strong>Publicación:</strong> Cada vez que agregues una publicación les llegará un correo de aviso a cada residente del condominio.</p>
+              </div>
+
+              <div class="bottom-display" style="position:relative"> </div>
+            </div>
+            <div class="mt-3">
+              <label for="title">Titulo</label>
+              <input type="text" id="title" name="title" class="form-control" placeholder="Title" maxlength="100"
+                value="{{title}}" required="required" autofocus>
+              <small id="emailHelp" class="form-text text-muted">Escribe un titulo resumido</small>
+            </div>
+
+            <div class="mt-3">
+              <label for="description">Descripción</label>
+              <textarea id="description" name="description" class="form-control trumbowyg-textarea"
+                placeholder="description" required="required" value="{{description}}"></textarea>
+              <small id="emailHelp" class="form-text text-muted">Escribe una descripción detallada de la
+                publicación</small>
+            </div>
+
+            
+            <div class="mt-3 container-button">
+              <button class="button-main-1 mt-5" type="submit"> Publicar </button>
+            </div>
+          </form>
+        </div>
+      </fieldset>
+    </div>
+
+  </div>

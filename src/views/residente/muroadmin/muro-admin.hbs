@@ -1,0 +1,181 @@
+<link rel="stylesheet" href="/css/cards-main.css">
+<!-- Search form -->
+<div class="row card border-card">
+  <!--  HEADEER --->
+  <div class="banner-question u-section-2">
+    <h3 class="u-heading-font u-text u-text-palette-1-base u-text-1">ADMINISTRADOR</h3>
+    <h2 class="u-heading-font u-text u-text-2">MURO ADMINISTRADOR</h2>
+    <div class="u-border-3 u-border-palette-1-base u-line u-line-horizontal u-line-1"></div>
+  </div>
+  <!-- /HEADER -->
+
+  <div class="tm-main row justify-content-md-center margin-x-0">
+
+    <div class="container">
+      <div class="col-md-12">
+        <button onclick="history.back()" class="btn btn-info button-atras">
+          <div class="icon"><i class="ion-ios-arrow-left" style="font-size: 25px;"></i></div>
+        </button>
+      </div>
+      <header class="section-header-dash wow fadeInUp" style="margin-top:0rem">
+        <h3>Bienvenido/a {{user_info.name}} </h3>
+         <h4 class="introduccion">Actualmente estás en el muro de los administradores/comité, aquí ellos podrán ingresar comunicados oficiales o levantar problemáticas, dando el paso tambien a que los residentes puedan dar su opinión en cada una de ellas. </h4>
+      </header>
+      <div class="row wow fadeInUp" style="margin-top:0.5rem">
+        <div class="col-4 " style="margin-top:1rem;padding-right: 5px;padding-left: 5px;">
+          <hr style="margin-top: 0;">
+          <a href="/residente/muro-residentes/">
+            <div class="card-dash-1 gastos-img">
+              <div class="inner-div-residente">
+                <div class="profile-name">Muro Residentes</div>
+                <div class="profile-icons">
+                  <div class="icon"><i class="ion-ios-people-outline"></i></div>
+                </div>
+                <div class="profile-username">Visualiza las solicitudes y publicaciones realizada por los residentes del condominio.</div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-4 " style="margin-top:1rem;padding-right: 5px;padding-left: 5px;">
+          <hr style="margin-top: 0;">
+          <a href="/administrador/encuestas/">
+           <div class="card-dash-1 encuesta-img">
+              <div class="inner-div-encuesta">
+                <div class="profile-name">Encuestas</div>
+                <div class="profile-icons">
+                  <div class="icon"><i class="ion-ios-bookmarks-outline"></i></div>
+                </div>
+                <div class="profile-username">Visualiza o realiza encuestas para la comunidad del condominio</div>
+              </div>
+            </div>
+          </a>
+        </div>
+        <div class="col-4 " style="margin-top:1rem;padding-right: 5px;padding-left: 5px;">
+          <hr style="margin-top: 0;">
+          <a href="/administrador/addedificio">
+           <div class="card-dash-1 agendar-img">
+              <div class="inner-div-agendar">
+                <div class="profile-name">Agendar</div>
+
+                <div class="profile-icons">
+                  <div class="icon"><i class="ion-ios-bookmarks-outline"></i></div>
+                </div>
+                <div class="profile-username">Visualiza la disponibilidad de quinchos, jacuzzi, gimnasios y con tan solo unos clicks. </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <div class="col-md-12 row search wow fadeInUp" style="margin-left: auto; margin-right:auto">
+        <div class="col-12" style="text-align: center;">
+          <a href="/administrador/muro-admin/newquestion/"><button class="cta-btn-main-2">Realiza una
+              publicación</button></a>
+        </div>
+      </div>
+      <div class="col-md-12 wow fadeInUp" style="margin-right: auto; margin-left: auto">
+        <div class="row ">
+          {{#each MuroAdminQuestions}}
+
+          <div class="col-md-12 col-lg-12 container-question ">
+            <div class="login-container">
+              <div class="body-question row">
+                <div class="col-md-8">
+                  <div class="body-question-title title-h1">
+                    {{title}}
+                  </div>
+                  <div class="body-question-description">
+                    {{{description}}}
+                  </div>
+                  <div class="stats-question-container">
+                    <div class="stats-question-footer">
+                      <i class="fas fa-user" style="font-size: 19px; color: #0585e3; margin-left: 3px;"></i>
+                      <div class="description-footer-question"> {{user_nombre}}</div>
+                    </div>
+
+
+                  </div>
+                  <div class="stats-question-container">
+                    <div class="stats-question-footer">
+                      <i class="fas fa-question-circle icon-answers-question"></i>
+                      <div class="description-footer-question"> {{countLength answers_info}} Answer(s)</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="question-header-reward">
+                    {{#ifEquals tipo_publicacion "solicitud"}}
+                    <div class="reward-price-question">
+
+                      <p> <strong>Tipo Publicación:</strong> Solicitud</p>
+                    </div>
+                    <div class="reward-price-question">
+                      <p> <strong>Estado:</strong> {{estado}}</p>
+                    </div>
+                    {{/ifEquals}}
+                    {{#ifEquals tipo_publicacion "publicacion_simple"}}
+                    <div class="reward-price-question">
+                      <p> <strong>Tipo Publicación:</strong> Publicación Simple</p>
+                    </div>
+                    {{/ifEquals}}
+
+                    <div class="">
+                      <span class="question-header-time"> <i class="fas fa-hourglass-half"></i> Preguntado {{formatDate
+                        createdAt}} </span>
+                    </div>
+                    <div>
+                      <a href="/residente/muro-admin/verquestion/{{_id}}"><button class="button-main-1">Ver
+                          Más</button></a>
+                    </div>
+                    {{#ifEquals user_id ../user_info.userID }}
+                    <div>
+                      <a href="/residente/muro-admin/deletequestion/{{_id}}"> <button class="button-delete-question btn btn-secondary"><i
+                            class="fas fa-trash-alt"></i></button> </a>
+                    </div>
+                    {{else}}
+                    {{/ifEquals}}
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{/each}}
+
+          <!-- Pagination -->
+          <div class="pagination-container col-md-12">
+            <nav class="pagination-nav" aria-label="Page navigation example ">
+              <ul class="pagination">
+                <!-- si existen filtros entonces los paginations serán form -->
+
+                <form method="POST" id="formprev" action="/questions/allquestionsfilter" class="">
+                  <li class="page-item">
+                    <a class="page-link" href="javascript:;"
+                      onclick="document.getElementById('formprev').submit();">Previous
+                    </a>
+                  </li>
+                  <input type="hidden" name="skip" value="{{skipObject.prevSkip}}">
+                </form>
+                <li class="page-item"> <a class="page-link">Page {{skipObject.nextSkip}}</a>
+                </li>
+                <form method="POST" id="formnext" action="/questions/allquestionsfilter" class="">
+                  <li class="page-item">
+                    <a class="page-link" href="javascript:;"
+                      onclick="document.getElementById('formnext').submit();">Next</a>
+                  </li>
+                  <input type="hidden" name="skip" value="{{skipObject.nextSkip}}">
+
+                </form>
+
+
+              </ul>
+            </nav>
+          </div>
+          <!-- end pagination -->
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
